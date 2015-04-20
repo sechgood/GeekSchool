@@ -19,23 +19,23 @@ import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
 
 public class ContactsManager {
-	// ĞÂÔöÁªÏµÈË
+	// æ–°å¢è”ç³»äºº
 	public static void addContact(Context context, ContactBean person) {
 		ContentResolver resolver = context.getContentResolver();
 
-		// ²åÈëĞÂµÄraw contactÊı¾İ,²¢»ñÈ¡·µ»ØµÄraw contact id
+		// æ’å…¥æ–°çš„raw contactæ•°æ®,å¹¶è·å–è¿”å›çš„raw contact id
 		ContentValues values = new ContentValues();
 		Uri rawContactUri = resolver.insert(RawContacts.CONTENT_URI, values);
 		long rawContactId = ContentUris.parseId(rawContactUri);
 
-		// Íùdata±íÖĞ²åÈëÎÒÃÇĞÂ½¨ÁªÏµÈË¶ÔÓ¦µÄÃû×ÖĞÅÏ¢
+		// å¾€dataè¡¨ä¸­æ’å…¥æˆ‘ä»¬æ–°å»ºè”ç³»äººå¯¹åº”çš„åå­—ä¿¡æ¯
 		values.clear();
 		values.put(Data.RAW_CONTACT_ID, rawContactId);
 		values.put(Data.MIMETYPE, StructuredName.CONTENT_ITEM_TYPE);
 		values.put(StructuredName.DISPLAY_NAME, person.name);
 		resolver.insert(Data.CONTENT_URI, values);
 
-		// Íùdata±íÖĞ²åÈëÎÒÃÇĞÂ½¨ÁªÏµÈË¶ÔÓ¦µÄºÅÂëĞÅÏ¢
+		// å¾€dataè¡¨ä¸­æ’å…¥æˆ‘ä»¬æ–°å»ºè”ç³»äººå¯¹åº”çš„å·ç ä¿¡æ¯
 		values.clear();
 		values.put(Data.RAW_CONTACT_ID, rawContactId);
 		values.put(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE);
@@ -44,11 +44,11 @@ public class ContactsManager {
 		resolver.insert(Data.CONTENT_URI, values);
 	}
 
-	// »ñÈ¡ÁªÏµÈËĞÅÏ¢
+	// è·å–è”ç³»äººä¿¡æ¯
 	public static ArrayList<ContactBean> getContacts(Context context) {
 		ContentResolver resolver = context.getContentResolver();
 
-		// ²éÑ¯raw contact±íÈ«²¿Êı¾İ
+		// æŸ¥è¯¢raw contactè¡¨å…¨éƒ¨æ•°æ®
 		Cursor rawCursor = resolver.query(
 				RawContacts.CONTENT_URI, null, null, null, null);
 
@@ -58,7 +58,7 @@ public class ContactsManager {
 		while (rawCursor.moveToNext()) {
 			p = new ContactBean();
 			
-			// ÀûÓÃraw contact id»ñÈ¡data±íÖĞ¶ÔÓ¦µÄÊı¾İ
+			// åˆ©ç”¨raw contact idè·å–dataè¡¨ä¸­å¯¹åº”çš„æ•°æ®
 			String raw_contact_id = rawCursor.getString(
 					rawCursor.getColumnIndex(RawContacts._ID));
 			p.raw_contact_id = raw_contact_id;
@@ -66,7 +66,7 @@ public class ContactsManager {
 			Cursor dataCursor = resolver.query(Data.CONTENT_URI, null,
 					Data.RAW_CONTACT_ID + "=" + raw_contact_id, null, null);
 
-			// data±íÖĞ¶ÔÓ¦µÄÊı¾İ¿ÉÄÜÊÇ¶àÌõ
+			// dataè¡¨ä¸­å¯¹åº”çš„æ•°æ®å¯èƒ½æ˜¯å¤šæ¡
 			while (dataCursor.moveToNext()) {
 				String data1 = dataCursor.getString(dataCursor
 						.getColumnIndex(Data.DATA1));
@@ -74,14 +74,14 @@ public class ContactsManager {
 						.getColumnIndex(Data.MIMETYPE));
 
 				if (minetype.equals(StructuredName.CONTENT_ITEM_TYPE)) {
-					// ĞÕÃûÀàĞÍ "vnd.android.cursor.item/name"
+					// å§“åç±»å‹ "vnd.android.cursor.item/name"
 					p.name = data1;
 				} else if (minetype.equals(Phone.CONTENT_ITEM_TYPE)) {
-					// µç»°ÀàĞÍ "vnd.android.cursor.item/phone_v2"
+					// ç”µè¯ç±»å‹ "vnd.android.cursor.item/phone_v2"
 					p.phone = data1;
 				} else if (minetype.equals(Email.CONTENT_ITEM_TYPE)) {
-					// ÓÊÏäÀàĞÍ "vnd.android.cursor.item/email_v2"
-					// ÆäËûĞÅÏ¢µÄ´¦ÀíÍ¬Àí
+					// é‚®ç®±ç±»å‹ "vnd.android.cursor.item/email_v2"
+					// å…¶ä»–ä¿¡æ¯çš„å¤„ç†åŒç†
 				}
 			}
 
@@ -92,21 +92,21 @@ public class ContactsManager {
 		return list;
 	}
 
-	// ĞŞ¸ÄÁªÏµÈË
+	// ä¿®æ”¹è”ç³»äºº
 	public static void update(Context context, ContactBean person) {
 		ContentResolver resolver = context.getContentResolver();
 
 		ArrayList<ContentProviderOperation> ops = 
 				new ArrayList<ContentProviderOperation>();
 
-		// Ïòdata±íÖĞ¶ÔÓ¦ÁªÏµÈËÀàĞÍÎªĞÕÃûµÄdata1ÖĞÌí¼ÓÊı¾İ
+		// å‘dataè¡¨ä¸­å¯¹åº”è”ç³»äººç±»å‹ä¸ºå§“åçš„data1ä¸­æ·»åŠ æ•°æ®
 		ops.add(ContentProviderOperation
 				.newUpdate(Data.CONTENT_URI)
 				.withSelection(
 						Data.RAW_CONTACT_ID + "=?" + " AND " + Data.MIMETYPE + "=?",
 						new String[] { person.raw_contact_id, StructuredName.CONTENT_ITEM_TYPE })
 				.withValue(StructuredName.DISPLAY_NAME, person.name).build());
-		// Ïòdata±íÖĞ¶ÔÓ¦ÁªÏµÈËÀàĞÍÎªÊÖ»úµÄdata1ÖĞÌí¼ÓÊı¾İ
+		// å‘dataè¡¨ä¸­å¯¹åº”è”ç³»äººç±»å‹ä¸ºæ‰‹æœºçš„data1ä¸­æ·»åŠ æ•°æ®
 		ops.add(ContentProviderOperation
 				.newUpdate(Data.CONTENT_URI)
 				.withSelection(
@@ -122,7 +122,7 @@ public class ContactsManager {
 		}
 	}
 
-	// É¾³ıÁªÏµÈË
+	// åˆ é™¤è”ç³»äºº
 	public static void deleteContact(Context context, ContactBean p) {
 		ContentResolver resolver = context.getContentResolver();
 		resolver.delete(RawContacts.CONTENT_URI, RawContacts._ID + "=? ",

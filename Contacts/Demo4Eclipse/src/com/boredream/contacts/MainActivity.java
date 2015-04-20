@@ -93,17 +93,17 @@ public class MainActivity extends Activity implements OnClickListener {
 		final LinearLayout ll = new LinearLayout(MainActivity.this);
 		ll.setOrientation(LinearLayout.VERTICAL);
 		final EditText etName = new EditText(MainActivity.this);
-		etName.setHint("ÇëÊäÈëÁªÏµÈËÃû³Æ");
+		etName.setHint("è¯·è¾“å…¥è”ç³»äººåç§°");
 		etName.setText(oldP.name);
 		final EditText etPhone = new EditText(MainActivity.this);
-		etPhone.setHint("ÇëÊäÈëµç»°ºÅÂë");
+		etPhone.setHint("è¯·è¾“å…¥ç”µè¯å·ç ");
 		etPhone.setText(oldP.phone);
 		ll.addView(etName);
 		ll.addView(etPhone);
 		new AlertDialog.Builder(MainActivity.this)
-			.setTitle("ĞŞ¸ÄÁªÏµÈË")
+			.setTitle("ä¿®æ”¹è”ç³»äºº")
 			.setView(ll)
-			.setPositiveButton("È·¶¨",
+			.setPositiveButton("ç¡®å®š",
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -120,14 +120,14 @@ public class MainActivity extends Activity implements OnClickListener {
 							getAllContact();
 						}
 					})
-			.setNegativeButton("È¡Ïû", null)
+			.setNegativeButton("å–æ¶ˆ", null)
 			.show();
 	}
 	
 	private void showDeleteDialog(final int position) {
 		new AlertDialog.Builder(MainActivity.this)
-			.setMessage("ÊÇ·ñÈ·¶¨É¾³ı?")
-			.setPositiveButton("È·¶¨",
+			.setMessage("æ˜¯å¦ç¡®å®šåˆ é™¤?")
+			.setPositiveButton("ç¡®å®š",
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -137,7 +137,7 @@ public class MainActivity extends Activity implements OnClickListener {
 							getAllContact();
 						}
 					})
-			.setNegativeButton("È¡Ïû", null)
+			.setNegativeButton("å–æ¶ˆ", null)
 			.show();
 	}
 	
@@ -145,15 +145,15 @@ public class MainActivity extends Activity implements OnClickListener {
 		final LinearLayout ll = new LinearLayout(MainActivity.this);
 		ll.setOrientation(LinearLayout.VERTICAL);
 		final EditText etName = new EditText(MainActivity.this);
-		etName.setHint("ÇëÊäÈëÁªÏµÈËÃû³Æ");
+		etName.setHint("è¯·è¾“å…¥è”ç³»äººåç§°");
 		final EditText etPhone = new EditText(MainActivity.this);
-		etPhone.setHint("ÇëÊäÈëµç»°ºÅÂë");
+		etPhone.setHint("è¯·è¾“å…¥ç”µè¯å·ç ");
 		ll.addView(etName);
 		ll.addView(etPhone);
 		new AlertDialog.Builder(MainActivity.this)
-			.setTitle("Ìí¼ÓÁªÏµÈË")
+			.setTitle("æ·»åŠ è”ç³»äºº")
 			.setView(ll)
-			.setPositiveButton("È·¶¨",
+			.setPositiveButton("ç¡®å®š",
 					new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -168,7 +168,7 @@ public class MainActivity extends Activity implements OnClickListener {
 					getAllContact();
 				}
 			})
-			.setNegativeButton("È¡Ïû", null)
+			.setNegativeButton("å–æ¶ˆ", null)
 			.show();
 	}
 

@@ -1,6 +1,6 @@
 package com.boredream.contacts;
 /**
- * ½«ºº×Ö×ª»»ÎªÆ´Òô
+ * å°†æ±‰å­—è½¬æ¢ä¸ºæ‹¼éŸ³
  * @author Champion.Wong
  *
  */
@@ -116,15 +116,15 @@ public class PinYinUtils {
 		int asc = 0;
 		try {
 			byte[] bytes = chs.getBytes("gb2312");
-			if (bytes == null || bytes.length > 2 || bytes.length <= 0) { // ´íÎó
+			if (bytes == null || bytes.length > 2 || bytes.length <= 0) { // é”™è¯¯
 				// log
 				throw new RuntimeException("illegal resource string");
 				// System.out.println("error");
 			}
-			if (bytes.length == 1) { // Ó¢ÎÄ×Ö·û
+			if (bytes.length == 1) { // è‹±æ–‡å­—ç¬¦
 				asc = bytes[0];
 			}
-			if (bytes.length == 2) { // ÖÐÎÄ×Ö·û
+			if (bytes.length == 2) { // ä¸­æ–‡å­—ç¬¦
 				int hightByte = 256 + bytes[0];
 				int lowByte = 256 + bytes[1];
 				asc = (256 * hightByte + lowByte) - 256 * 256;
@@ -138,7 +138,7 @@ public class PinYinUtils {
 		return asc;
 	}
 	/**
-	 * ×ª»»µ¥¸öºº×Ö
+	 * è½¬æ¢å•ä¸ªæ±‰å­—
 	 * 
 	 * @param str
 	 * @return
@@ -159,7 +159,7 @@ public class PinYinUtils {
 		return result;
 	}
 	/**
-	 * ×ª»»Ò»¸ö»ò¶à¸öºº×Ö
+	 * è½¬æ¢ä¸€ä¸ªæˆ–å¤šä¸ªæ±‰å­—
 	 * 
 	 * @param str
 	 * @return
@@ -205,7 +205,7 @@ public class PinYinUtils {
 	}
 	
 	/**
-	 * ×ª»»ÎªÆ´Òô
+	 * è½¬æ¢ä¸ºæ‹¼éŸ³
 	 * @param str
 	 * @return
 	 */
@@ -213,7 +213,7 @@ public class PinYinUtils {
 		return PinYinUtils.getInstance().convertAll(str);
 	}
 	public static void main(String[] args) {
-		String str = "ÄãºÃ£¬Hello£¡";
+		String str = "ä½ å¥½ï¼ŒHelloï¼";
 		//String strPinYin = new Trans2PinYin().convertAll(str);
 		String strPinYin = trans2PinYin(str);
 		System.out.println(strPinYin);

@@ -72,6 +72,8 @@ public class ContactsManager {
 						.getColumnIndex(Data.DATA1));
 				String minetype = dataCursor.getString(dataCursor
 						.getColumnIndex(Data.MIMETYPE));
+				
+				System.out.println(minetype);
 
 				if (minetype.equals(StructuredName.CONTENT_ITEM_TYPE)) {
 					// 姓名类型 "vnd.android.cursor.item/name"

@@ -16,13 +16,12 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.boredream.contacts.BoreLetterBar.OnLetterChangedListener;
 
 public class MainActivity extends Activity implements OnClickListener {
-	private ListView lv;
+	private PinnedSectionListView lv;
 	private BoreLetterBar lb;
 	private TextView tv_overlay;
 	
@@ -43,7 +42,8 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	private void initView() {
 		pd = new ProgressDialog(this);
-		lv = (ListView) findViewById(R.id.lv_contacts);
+		lv = (PinnedSectionListView) findViewById(R.id.lv_contacts);
+		lv.setShadowVisible(false);
 		lb = (BoreLetterBar) findViewById(R.id.lb_contacts);
 		tv_overlay = (TextView) findViewById(R.id.tv_overlay);
 		addBtn = (Button) findViewById(R.id.btn_add);
@@ -53,7 +53,13 @@ public class MainActivity extends Activity implements OnClickListener {
 				if(TextUtils.isEmpty(letter)) {
 					tv_overlay.setVisibility(View.GONE);
 				} else {
+					tv_overlay.setVisibility(View.VISIBLE);
+					tv_overlay.setText(letter);
 					
+					int position = adapter.getLetterPosition(letter);
+					if(position != -1) {
+						lv.setSelection(position);
+					}
 				}
 			}
 		});
@@ -84,44 +90,48 @@ public class MainActivity extends Activity implements OnClickListener {
 		pd.show();
 		dataList = ContactsManager.getContacts(this);
 		adapter.updateList(dataList);
+		adapter.notifyDataSetChanged();
 		pd.dismiss();
 	}
 	
 	private void showUpdateDialog(final int position) {
-		final ContactBean oldP = adapter.getItem(position);
-		
-		final LinearLayout ll = new LinearLayout(MainActivity.this);
-		ll.setOrientation(LinearLayout.VERTICAL);
-		final EditText etName = new EditText(MainActivity.this);
-		etName.setHint("请输入联系人名称");
-		etName.setText(oldP.name);
-		final EditText etPhone = new EditText(MainActivity.this);
-		etPhone.setHint("请输入电话号码");
-		etPhone.setText(oldP.phone);
-		ll.addView(etName);
-		ll.addView(etPhone);
-		new AlertDialog.Builder(MainActivity.this)
+		Object item = adapter.getItem(position);
+		if(item instanceof ContactBean) {
+			final ContactBean oldP = (ContactBean) item;
+			
+			final LinearLayout ll = new LinearLayout(MainActivity.this);
+			ll.setOrientation(LinearLayout.VERTICAL);
+			final EditText etName = new EditText(MainActivity.this);
+			etName.setHint("请输入联系人名称");
+			etName.setText(oldP.name);
+			final EditText etPhone = new EditText(MainActivity.this);
+			etPhone.setHint("请输入电话号码");
+			etPhone.setText(oldP.phone);
+			ll.addView(etName);
+			ll.addView(etPhone);
+			new AlertDialog.Builder(MainActivity.this)
 			.setTitle("修改联系人")
 			.setView(ll)
 			.setPositiveButton("确定",
 					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							String name = etName.getText().toString();
-							String phone = etPhone.getText().toString();
-							
-							ContactBean newP = new ContactBean();
-							newP.raw_contact_id = oldP.raw_contact_id;
-							newP.name = name;
-							newP.phone = phone;
-							
-							ContactsManager.update(MainActivity.this, newP);
-							
-							getAllContact();
-						}
-					})
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					String name = etName.getText().toString();
+					String phone = etPhone.getText().toString();
+					
+					ContactBean newP = new ContactBean();
+					newP.raw_contact_id = oldP.raw_contact_id;
+					newP.name = name;
+					newP.phone = phone;
+					
+					ContactsManager.update(MainActivity.this, newP);
+					
+					getAllContact();
+				}
+			})
 			.setNegativeButton("取消", null)
 			.show();
+		}
 	}
 	
 	private void showDeleteDialog(final int position) {
@@ -131,10 +141,13 @@ public class MainActivity extends Activity implements OnClickListener {
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							ContactBean p = adapter.getItem(position);
-							ContactsManager.deleteContact(MainActivity.this, p);
-							
-							getAllContact();
+							Object item = adapter.getItem(position);
+							if(item instanceof ContactBean) {
+								final ContactBean contact = (ContactBean) item;
+								ContactsManager.deleteContact(MainActivity.this, contact);
+								
+								getAllContact();
+							}
 						}
 					})
 			.setNegativeButton("取消", null)

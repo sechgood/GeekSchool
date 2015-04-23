@@ -70,7 +70,6 @@ public class BoreLetterBar extends LinearLayout {
 			break;
 		}
 
-
 		return true;
 	}
 

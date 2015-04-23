@@ -1,8 +1,7 @@
 package com.boredream.contacts;
+
 /**
  * 将汉字转换为拼音
- * @author Champion.Wong
- *
  */
 public class PinYinUtils {
 	private static int[] pyvalue = new int[] { -20319, -20317, -20304, -20295,
@@ -103,15 +102,19 @@ public class PinYinUtils {
 	private StringBuilder buffer;
 	private String resource;
 	private static PinYinUtils chineseSpelling = new PinYinUtils();
+
 	public static PinYinUtils getInstance() {
 		return chineseSpelling;
 	}
+
 	public String getResource() {
 		return resource;
 	}
+
 	public void setResource(String resource) {
 		this.resource = resource;
 	}
+
 	private int getChsAscii(String chs) {
 		int asc = 0;
 		try {
@@ -137,6 +140,7 @@ public class PinYinUtils {
 		}
 		return asc;
 	}
+
 	/**
 	 * 转换单个汉字
 	 * 
@@ -158,6 +162,7 @@ public class PinYinUtils {
 		}
 		return result;
 	}
+
 	/**
 	 * 转换一个或多个汉字
 	 * 
@@ -183,6 +188,7 @@ public class PinYinUtils {
 		}
 		return result;
 	}
+
 	public String getSelling(String chs) {
 		String key, value;
 		buffer = new StringBuilder();
@@ -200,22 +206,18 @@ public class PinYinUtils {
 		}
 		return buffer.toString();
 	}
+
 	public String getSpelling() {
 		return this.getSelling(this.getResource());
 	}
-	
+
 	/**
 	 * 转换为拼音
+	 * 
 	 * @param str
 	 * @return
 	 */
 	public static String trans2PinYin(String str) {
 		return PinYinUtils.getInstance().convertAll(str);
-	}
-	public static void main(String[] args) {
-		String str = "你好，Hello！";
-		//String strPinYin = new Trans2PinYin().convertAll(str);
-		String strPinYin = trans2PinYin(str);
-		System.out.println(strPinYin);
 	}
 }

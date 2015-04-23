@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/btn_add" >
 
-        <ListView
+        <com.boredream.contacts.PinnedSectionListView
             android:id="@+id/lv_contacts"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

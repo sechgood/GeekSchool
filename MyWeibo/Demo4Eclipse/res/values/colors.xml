@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- common -->
+    <color name="transparent">#00000000</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="red">#ff403c</color>
+    
+    <!-- lofter -->
+    <color name="divider_gray">#d7d7d7</color>
+    <color name="bg_gray">#dddddd</color>
+    <color name="bg_item_bar">#f3f3f3</color>
+    <color name="bg_item_bar_pressed">#e8e8e8</color>
+    <color name="dashboard_common_default">#fff3f3f3</color>
+    <color name="dashboard_common_pressed">#ffe1e1e1</color>
+
+    <!-- material design -->
+    <color name="txt_black_alpha">#de000000</color>
+    <color name="txt_gray_alpha">#8d000000</color>
+    <color name="txt_light_gray_alpha">#49000000</color>
+    <color name="divider_black_alpha">#23000000</color>
+    
+    <color name="txt_white_alpha">#deffffff</color>
+    <color name="txt_whitegray_alpha">#8dffffff</color>
+    <color name="txt_light_white_alpha">#49ffffff</color>
+    <color name="bg_light_gray_alpha">#e3e3e3</color>
+    <color name="divider_white_alpha">#23ffffff</color>
+
+    <!-- primary color -->
+    <color name="coffee_dark">#5d4037</color>
+    <color name="coffee">#795548</color>
+    <color name="coffee_light">#d7ccc8</color>
+    <!-- accent color -->
+    <color name="orange">#ff5722</color>
+
+    <!-- customer -->
+    <color name="bg_gray_pressed">#d2d2d2</color>
+
+</resources>

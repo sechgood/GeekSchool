@@ -111,7 +111,7 @@
     </style>
 
     <style name="RadioButtonIndicatorTab">
-        <item name="android:background">@color/coffee_light</item>
+        <item name="android:background">@color/primary_light</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:textColor">@color/txt_black_alpha</item>
         <item name="android:layout_height">match_parent</item>

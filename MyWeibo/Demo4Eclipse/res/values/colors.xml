@@ -28,9 +28,9 @@
     <color name="divider_white_alpha">#23ffffff</color>
 
     <!-- primary color -->
-    <color name="coffee_dark">#5d4037</color>
-    <color name="coffee">#795548</color>
-    <color name="coffee_light">#d7ccc8</color>
+    <color name="primary_dark">#5d4037</color>
+    <color name="primary">#795548</color>
+    <color name="primary_light">#d7ccc8</color>
     <!-- accent color -->
     <color name="orange">#ff5722</color>
 

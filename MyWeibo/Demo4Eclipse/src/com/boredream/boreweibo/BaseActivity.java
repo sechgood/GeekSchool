@@ -2,7 +2,7 @@ package com.boredream.boreweibo;
 
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import com.boredream.boreweibo.api.BoreWeiboAPI;
 import com.boredream.boreweibo.constants.CommonConstants;
 import com.boredream.boreweibo.utils.DialogUtils;
 import com.boredream.boreweibo.utils.Logger;
+import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public abstract class BaseActivity extends Activity {
@@ -21,10 +22,11 @@ public abstract class BaseActivity extends Activity {
 	protected BaseApplication application;
 	protected SharedPreferences sp;
 	protected Intent intent;
-	protected ProgressDialog progressDialog;
+	protected Dialog progressDialog;
 	
 	protected ImageLoader imageLoader;
 	protected BoreWeiboAPI weiboApi;
+	protected Gson gson;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public abstract class BaseActivity extends Activity {
 		
 		imageLoader = ImageLoader.getInstance();
 		weiboApi = new BoreWeiboAPI(this);
+		gson = new Gson();
 	}
 	
 	protected void intent2Activity(Class<? extends Activity> tarActivity) {

@@ -2,7 +2,7 @@ package com.boredream.boreweibo.entity;
 
 
 public class User {
-	private int id;
+	private long id;
 	private String idstr;
 	private String screen_name;
 	private String name;
@@ -51,11 +51,11 @@ public class User {
 	private int credit_score;
 	private int urank;
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

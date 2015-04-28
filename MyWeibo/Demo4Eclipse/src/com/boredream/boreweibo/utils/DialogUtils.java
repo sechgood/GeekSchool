@@ -17,7 +17,7 @@ import android.text.TextUtils;
 
 public class DialogUtils {
 
-	public static ProgressDialog createLoadingDialog(Context context) {
+	public static Dialog createLoadingDialog(Context context) {
 		ProgressDialog progressDialog = new ProgressDialog(context);
 		return progressDialog;
 	}

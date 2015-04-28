@@ -24,6 +24,7 @@ public class Status {
 	private int reposts_count;
 	private int comments_count;
 	private int attitudes_count;
+	private User user;
 	private int mlevel;
 	private Visible visible;
 	private ArrayList<Object> darwin_tags;
@@ -194,6 +195,14 @@ public class Status {
 
 	public void setAttitudes_count(int attitudes_count) {
 		this.attitudes_count = attitudes_count;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public int getMlevel() {

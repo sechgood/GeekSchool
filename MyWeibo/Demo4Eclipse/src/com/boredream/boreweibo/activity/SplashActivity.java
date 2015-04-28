@@ -80,7 +80,7 @@ public class SplashActivity extends BaseActivity {
 		mAccessToken = AccessTokenKeeper.readAccessToken(this);
 		
 		if (mAccessToken.isSessionValid()) {
-			weiboApi.requestUsersShow(mAccessToken.getUid(),
+			weiboApi.usersShow(mAccessToken.getUid(),
 					new SimpleRequestListener(this, progressDialog) {
 
 						@Override

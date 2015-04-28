@@ -13,33 +13,39 @@ import com.sina.weibo.sdk.net.RequestListener;
 public class SimpleRequestListener implements RequestListener {
 
 	private Context context;
-	private Dialog loadingDialog;
+	private Dialog progressDialog;
 
-	public SimpleRequestListener(Context context, Dialog loadingDialog) {
+	public SimpleRequestListener(Context context, Dialog progressDialog) {
 		this.context = context;
-		this.loadingDialog = loadingDialog;
+		this.progressDialog = progressDialog;
 	}
 	
 	public void onComplete(String response) {
-		if(loadingDialog != null && loadingDialog.getContext() == context) {
-			loadingDialog.dismiss();
+		if(progressDialog != null && progressDialog.getContext() == context) {
+			progressDialog.dismiss();
 		}
 		LogUtils.show("REQUEST onComplete", response);
 	}
 
 	public void onComplete4binary(ByteArrayOutputStream responseOS) {
-		if(loadingDialog != null && loadingDialog.getContext() == context) {
-			loadingDialog.dismiss();
+		if(progressDialog != null && progressDialog.getContext() == context) {
+			progressDialog.dismiss();
 		}
 		LogUtils.show("REQUEST onComplete4binary", responseOS.size() + "");
 		
 	}
 
 	public void onIOException(IOException e) {
+		if(progressDialog != null && progressDialog.getContext() == context) {
+			progressDialog.dismiss();
+		}
 		LogUtils.show("REQUEST onIOException", e.toString());
 	}
 
 	public void onError(WeiboException e) {
+		if(progressDialog != null && progressDialog.getContext() == context) {
+			progressDialog.dismiss();
+		}
 		LogUtils.show("REQUEST onError", e.toString());
 	}
 

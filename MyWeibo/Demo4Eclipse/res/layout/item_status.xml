@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_card_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white2gray_sel"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/ll_top_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <include layout="@layout/include_avatar" />
+
+        <TextView
+            android:id="@+id/tv_content"
+            style="@style/TextViewBody"
+            android:layout_width="match_parent"
+            android:padding="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/iv_location"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="8dp"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:id="@+id/tv_location"
+                style="@style/TextViewBody"
+                android:singleLine="true"
+                android:text="XXX咖啡店"
+                android:textColor="@color/txt_gray_alpha" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_imageview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <GridView
+                android:id="@+id/gv_images"
+                style="@style/GridViewImages"
+                android:layout_width="272dp"
+                android:focusable="false" />
+
+            <ImageView
+                android:id="@+id/iv_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/ll_bottom_control"
+        layout="@layout/include_status_controlbar" />
+
+</LinearLayout>

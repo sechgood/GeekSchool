@@ -27,15 +27,15 @@
 
             <ImageView
                 android:id="@+id/iv_share_bottom"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_launcher" />
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/timeline_icon_retweet" />
 
             <TextView
                 android:id="@+id/tv_share_bottom"
                 style="@style/TextViewBody"
                 android:layout_marginLeft="8dp"
-                android:text="分享"
+                android:text="转发"
                 android:textColor="@color/txt_gray_alpha" />
         </LinearLayout>
 
@@ -55,9 +55,9 @@
 
             <ImageView
                 android:id="@+id/iv_comment_bottom"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_launcher" />
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/timeline_icon_comment" />
 
             <TextView
                 android:id="@+id/tv_comment_bottom"
@@ -81,11 +81,12 @@
             android:gravity="center"
             android:orientation="horizontal" >
 
-            <ImageView
-                android:id="@+id/iv_like_bottom"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_launcher" />
+            <CheckBox
+                android:id="@+id/cb_like_bottom"
+                android:layout_width="24dp"
+                android:enabled="false"
+                android:layout_height="24dp"
+                android:button="@drawable/timeline_icon_like_sel" />
 
             <TextView
                 android:id="@+id/tv_like_bottom"

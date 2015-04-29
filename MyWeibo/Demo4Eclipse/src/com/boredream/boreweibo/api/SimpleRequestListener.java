@@ -21,32 +21,30 @@ public class SimpleRequestListener implements RequestListener {
 	}
 	
 	public void onComplete(String response) {
-		if(progressDialog != null && progressDialog.getContext() == context) {
-			progressDialog.dismiss();
-		}
+		onDone();
 		LogUtils.show("REQUEST onComplete", response);
 	}
 
 	public void onComplete4binary(ByteArrayOutputStream responseOS) {
-		if(progressDialog != null && progressDialog.getContext() == context) {
-			progressDialog.dismiss();
-		}
+		onDone();
 		LogUtils.show("REQUEST onComplete4binary", responseOS.size() + "");
 		
 	}
 
 	public void onIOException(IOException e) {
-		if(progressDialog != null && progressDialog.getContext() == context) {
-			progressDialog.dismiss();
-		}
+		onDone();
 		LogUtils.show("REQUEST onIOException", e.toString());
 	}
 
 	public void onError(WeiboException e) {
+		onDone();
+		LogUtils.show("REQUEST onError", e.toString());
+	}
+	
+	public void onDone() {
 		if(progressDialog != null && progressDialog.getContext() == context) {
 			progressDialog.dismiss();
 		}
-		LogUtils.show("REQUEST onError", e.toString());
 	}
 
 }

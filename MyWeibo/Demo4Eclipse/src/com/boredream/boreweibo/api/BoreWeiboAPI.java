@@ -2,8 +2,6 @@ package com.boredream.boreweibo.api;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import android.content.Context;
 import android.os.Handler;
@@ -15,7 +13,6 @@ import com.boredream.boreweibo.utils.URLs;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboParameters;
 import com.sina.weibo.sdk.exception.WeiboException;
-import com.sina.weibo.sdk.net.HttpManager;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.openapi.legacy.WeiboAPI;
 

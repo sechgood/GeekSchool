@@ -51,8 +51,6 @@ public class StatusGridImgsAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		
-		System.out.println(parent.getWidth());
-		
 		// set data
 		PicUrls item = getItem(position);
 		imageLoader.displayImage(item.getThumbnail_pic(), holder.iv_image);

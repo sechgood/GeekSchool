@@ -1,7 +1,5 @@
 package com.boredream.boreweibo.fragment;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +22,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.sina.weibo.sdk.exception.WeiboException;
 
 public class HomeFragment extends BaseFragment {
 
@@ -114,45 +111,30 @@ public class HomeFragment extends BaseFragment {
 					public void onComplete(String response) {
 						super.onComplete(response);
 						
-						isLoadingMore = false;
-						plv_home.onRefreshComplete();
-						
+						if(requestPage == 1) {
+							statuses.clear();
+						}
 						curPage = requestPage;
 						
-						HomeTimeLineResponse resBean = gson.fromJson(response, HomeTimeLineResponse.class);
-						addData(resBean);
+						addData(gson.fromJson(response, HomeTimeLineResponse.class));
 					}
 
 					@Override
-					public void onComplete4binary(ByteArrayOutputStream responseOS) {
-						super.onComplete4binary(responseOS);
+					public void onDone() {
+						super.onDone();
 						
 						isLoadingMore = false;
 						plv_home.onRefreshComplete();
 					}
-
-					@Override
-					public void onIOException(IOException e) {
-						super.onIOException(e);
-						
-						isLoadingMore = false;
-						plv_home.onRefreshComplete();
-					}
-
-					@Override
-					public void onError(WeiboException e) {
-						super.onError(e);
-						
-						isLoadingMore = false;
-						plv_home.onRefreshComplete();
-					}
-					
-					
 		});
 	}
 
 	private void addData(HomeTimeLineResponse resBean) {
-		statuses.addAll(resBean.getStatuses());
+		for(Status status : resBean.getStatuses()) {
+			if(!statuses.contains(status)) {
+				statuses.add(status);
+			}
+		}
 		adapter.notifyDataSetChanged();
 		
 		if(curPage < resBean.getTotal_number()) {

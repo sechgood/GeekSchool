@@ -18,13 +18,15 @@
             android:id="@+id/tv_content"
             style="@style/TextViewBody"
             android:layout_width="match_parent"
+            android:layout_marginTop="-16dp"
             android:padding="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <ImageView
                 android:id="@+id/iv_location"
@@ -45,9 +47,10 @@
         <FrameLayout
             android:id="@+id/fl_imageview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:padding="16dp" >
 
-            <GridView
+            <com.boredream.boreweibo.widget.WrapHeightGridView
                 android:id="@+id/gv_images"
                 style="@style/GridViewImages"
                 android:layout_width="272dp"
@@ -55,11 +58,16 @@
 
             <ImageView
                 android:id="@+id/iv_image"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="200dp"
                 android:visibility="gone" />
         </FrameLayout>
+
+        <include
+            android:id="@+id/include_retweeted_status"
+            layout="@layout/include_retweeted_status"
+            android:visibility="gone" />
     </LinearLayout>
 
     <include

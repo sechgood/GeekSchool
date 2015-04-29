@@ -10,7 +10,12 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -25,6 +30,7 @@ import com.boredream.boreweibo.entity.User;
 import com.boredream.boreweibo.utils.DateUtils;
 import com.boredream.boreweibo.utils.DialogUtils;
 import com.boredream.boreweibo.utils.ImageOptHelper;
+import com.boredream.boreweibo.utils.StringUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class StatusAdapter extends BaseAdapter {
@@ -59,7 +65,7 @@ public class StatusAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder holder;
+		final ViewHolder holder;
 		if(convertView == null) {
 			holder = new ViewHolder();
 			convertView = View.inflate(context, R.layout.item_status, null);
@@ -74,6 +80,18 @@ public class StatusAdapter extends BaseAdapter {
 			holder.tv_content = (TextView) convertView.findViewById(R.id.tv_content);
 			holder.iv_location = (ImageView) convertView.findViewById(R.id.iv_location);
 			holder.tv_location = (TextView) convertView.findViewById(R.id.tv_location);
+			
+			holder.include_retweeted_status = (LinearLayout) convertView
+					.findViewById(R.id.include_retweeted_status);
+			holder.tv_retweeted_content = (TextView) convertView
+					.findViewById(R.id.tv_retweeted_content);
+			holder.fl_retweeted_imageview = (FrameLayout) convertView
+					.findViewById(R.id.fl_retweeted_imageview);
+			holder.gv_retweeted_images = (GridView) convertView
+					.findViewById(R.id.gv_retweeted_images);
+			holder.iv_retweeted_image = (ImageView) convertView
+					.findViewById(R.id.iv_retweeted_image);
+			
 			holder.ll_share_bottom = (LinearLayout) convertView
 					.findViewById(R.id.ll_share_bottom);
 			holder.iv_share_bottom = (ImageView) convertView
@@ -88,8 +106,8 @@ public class StatusAdapter extends BaseAdapter {
 					.findViewById(R.id.tv_comment_bottom);
 			holder.ll_like_bottom = (LinearLayout) convertView
 					.findViewById(R.id.ll_like_bottom);
-			holder.iv_like_bottom = (ImageView) convertView
-					.findViewById(R.id.iv_like_bottom);
+			holder.cb_like_bottom = (CheckBox) convertView
+					.findViewById(R.id.cb_like_bottom);
 			holder.tv_like_bottom = (TextView) convertView
 					.findViewById(R.id.tv_like_bottom);
 			convertView.setTag(holder);
@@ -103,29 +121,17 @@ public class StatusAdapter extends BaseAdapter {
 		imageLoader.displayImage(user.getProfile_image_url(), holder.iv_avatar,
 				ImageOptHelper.getAvatarOptions());
 		holder.tv_subhead.setText(user.getName());
-		holder.tv_body.setText(DateUtils.getShortTime(item.getCreated_at()) + " " + Html.fromHtml(item.getSource()));
+		holder.tv_body.setText(DateUtils.getShortTime(item.getCreated_at()) + 
+				"  来自" + Html.fromHtml(item.getSource()));
+
+		setImages(item, holder.fl_imageview, holder.gv_images, holder.iv_image);
 		
-		ArrayList<PicUrls> picUrls = item.getPic_urls();
-		if(picUrls.size() == 1) {
-			holder.fl_imageview.setVisibility(View.VISIBLE);
-			holder.gv_images.setVisibility(View.GONE);
-			holder.iv_image.setVisibility(View.VISIBLE);
-			
-			imageLoader.displayImage(picUrls.get(0).getThumbnail_pic(), holder.iv_image);
-		} else if(picUrls.size() > 1) {
-			holder.fl_imageview.setVisibility(View.VISIBLE);
-			holder.gv_images.setVisibility(View.VISIBLE);
-			holder.iv_image.setVisibility(View.GONE);
-			
-			StatusGridImgsAdapter imagesAdapter = new StatusGridImgsAdapter(context, picUrls);
-			holder.gv_images.setAdapter(imagesAdapter);
+		if(TextUtils.isEmpty(item.getText())) {
+			holder.tv_content.setVisibility(View.GONE);
 		} else {
-			holder.fl_imageview.setVisibility(View.GONE);
+			holder.tv_content.setVisibility(View.VISIBLE);
+			holder.tv_content.setText(StringUtils.getWeiboContent(context, item.getText()));
 		}
-		
-		holder.tv_content.setVisibility(TextUtils.isEmpty(item.getText()) ? 
-				View.GONE : View.VISIBLE);
-		holder.tv_content.setText(item.getText());
 //		holder.tv_location.setText(item.get);
 
 //		holder.gv_images.setOnItemClickListener(new OnItemClickListener() {
@@ -140,6 +146,19 @@ public class StatusAdapter extends BaseAdapter {
 //			}
 //		});
 		
+		// retweeted
+		Status retweetedStatus = item.getRetweeted_status();
+		if(retweetedStatus != null) {
+			holder.include_retweeted_status.setVisibility(View.VISIBLE);
+			holder.tv_retweeted_content.setText("@" + retweetedStatus.getUser().getName()
+					+ ":" + retweetedStatus.getText());
+			setImages(retweetedStatus, holder.fl_retweeted_imageview, 
+					holder.gv_retweeted_images, holder.iv_retweeted_image);
+		} else {
+			holder.include_retweeted_status.setVisibility(View.GONE);
+		}
+		
+		// bottom bar
 		holder.ll_share_bottom.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -160,6 +179,33 @@ public class StatusAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 //				sendLike(item);
+				
+				
+				final ScaleAnimation scaleAnimation2 = new ScaleAnimation(1.5f, 1f, 1.5f, 1f, 
+						Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+				scaleAnimation2.setDuration(150);
+				
+				ScaleAnimation scaleAnimation1 = new ScaleAnimation(1f, 1.5f, 1f, 1.5f, 
+						Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+				scaleAnimation1.setDuration(200);
+				scaleAnimation1.setAnimationListener(new AnimationListener() {
+					@Override
+					public void onAnimationStart(Animation animation) {
+						
+					}
+					
+					@Override
+					public void onAnimationRepeat(Animation animation) {
+						
+					}
+					
+					@Override
+					public void onAnimationEnd(Animation animation) {
+						holder.cb_like_bottom.setChecked(!holder.cb_like_bottom.isChecked());
+						holder.cb_like_bottom.setAnimation(scaleAnimation2);
+					}
+				});
+				holder.cb_like_bottom.setAnimation(scaleAnimation1);
 			}
 		});
 		
@@ -174,6 +220,28 @@ public class StatusAdapter extends BaseAdapter {
 		return convertView;
 	}
 
+	private void setImages(Status status, ViewGroup vgContainer, GridView gvImgs, ImageView ivImg) {
+		ArrayList<PicUrls> picUrls = status.getPic_urls();
+		String picUrl = status.getBmiddle_pic();
+		
+		if(picUrls.size() == 1) {
+			vgContainer.setVisibility(View.VISIBLE);
+			gvImgs.setVisibility(View.GONE);
+			ivImg.setVisibility(View.VISIBLE);
+			
+			imageLoader.displayImage(picUrl, ivImg);
+		} else if(picUrls.size() > 1) {
+			vgContainer.setVisibility(View.VISIBLE);
+			gvImgs.setVisibility(View.VISIBLE);
+			ivImg.setVisibility(View.GONE);
+			
+			StatusGridImgsAdapter imagesAdapter = new StatusGridImgsAdapter(context, picUrls);
+			gvImgs.setAdapter(imagesAdapter);
+		} else {
+			vgContainer.setVisibility(View.GONE);
+		}
+	}
+
 	public static class ViewHolder{
 		public LinearLayout ll_top_content;
 		public ImageView iv_avatar;
@@ -186,6 +254,12 @@ public class StatusAdapter extends BaseAdapter {
 		public TextView tv_content;
 		public ImageView iv_location;
 		public TextView tv_location;
+		
+		public LinearLayout include_retweeted_status;
+		public TextView tv_retweeted_content;
+		public FrameLayout fl_retweeted_imageview;
+		public GridView gv_retweeted_images; 
+		public ImageView iv_retweeted_image;
 
 		public LinearLayout ll_share_bottom;
 		public ImageView iv_share_bottom;
@@ -194,7 +268,7 @@ public class StatusAdapter extends BaseAdapter {
 		public ImageView iv_comment_bottom;
 		public TextView tv_comment_bottom;
 		public LinearLayout ll_like_bottom;
-		public ImageView iv_like_bottom;
+		public CheckBox cb_like_bottom;
 		public TextView tv_like_bottom;
 	}
 

@@ -25,6 +25,8 @@ public class DateUtils {
 			
 			if(durTime <= 10 * ONE_MINUTE_MILLIONS) {
 				str = "刚刚";
+			} else if(durTime < ONE_HOUR_MILLIONS){
+				str = durTime / ONE_MINUTE_MILLIONS + "分钟前";
 			} else if(dayStatus == 0){
 				str = durTime / ONE_HOUR_MILLIONS + "小时前";
 			} else if(dayStatus == -1) {

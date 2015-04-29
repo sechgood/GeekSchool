@@ -20,7 +20,7 @@ import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.api.SimpleRequestListener;
 import com.boredream.boreweibo.constants.AccessTokenKeeper;
 import com.boredream.boreweibo.entity.User;
-import com.boredream.boreweibo.view.RoundedImageView;
+import com.boredream.boreweibo.widget.RoundedImageView;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;

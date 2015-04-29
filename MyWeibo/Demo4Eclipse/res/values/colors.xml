@@ -36,5 +36,6 @@
 
     <!-- customer -->
     <color name="bg_gray_pressed">#d2d2d2</color>
+    <color name="txt_at_blue">#507daf</color>
 
 </resources>

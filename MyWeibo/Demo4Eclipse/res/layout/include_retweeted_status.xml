@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_gray"
+    android:orientation="vertical"
+    android:padding="16dp" >
+
+    <TextView
+        android:id="@+id/tv_retweeted_content"
+        style="@style/TextViewBody"
+        android:text="我和宠物的日常" />
+
+    <FrameLayout
+        android:id="@+id/fl_retweeted_imageview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" >
+
+        <com.boredream.boreweibo.widget.WrapHeightGridView
+            android:id="@+id/gv_retweeted_images"
+            style="@style/GridViewImages"
+            android:layout_width="272dp"
+            android:focusable="false" />
+
+        <ImageView
+            android:id="@+id/iv_retweeted_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="200dp"
+            android:maxHeight="200dp"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>

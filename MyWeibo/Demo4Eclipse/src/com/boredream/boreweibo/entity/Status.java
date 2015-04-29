@@ -25,6 +25,7 @@ public class Status {
 	private int comments_count;
 	private int attitudes_count;
 	private User user;
+	private Status retweeted_status;
 	private int mlevel;
 	private Visible visible;
 	private ArrayList<Object> darwin_tags;
@@ -204,6 +205,14 @@ public class Status {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
+	public Status getRetweeted_status() {
+		return retweeted_status;
+	}
+
+	public void setRetweeted_status(Status retweeted_status) {
+		this.retweeted_status = retweeted_status;
+	}
 
 	public int getMlevel() {
 		return mlevel;
@@ -227,6 +236,14 @@ public class Status {
 
 	public void setDarwin_tags(ArrayList<Object> darwin_tags) {
 		this.darwin_tags = darwin_tags;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof Status) {
+			return this.id == ((Status)o).id;
+		}
+		return super.equals(o);
 	}
 
 }

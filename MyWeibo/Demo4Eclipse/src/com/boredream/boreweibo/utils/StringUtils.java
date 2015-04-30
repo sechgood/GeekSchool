@@ -22,7 +22,7 @@ public class StringUtils {
 		SpannableString spannableString = new SpannableString(source);
 		Resources res = context.getResources();
 		
-		String regexAt = "@([\u4e00-\u9fa5\\w])+";
+		String regexAt = "(@([\u4e00-\u9fa5\\w])+)|(#([\u4e00-\u9fa5\\w])+#)";
 		Pattern patternAt = Pattern.compile(regexAt);
 		Matcher matcherAt = patternAt.matcher(spannableString);
 		int atBlue = res.getColor(R.color.txt_at_blue);

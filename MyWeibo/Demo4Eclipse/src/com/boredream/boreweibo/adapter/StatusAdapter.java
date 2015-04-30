@@ -1,10 +1,14 @@
 package com.boredream.boreweibo.adapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,8 +16,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
@@ -24,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.boredream.boreweibo.R;
+import com.boredream.boreweibo.activity.ImageBrowerActivity;
 import com.boredream.boreweibo.entity.PicUrls;
 import com.boredream.boreweibo.entity.Status;
 import com.boredream.boreweibo.entity.User;
@@ -32,12 +38,15 @@ import com.boredream.boreweibo.utils.DialogUtils;
 import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.boredream.boreweibo.utils.StringUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 public class StatusAdapter extends BaseAdapter {
 
 	private Context context;
 	private List<Status> datas;
 	private ImageLoader imageLoader;
+	private AnimateFirstDisplayListener animateFirstDisplayListener;
 	
 	private Dialog progressDialog;
 
@@ -46,6 +55,7 @@ public class StatusAdapter extends BaseAdapter {
 		this.datas = datas;
 		imageLoader = ImageLoader.getInstance();
 		progressDialog = DialogUtils.createLoadingDialog(context);
+		animateFirstDisplayListener = new AnimateFirstDisplayListener();
 	}
 	
 	@Override
@@ -132,19 +142,6 @@ public class StatusAdapter extends BaseAdapter {
 			holder.tv_content.setVisibility(View.VISIBLE);
 			holder.tv_content.setText(StringUtils.getWeiboContent(context, item.getText()));
 		}
-//		holder.tv_location.setText(item.get);
-
-//		holder.gv_images.setOnItemClickListener(new OnItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> parent, View view,
-//					int position, long id) {
-//				Intent intent = new Intent(context, ImageBrowserActivity.class);
-//				intent.putExtra("info", item);
-//				intent.putExtra("position", position);
-//				context.startActivity(intent);
-//			}
-//		});
 		
 		// retweeted
 		Status retweetedStatus = item.getRetweeted_status();
@@ -159,6 +156,9 @@ public class StatusAdapter extends BaseAdapter {
 		}
 		
 		// bottom bar
+		holder.tv_share_bottom.setText(item.getReposts_count() == 0 ?
+				"转发" : item.getReposts_count()+"");
+		holder.cb_like_bottom.setChecked(item.isLiked());
 		holder.ll_share_bottom.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -166,6 +166,8 @@ public class StatusAdapter extends BaseAdapter {
 			}
 		});
 		
+		holder.tv_comment_bottom.setText(item.getComments_count() == 0 ?
+				"评论" : item.getComments_count()+"");
 		holder.ll_comment_bottom.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -175,6 +177,8 @@ public class StatusAdapter extends BaseAdapter {
 			}
 		});
 		
+		holder.tv_like_bottom.setText(item.getAttitudes_count() == 0 ?
+				"赞" : item.getAttitudes_count()+"");
 		holder.ll_like_bottom.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -220,7 +224,7 @@ public class StatusAdapter extends BaseAdapter {
 		return convertView;
 	}
 
-	private void setImages(Status status, ViewGroup vgContainer, GridView gvImgs, ImageView ivImg) {
+	private void setImages(final Status status, ViewGroup vgContainer, GridView gvImgs, final ImageView ivImg) {
 		ArrayList<PicUrls> picUrls = status.getPic_urls();
 		String picUrl = status.getBmiddle_pic();
 		
@@ -229,7 +233,17 @@ public class StatusAdapter extends BaseAdapter {
 			gvImgs.setVisibility(View.GONE);
 			ivImg.setVisibility(View.VISIBLE);
 			
-			imageLoader.displayImage(picUrl, ivImg);
+			imageLoader.displayImage(picUrl, ivImg, animateFirstDisplayListener);
+			
+			ivImg.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, ImageBrowerActivity.class);
+					intent.putExtra("status", status);
+					intent.putExtra("position", -1);
+					context.startActivity(intent);
+				}
+			});
 		} else if(picUrls.size() > 1) {
 			vgContainer.setVisibility(View.VISIBLE);
 			gvImgs.setVisibility(View.VISIBLE);
@@ -237,6 +251,17 @@ public class StatusAdapter extends BaseAdapter {
 			
 			StatusGridImgsAdapter imagesAdapter = new StatusGridImgsAdapter(context, picUrls);
 			gvImgs.setAdapter(imagesAdapter);
+			
+			gvImgs.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					Intent intent = new Intent(context, ImageBrowerActivity.class);
+					intent.putExtra("status", status);
+					intent.putExtra("position", position);
+					context.startActivity(intent);
+				}
+			});
 		} else {
 			vgContainer.setVisibility(View.GONE);
 		}
@@ -283,4 +308,21 @@ public class StatusAdapter extends BaseAdapter {
 //			}
 //		});
 //	}
+	
+	private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
+
+		static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
+
+		@Override
+		public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+			if (loadedImage != null) {
+				ImageView imageView = (ImageView) view;
+				boolean firstDisplay = !displayedImages.contains(imageUri);
+				if (firstDisplay) {
+					FadeInBitmapDisplayer.animate(imageView, 500);
+					displayedImages.add(imageUri);
+				}
+			}
+		}
+	}
 }

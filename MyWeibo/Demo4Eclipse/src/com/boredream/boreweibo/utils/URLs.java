@@ -6,5 +6,6 @@ public interface URLs {
 	
 	String usersShow = BASE_URL + "users/show.json";
 	String statusesHome_timeline = BASE_URL + "statuses/home_timeline.json";
+	String statusesRepost = BASE_URL + "statuses/repost.json";
 	
 }

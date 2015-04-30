@@ -1,8 +1,9 @@
 package com.boredream.boreweibo.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Status {
+public class Status extends BaseBean {
 	private String created_at;
 	private long id;
 	private String mid;
@@ -26,6 +27,7 @@ public class Status {
 	private int attitudes_count;
 	private User user;
 	private Status retweeted_status;
+	private boolean liked;
 	private int mlevel;
 	private Visible visible;
 	private ArrayList<Object> darwin_tags;
@@ -205,13 +207,21 @@ public class Status {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
 	public Status getRetweeted_status() {
 		return retweeted_status;
 	}
 
 	public void setRetweeted_status(Status retweeted_status) {
 		this.retweeted_status = retweeted_status;
+	}
+
+	public boolean isLiked() {
+		return liked;
+	}
+
+	public void setLiked(boolean liked) {
+		this.liked = liked;
 	}
 
 	public int getMlevel() {
@@ -240,8 +250,8 @@ public class Status {
 
 	@Override
 	public boolean equals(Object o) {
-		if(o instanceof Status) {
-			return this.id == ((Status)o).id;
+		if (o instanceof Status) {
+			return this.id == ((Status) o).id;
 		}
 		return super.equals(o);
 	}

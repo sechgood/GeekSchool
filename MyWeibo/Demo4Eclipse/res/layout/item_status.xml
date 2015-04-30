@@ -53,13 +53,13 @@
             <com.boredream.boreweibo.widget.WrapHeightGridView
                 android:id="@+id/gv_images"
                 style="@style/GridViewImages"
-                android:layout_width="272dp"
-                android:focusable="false" />
+                android:layout_width="272dp" />
 
             <ImageView
                 android:id="@+id/iv_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxHeight="200dp"
                 android:maxWidth="200dp"
                 android:visibility="gone" />
         </FrameLayout>

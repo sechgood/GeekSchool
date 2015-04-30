@@ -118,4 +118,19 @@ public class BoreWeiboAPI extends WeiboAPI{
 		requestInMainLooper(URLs.statusesHome_timeline, params , WeiboAPI.HTTPMETHOD_GET, listener);
 	}
 	
+	/**
+	 * 转发微博
+	 * @param id 要转发的微博ID。
+	 * @param status 添加的转发文本，必须做URLencode，内容不超过140个汉字，不填则默认为“转发微博”。
+	 * @param is_comment 是否在转发的同时发表评论，0：否、1：评论给当前微博、2：评论给原微博、3：都评论，默认为0 。
+	 * @param listener
+	 */
+	public void statusesRepost(long id, String status, int is_comment, RequestListener listener) {
+		WeiboParameters params = new WeiboParameters();
+		params.add("id", id);
+		params.add("status", status);
+		params.add("is_comment", is_comment);
+		requestInMainLooper(URLs.statusesRepost, params , WeiboAPI.HTTPMETHOD_POST, listener);
+	}
+	
 }

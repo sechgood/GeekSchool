@@ -2,7 +2,7 @@ package com.boredream.boreweibo.entity;
 
 import java.util.ArrayList;
 
-public class HomeTimeLineResponse {
+public class HomeTimeLineResponse extends BaseBean {
 
 	private ArrayList<Status> statuses;
 	private ArrayList<Ad> ad;

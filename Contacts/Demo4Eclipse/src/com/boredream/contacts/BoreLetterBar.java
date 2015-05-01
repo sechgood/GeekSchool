@@ -28,8 +28,9 @@ public class BoreLetterBar extends LinearLayout {
 			TextView t = new TextView(context);
 			t.setText(s);
 			t.setTextSize(10);
-			ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-					ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+					ViewGroup.LayoutParams.WRAP_CONTENT, 0);
+			params.weight = 1;
 			t.setLayoutParams(params);
 			t.setTextColor(Color.WHITE);
 			addView(t);

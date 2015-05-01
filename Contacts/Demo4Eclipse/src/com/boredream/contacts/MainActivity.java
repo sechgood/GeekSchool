@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -70,7 +72,10 @@ public class MainActivity extends Activity implements OnClickListener {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					final int position, long id) {
-				showUpdateDialog(position);
+				Object item = adapter.getItem(position);
+				if(item instanceof ContactBean) {
+					showUpdateDialog((ContactBean)item);
+				}
 			}
 		});
 		lv.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -78,7 +83,10 @@ public class MainActivity extends Activity implements OnClickListener {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					final int position, long id) {
-				showDeleteDialog(position);
+				Object item = adapter.getItem(position);
+				if(item instanceof ContactBean) {
+					showLongClickDialog((ContactBean)item);
+				}
 				return true;
 			}
 			
@@ -94,62 +102,79 @@ public class MainActivity extends Activity implements OnClickListener {
 		pd.dismiss();
 	}
 	
-	private void showUpdateDialog(final int position) {
-		Object item = adapter.getItem(position);
-		if(item instanceof ContactBean) {
-			final ContactBean oldP = (ContactBean) item;
-			
-			final LinearLayout ll = new LinearLayout(MainActivity.this);
-			ll.setOrientation(LinearLayout.VERTICAL);
-			final EditText etName = new EditText(MainActivity.this);
-			etName.setHint("请输入联系人名称");
-			etName.setText(oldP.name);
-			final EditText etPhone = new EditText(MainActivity.this);
-			etPhone.setHint("请输入电话号码");
-			etPhone.setText(oldP.phone);
-			ll.addView(etName);
-			ll.addView(etPhone);
-			new AlertDialog.Builder(MainActivity.this)
-			.setTitle("修改联系人")
-			.setView(ll)
-			.setPositiveButton("确定",
-					new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					String name = etName.getText().toString();
-					String phone = etPhone.getText().toString();
-					
-					ContactBean newP = new ContactBean();
-					newP.raw_contact_id = oldP.raw_contact_id;
-					newP.name = name;
-					newP.phone = phone;
-					
-					ContactsManager.update(MainActivity.this, newP);
-					
-					getAllContact();
-				}
-			})
-			.setNegativeButton("取消", null)
-			.show();
-		}
+	private void showUpdateDialog(final ContactBean oldContact) {
+		final LinearLayout ll = new LinearLayout(MainActivity.this);
+		ll.setOrientation(LinearLayout.VERTICAL);
+		final EditText etName = new EditText(MainActivity.this);
+		etName.setHint("请输入联系人名称");
+		etName.setText(oldContact.name);
+		final EditText etPhone = new EditText(MainActivity.this);
+		etPhone.setHint("请输入电话号码");
+		etPhone.setText(oldContact.phone);
+		ll.addView(etName);
+		ll.addView(etPhone);
+		new AlertDialog.Builder(MainActivity.this)
+		.setTitle("修改联系人")
+		.setView(ll)
+		.setPositiveButton("确定",
+				new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				String name = etName.getText().toString();
+				String phone = etPhone.getText().toString();
+				
+				ContactBean newP = new ContactBean();
+				newP.raw_contact_id = oldContact.raw_contact_id;
+				newP.name = name;
+				newP.phone = phone;
+				
+				ContactsManager.update(MainActivity.this, newP);
+				
+				getAllContact();
+			}
+		})
+		.setNegativeButton("取消", null)
+		.show();
 	}
 	
-	private void showDeleteDialog(final int position) {
+	private void showDeleteDialog(final ContactBean contact) {
 		new AlertDialog.Builder(MainActivity.this)
 			.setMessage("是否确定删除?")
 			.setPositiveButton("确定",
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							Object item = adapter.getItem(position);
-							if(item instanceof ContactBean) {
-								final ContactBean contact = (ContactBean) item;
-								ContactsManager.deleteContact(MainActivity.this, contact);
-								
-								getAllContact();
-							}
+							ContactsManager.deleteContact(MainActivity.this, contact);
+							getAllContact();
 						}
 					})
+			.setNegativeButton("取消", null)
+			.show();
+	}
+	
+	private void showLongClickDialog(final ContactBean contact) {
+		new AlertDialog.Builder(MainActivity.this)
+			.setItems(new String[]{"拨打电话", "发送短信", "删除联系人"}, 
+					new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					switch (which) {
+					case 0:
+		                Intent intent0 = new Intent(Intent.ACTION_CALL, 
+		                		Uri.parse("tel:" + contact.phone));  
+		                startActivity(intent0);  
+						break;
+					case 1:
+						Intent intent1 = new Intent(android.content.Intent.ACTION_SENDTO, 
+								Uri.parse("smsto://" + contact.phone));
+						startActivity(intent1);
+						break;
+					case 2:
+						showDeleteDialog(contact);
+						break;
+					}
+				}
+			})
 			.setNegativeButton("取消", null)
 			.show();
 	}

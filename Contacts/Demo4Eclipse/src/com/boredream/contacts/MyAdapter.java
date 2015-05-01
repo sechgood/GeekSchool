@@ -45,8 +45,8 @@ public class MyAdapter extends BaseAdapter implements PinnedSectionListAdapter{
 
 			@Override
 			public int compare(ContactBean lhs, ContactBean rhs) {
-				String lhsLetter = PinYinUtils.trans2PinYin(lhs.name);
-				String rhsLetter = PinYinUtils.trans2PinYin(rhs.name);
+				String lhsLetter = PinYinUtils.trans2PinYin(lhs.name).toUpperCase(Locale.CHINESE);
+				String rhsLetter = PinYinUtils.trans2PinYin(rhs.name).toUpperCase(Locale.CHINESE);
 				return lhsLetter.compareTo(rhsLetter);
 			}
 		});

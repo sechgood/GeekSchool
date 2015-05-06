@@ -6,7 +6,7 @@ import java.io.IOException;
 import android.app.Dialog;
 import android.content.Context;
 
-import com.boredream.boreweibo.utils.LogUtils;
+import com.boredream.boreweibo.utils.Logger;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 
@@ -22,23 +22,23 @@ public class SimpleRequestListener implements RequestListener {
 	
 	public void onComplete(String response) {
 		onDone();
-		LogUtils.show("REQUEST onComplete", response);
+		Logger.show("REQUEST onComplete", response);
 	}
 
 	public void onComplete4binary(ByteArrayOutputStream responseOS) {
 		onDone();
-		LogUtils.show("REQUEST onComplete4binary", responseOS.size() + "");
+		Logger.show("REQUEST onComplete4binary", responseOS.size() + "");
 		
 	}
 
 	public void onIOException(IOException e) {
 		onDone();
-		LogUtils.show("REQUEST onIOException", e.toString());
+		Logger.show("REQUEST onIOException", e.toString());
 	}
 
 	public void onError(WeiboException e) {
 		onDone();
-		LogUtils.show("REQUEST onError", e.toString());
+		Logger.show("REQUEST onError", e.toString());
 	}
 	
 	public void onDone() {

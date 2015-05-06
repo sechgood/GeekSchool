@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- common -->
+    <color name="transparent">#00000000</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000</color>
+
+    <!-- material design -->
+    <color name="txt_black_alpha">#de000000</color>
+    <color name="txt_gray_alpha">#8d000000</color>
+    <color name="txt_light_gray_alpha">#49000000</color>
+    <color name="divider_black_alpha">#23000000</color>
+    
+    <color name="txt_white_alpha">#deffffff</color>
+    <color name="txt_whitegray_alpha">#8dffffff</color>
+    <color name="txt_light_white_alpha">#49ffffff</color>
+    <color name="divider_white_alpha">#23ffffff</color>
+
+    <!-- customer -->
+    <color name="bg_gray">#dddddd</color>
+
+</resources>

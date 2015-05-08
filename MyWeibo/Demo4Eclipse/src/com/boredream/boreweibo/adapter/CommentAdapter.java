@@ -4,22 +4,26 @@ import java.util.List;
 
 import android.content.Context;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.boredream.boreweibo.R;
-import com.boredream.boreweibo.entity.StatusComment;
+import com.boredream.boreweibo.entity.Comment;
+import com.boredream.boreweibo.entity.User;
+import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class CommentAdapter extends BaseAdapter {
 
 	private Context context;
-	private List<StatusComment> datas;
+	private List<Comment> datas;
 	private ImageLoader imageLoader;
 
-	public CommentAdapter(Context context, List<StatusComment> datas) {
+	public CommentAdapter(Context context, List<Comment> datas) {
 		this.context = context;
 		this.datas = datas;
 		this.imageLoader = ImageLoader.getInstance();
@@ -31,7 +35,7 @@ public class CommentAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public StatusComment getItem(int position) {
+	public Comment getItem(int position) {
 		return datas.get(position);
 	}
 
@@ -46,6 +50,8 @@ public class CommentAdapter extends BaseAdapter {
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = View.inflate(context, R.layout.item_comment, null);
+			holder.ll_comments = (LinearLayout) convertView
+					.findViewById(R.id.ll_comments);
 			holder.iv_avatar = (ImageView) convertView
 					.findViewById(R.id.iv_avatar);
 			holder.tv_subhead = (TextView) convertView
@@ -62,19 +68,28 @@ public class CommentAdapter extends BaseAdapter {
 		}
 
 		// set data
-		StatusComment bean = getItem(position);
-//		User user = 
-//		
-//		imageLoader.displayImage(user.getAvatarUrl(), holder.iv_avatar, 
-//				ImageOptHelper.getAvatarOptions());
-//		holder.tv_subhead.setText(user.getUsername());
-//		holder.tv_body.setText(bean.getCreatedAt());
-//		holder.tv_like.setText(bean.getLikeCount()+"");
-//		holder.tv_comment.setText(bean.getContent());
+		Comment comment = getItem(position);
+		User user = comment.getUser();
+		
+		imageLoader.displayImage(user.getProfile_image_url(), holder.iv_avatar, 
+				ImageOptHelper.getAvatarOptions());
+		holder.tv_subhead.setText(user.getName());
+		holder.tv_body.setText(comment.getCreated_at());
+		holder.tv_like.setText(comment.getFloor_num()+"");
+		holder.tv_comment.setText(comment.getText());
+		
+		holder.ll_comments.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+		
 		return convertView;
 	}
 
 	public static class ViewHolder {
+		public LinearLayout ll_comments;
 		public ImageView iv_avatar;
 		public TextView tv_subhead;
 		public TextView tv_body;

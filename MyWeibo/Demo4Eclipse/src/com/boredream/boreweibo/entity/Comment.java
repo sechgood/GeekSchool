@@ -1,6 +1,6 @@
 package com.boredream.boreweibo.entity;
 
-public class Comments extends BaseEntity {
+public class Comment extends BaseEntity {
 	private String created_at;
 	private long id;
 	private String text;

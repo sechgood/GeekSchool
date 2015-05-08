@@ -2,17 +2,17 @@ package com.boredream.boreweibo.entity.response;
 
 import java.util.List;
 
-import com.boredream.boreweibo.entity.Comments;
+import com.boredream.boreweibo.entity.Comment;
 
-public class CommentResponse {
-	private List<Comments> comments;
+public class CommentsResponse {
+	private List<Comment> comments;
 	private int total_number;
 
-	public List<Comments> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<Comments> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
 

@@ -30,6 +30,7 @@ import android.widget.TextView;
 
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.activity.ImageBrowerActivity;
+import com.boredream.boreweibo.activity.StatusDetailActivity;
 import com.boredream.boreweibo.entity.PicUrls;
 import com.boredream.boreweibo.entity.Status;
 import com.boredream.boreweibo.entity.User;
@@ -74,12 +75,12 @@ public class StatusAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		final ViewHolder holder;
 		if(convertView == null) {
 			holder = new ViewHolder();
 			convertView = View.inflate(context, R.layout.item_status, null);
-			holder.ll_top_content = (LinearLayout) convertView.findViewById(R.id.ll_top_content);
+			holder.ll_card_content = (LinearLayout) convertView.findViewById(R.id.ll_card_content);
 			holder.iv_avatar = (ImageView) convertView.findViewById(R.id.iv_avatar);
 			holder.rl_content = (RelativeLayout) convertView.findViewById(R.id.rl_content);
 			holder.tv_subhead = (TextView) convertView.findViewById(R.id.tv_subhead);
@@ -126,25 +127,25 @@ public class StatusAdapter extends BaseAdapter {
 		}
 		
 		// set data
-		final Status item = getItem(position);
-		User user = item.getUser();
+		final Status status = getItem(position);
+		User user = status.getUser();
 		imageLoader.displayImage(user.getProfile_image_url(), holder.iv_avatar,
 				ImageOptHelper.getAvatarOptions());
 		holder.tv_subhead.setText(user.getName());
-		holder.tv_body.setText(DateUtils.getShortTime(item.getCreated_at()) + 
-				"  来自" + Html.fromHtml(item.getSource()));
+		holder.tv_body.setText(DateUtils.getShortTime(status.getCreated_at()) + 
+				"  来自" + Html.fromHtml(status.getSource()));
 
-		setImages(item, holder.fl_imageview, holder.gv_images, holder.iv_image);
+		setImages(status, holder.fl_imageview, holder.gv_images, holder.iv_image);
 		
-		if(TextUtils.isEmpty(item.getText())) {
+		if(TextUtils.isEmpty(status.getText())) {
 			holder.tv_content.setVisibility(View.GONE);
 		} else {
 			holder.tv_content.setVisibility(View.VISIBLE);
-			holder.tv_content.setText(StringUtils.getWeiboContent(context, item.getText()));
+			holder.tv_content.setText(StringUtils.getWeiboContent(context, status.getText()));
 		}
 		
 		// retweeted
-		Status retweetedStatus = item.getRetweeted_status();
+		Status retweetedStatus = status.getRetweeted_status();
 		if(retweetedStatus != null) {
 			holder.include_retweeted_status.setVisibility(View.VISIBLE);
 			holder.tv_retweeted_content.setText("@" + retweetedStatus.getUser().getName()
@@ -156,9 +157,9 @@ public class StatusAdapter extends BaseAdapter {
 		}
 		
 		// bottom bar
-		holder.tv_share_bottom.setText(item.getReposts_count() == 0 ?
-				"转发" : item.getReposts_count()+"");
-		holder.cb_like_bottom.setChecked(item.isLiked());
+		holder.tv_share_bottom.setText(status.getReposts_count() == 0 ?
+				"转发" : status.getReposts_count()+"");
+		holder.cb_like_bottom.setChecked(status.isLiked());
 		holder.ll_share_bottom.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -166,8 +167,8 @@ public class StatusAdapter extends BaseAdapter {
 			}
 		});
 		
-		holder.tv_comment_bottom.setText(item.getComments_count() == 0 ?
-				"评论" : item.getComments_count()+"");
+		holder.tv_comment_bottom.setText(status.getComments_count() == 0 ?
+				"评论" : status.getComments_count()+"");
 		holder.ll_comment_bottom.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -177,8 +178,8 @@ public class StatusAdapter extends BaseAdapter {
 			}
 		});
 		
-		holder.tv_like_bottom.setText(item.getAttitudes_count() == 0 ?
-				"赞" : item.getAttitudes_count()+"");
+		holder.tv_like_bottom.setText(status.getAttitudes_count() == 0 ?
+				"赞" : status.getAttitudes_count()+"");
 		holder.ll_like_bottom.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -213,11 +214,12 @@ public class StatusAdapter extends BaseAdapter {
 			}
 		});
 		
-		holder.ll_top_content.setOnClickListener(new OnClickListener() {
+		holder.ll_card_content.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				onAdapterMultiClickListener.onItemClick(
-//						OnAdapterMultiClickListener.TYPE_INFO_DETAIL, item);
+				Intent intent = new Intent(context, StatusDetailActivity.class);
+				intent.putExtra("status", status);
+				context.startActivity(intent);
 			}
 		});
 		
@@ -268,7 +270,7 @@ public class StatusAdapter extends BaseAdapter {
 	}
 
 	public static class ViewHolder{
-		public LinearLayout ll_top_content;
+		public LinearLayout ll_card_content;
 		public ImageView iv_avatar;
 		public RelativeLayout rl_content;
 		public TextView tv_subhead;
@@ -296,18 +298,6 @@ public class StatusAdapter extends BaseAdapter {
 		public CheckBox cb_like_bottom;
 		public TextView tv_like_bottom;
 	}
-
-//	private void sendLike(Status info) {
-//		progressDialog.show();
-//		BmobApi.likeInfo(context, info, 
-//				new UpdateSimpleListener(context, progressDialog){
-//			@Override
-//			public void onSuccess() {
-//				super.onSuccess();
-////				setLikeState();
-//			}
-//		});
-//	}
 	
 	private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
 

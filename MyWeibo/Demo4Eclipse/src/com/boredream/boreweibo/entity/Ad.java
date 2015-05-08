@@ -1,6 +1,6 @@
 package com.boredream.boreweibo.entity;
 
-public class Ad extends BaseBean {
+public class Ad extends BaseEntity {
 	private long id;
 	private String mark;
 

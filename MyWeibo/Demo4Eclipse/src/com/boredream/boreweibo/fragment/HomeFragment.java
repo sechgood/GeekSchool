@@ -3,6 +3,7 @@ package com.boredream.boreweibo.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +14,11 @@ import android.widget.ListView;
 
 import com.boredream.boreweibo.BaseFragment;
 import com.boredream.boreweibo.R;
+import com.boredream.boreweibo.activity.StatusDetailActivity;
 import com.boredream.boreweibo.adapter.StatusAdapter;
 import com.boredream.boreweibo.api.SimpleRequestListener;
-import com.boredream.boreweibo.entity.HomeTimeLineResponse;
 import com.boredream.boreweibo.entity.Status;
+import com.boredream.boreweibo.entity.response.HomeTimeLineResponse;
 import com.boredream.boreweibo.utils.TitleBuilder;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
@@ -65,13 +67,6 @@ public class HomeFragment extends BaseFragment {
 						loadData(curPage + 1);
 					}
 				});
-		plv_home.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				
-			}
-		});
 		
 		footView = View.inflate(activity, R.layout.footview_loading, null);
 	}

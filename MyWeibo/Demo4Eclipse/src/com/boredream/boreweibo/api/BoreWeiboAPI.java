@@ -120,9 +120,13 @@ public class BoreWeiboAPI extends WeiboAPI{
 	
 	/**
 	 * 转发微博
-	 * @param id 要转发的微博ID。
-	 * @param status 添加的转发文本，必须做URLencode，内容不超过140个汉字，不填则默认为“转发微博”。
-	 * @param is_comment 是否在转发的同时发表评论，0：否、1：评论给当前微博、2：评论给原微博、3：都评论，默认为0 。
+	 * 
+	 * @param id
+	 *            要转发的微博ID。
+	 * @param status
+	 *            添加的转发文本，必须做URLencode，内容不超过140个汉字，不填则默认为“转发微博”。
+	 * @param is_comment
+	 *            是否在转发的同时发表评论，0：否、1：评论给当前微博、2：评论给原微博、3：都评论，默认为0 。
 	 * @param listener
 	 */
 	public void statusesRepost(long id, String status, int is_comment, RequestListener listener) {
@@ -131,6 +135,22 @@ public class BoreWeiboAPI extends WeiboAPI{
 		params.add("status", status);
 		params.add("is_comment", is_comment);
 		requestInMainLooper(URLs.statusesRepost, params , WeiboAPI.HTTPMETHOD_POST, listener);
+	}
+	
+	/**
+	 * 根据微博ID返回某条微博的评论列表
+	 * 
+	 * @param id
+	 *            需要查询的微博ID。
+	 * @param page
+	 *            返回结果的页码，默认为1。(单页返回的记录条数，默认为50。)
+	 * @param listener
+	 */
+	public void commentsShow(long id, int page, RequestListener listener) {
+		WeiboParameters params = new WeiboParameters();
+		params.add("id", id);
+		params.add("page", page);
+		requestInMainLooper(URLs.commentsShow, params , WeiboAPI.HTTPMETHOD_GET, listener);
 	}
 	
 }

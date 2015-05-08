@@ -3,7 +3,6 @@
     android:id="@+id/ll_card_content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_white2gray_sel"
     android:orientation="vertical" >
 
     <include layout="@layout/include_avatar" />
@@ -62,9 +61,5 @@
         android:id="@+id/include_retweeted_status"
         layout="@layout/include_retweeted_status"
         android:visibility="gone" />
-
-    <include
-        android:id="@+id/ll_bottom_control"
-        layout="@layout/include_status_controlbar" />
 
 </LinearLayout>

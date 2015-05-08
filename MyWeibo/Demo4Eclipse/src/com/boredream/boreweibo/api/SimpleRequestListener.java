@@ -42,7 +42,7 @@ public class SimpleRequestListener implements RequestListener {
 	}
 	
 	public void onDone() {
-		if(progressDialog != null && progressDialog.getContext() == context) {
+		if(progressDialog != null) {
 			progressDialog.dismiss();
 		}
 	}

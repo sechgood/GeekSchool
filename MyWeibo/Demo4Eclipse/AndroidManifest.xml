@@ -31,6 +31,7 @@
         <activity android:name=".activity.LoginActivity"></activity>
         <activity android:name=".activity.MainTabActivity"></activity>
         <activity android:name=".activity.ImageBrowerActivity"></activity>
+        <activity android:name=".activity.StatusDetailActivity"></activity>
     </application>
 
 </manifest>

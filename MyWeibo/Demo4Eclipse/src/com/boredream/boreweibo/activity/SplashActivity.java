@@ -20,7 +20,6 @@ import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.api.SimpleRequestListener;
 import com.boredream.boreweibo.constants.AccessTokenKeeper;
 import com.boredream.boreweibo.entity.User;
-import com.boredream.boreweibo.widget.RoundedImageView;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -35,7 +34,7 @@ public class SplashActivity extends BaseActivity {
 	private static final long SPLASH_DUR_TIME = 2000;
 	
 	private ImageView iv_slogan;
-	private RoundedImageView iv_portrait;
+	private ImageView iv_portrait;
 	private TextView tv_welcome;
 
 	private long startTimeMillis;
@@ -114,7 +113,7 @@ public class SplashActivity extends BaseActivity {
 	
 	private void initView() {
 		iv_slogan = (ImageView) findViewById(R.id.iv_slogan);
-		iv_portrait = (RoundedImageView) findViewById(R.id.iv_portrait);
+		iv_portrait = (ImageView) findViewById(R.id.iv_portrait);
 		tv_welcome = (TextView) findViewById(R.id.tv_welcome);
 	}
 	

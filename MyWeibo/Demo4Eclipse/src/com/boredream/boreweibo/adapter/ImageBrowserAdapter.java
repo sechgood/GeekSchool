@@ -47,7 +47,7 @@ public class ImageBrowserAdapter extends PagerAdapter {
 		PicUrls url = picUrls.get(position % picUrls.size());
 		mImageLoader.displayImage(url.getThumbnail_pic(), iv);
 		if(!TextUtils.isEmpty(url.getOriginal_pic())) {
-			
+			mImageLoader.displayImage(url.getOriginal_pic(), iv);
 		}
 		
 		container.addView(iv, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);

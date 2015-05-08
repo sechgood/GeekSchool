@@ -1,7 +1,7 @@
 package com.boredream.boreweibo.entity;
 
 /*sub class*/
-public class PicUrls extends BaseBean {
+public class PicUrls extends BaseEntity {
 	private String thumbnail_pic;
 	private String original_pic;
 

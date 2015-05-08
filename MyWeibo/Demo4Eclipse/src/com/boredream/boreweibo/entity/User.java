@@ -1,7 +1,7 @@
 package com.boredream.boreweibo.entity;
 
 
-public class User extends BaseBean {
+public class User extends BaseEntity {
 	private long id;
 	private String idstr;
 	private String screen_name;

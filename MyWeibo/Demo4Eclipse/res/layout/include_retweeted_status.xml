@@ -8,8 +8,7 @@
 
     <TextView
         android:id="@+id/tv_retweeted_content"
-        style="@style/TextViewBody"
-        android:text="我和宠物的日常" />
+        style="@style/TextViewBody" />
 
     <FrameLayout
         android:id="@+id/fl_retweeted_imageview"

@@ -1,6 +1,6 @@
 package com.boredream.boreweibo.entity;
 
-public class Visible extends BaseBean {
+public class Visible extends BaseEntity {
 	private int type;
 	private int list_id;
 

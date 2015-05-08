@@ -17,7 +17,7 @@ import com.boredream.boreweibo.adapter.ImageBrowserAdapter;
 import com.boredream.boreweibo.entity.PicUrls;
 import com.boredream.boreweibo.entity.Status;
 
-public class ImageBrowerActivity extends BaseActivity implements OnClickListener {
+public class ImageBrowserActivity extends BaseActivity implements OnClickListener {
 	private ViewPager vp_image_brower;
 	private TextView tv_image_index;
 	private Button btn_save;

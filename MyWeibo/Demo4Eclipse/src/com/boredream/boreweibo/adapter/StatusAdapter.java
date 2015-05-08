@@ -29,7 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.boredream.boreweibo.R;
-import com.boredream.boreweibo.activity.ImageBrowerActivity;
+import com.boredream.boreweibo.activity.ImageBrowserActivity;
 import com.boredream.boreweibo.activity.StatusDetailActivity;
 import com.boredream.boreweibo.entity.PicUrls;
 import com.boredream.boreweibo.entity.Status;
@@ -240,7 +240,7 @@ public class StatusAdapter extends BaseAdapter {
 			ivImg.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Intent intent = new Intent(context, ImageBrowerActivity.class);
+					Intent intent = new Intent(context, ImageBrowserActivity.class);
 					intent.putExtra("status", status);
 					intent.putExtra("position", -1);
 					context.startActivity(intent);
@@ -258,7 +258,7 @@ public class StatusAdapter extends BaseAdapter {
 
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					Intent intent = new Intent(context, ImageBrowerActivity.class);
+					Intent intent = new Intent(context, ImageBrowserActivity.class);
 					intent.putExtra("status", status);
 					intent.putExtra("position", position);
 					context.startActivity(intent);

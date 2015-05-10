@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ import com.boredream.boreweibo.utils.DateUtils;
 import com.boredream.boreweibo.utils.DialogUtils;
 import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.boredream.boreweibo.utils.StringUtils;
+import com.boredream.boreweibo.utils.StringUtils.LinkTouchMovementMethod;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class StatusAdapter extends BaseAdapter {
@@ -135,6 +137,7 @@ public class StatusAdapter extends BaseAdapter {
 		} else {
 			holder.tv_content.setVisibility(View.VISIBLE);
 			holder.tv_content.setText(StringUtils.getWeiboContent(context, status.getText()));
+			holder.tv_content.setMovementMethod(new StringUtils.LinkTouchMovementMethod());
 		}
 		
 		// retweeted
@@ -145,6 +148,8 @@ public class StatusAdapter extends BaseAdapter {
 					+ ":" + retweetedStatus.getText();
 			holder.tv_retweeted_content.setText(StringUtils.getWeiboContent(
 					context, retweetContent));
+			holder.tv_retweeted_content.setMovementMethod(
+					new StringUtils.LinkTouchMovementMethod());
 			setImages(retweetedStatus, holder.fl_retweeted_imageview, 
 					holder.gv_retweeted_images, holder.iv_retweeted_image);
 			

@@ -162,6 +162,7 @@ public class StatusDetailActivity extends BaseActivity implements
 		} else {
 			tv_content.setVisibility(View.VISIBLE);
 			tv_content.setText(StringUtils.getWeiboContent(this, status.getText()));
+			tv_content.setMovementMethod(new StringUtils.LinkTouchMovementMethod());
 		}
 		
 		// retweeted

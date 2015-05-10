@@ -1,4 +1,4 @@
-package com.boredream.contacts;
+package com.boredream.temp;
 
 import java.util.ArrayList;
 
@@ -18,14 +18,15 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.boredream.contacts.BoreLetterBar;
 import com.boredream.contacts.BoreLetterBar.OnLetterChangedListener;
+import com.boredream.contacts.R;
 
 public class MainActivity extends Activity implements OnClickListener {
-	private PinnedSectionListView lv;
-	private BoreLetterBar lb;
-	private TextView tv_overlay;
+	private ListView lv;
 	
 	private Button addBtn;
 	private ArrayList<ContactBean> dataList = new ArrayList<ContactBean>();
@@ -44,27 +45,8 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	private void initView() {
 		pd = new ProgressDialog(this);
-		lv = (PinnedSectionListView) findViewById(R.id.lv_contacts);
-		lv.setShadowVisible(false);
-		lb = (BoreLetterBar) findViewById(R.id.lb_contacts);
-		tv_overlay = (TextView) findViewById(R.id.tv_overlay);
+		lv = (ListView) findViewById(R.id.lv_contacts);
 		addBtn = (Button) findViewById(R.id.btn_add);
-		lb.setOnLetterChangedListener(new OnLetterChangedListener() {
-			@Override
-			public void onLetterSelected(String letter) {
-				if(TextUtils.isEmpty(letter)) {
-					tv_overlay.setVisibility(View.GONE);
-				} else {
-					tv_overlay.setVisibility(View.VISIBLE);
-					tv_overlay.setText(letter);
-					
-					int position = adapter.getLetterPosition(letter);
-					if(position != -1) {
-						lv.setSelection(position);
-					}
-				}
-			}
-		});
 		adapter = new MyAdapter(dataList, MainActivity.this);
 		lv.setAdapter(adapter);
 		lv.setOnItemClickListener(new OnItemClickListener() {
@@ -83,10 +65,8 @@ public class MainActivity extends Activity implements OnClickListener {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					final int position, long id) {
-				Object item = adapter.getItem(position);
-				if(item instanceof ContactBean) {
-					showLongClickDialog((ContactBean)item);
-				}
+				ContactBean contact = adapter.getItem(position);
+				showDeleteDialog(contact);
 				return true;
 			}
 			
@@ -148,34 +128,6 @@ public class MainActivity extends Activity implements OnClickListener {
 							getAllContact();
 						}
 					})
-			.setNegativeButton("取消", null)
-			.show();
-	}
-	
-	private void showLongClickDialog(final ContactBean contact) {
-		new AlertDialog.Builder(MainActivity.this)
-			.setItems(new String[]{"拨打电话", "发送短信", "删除联系人"}, 
-					new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					switch (which) {
-					case 0:
-		                Intent intent0 = new Intent();  
-		                intent0.setAction(Intent.ACTION_CALL);
-		                intent0.setData(Uri.parse("tel:" + contact.phone));
-		                startActivity(intent0);  
-						break;
-					case 1:
-						Intent intent1 = new Intent(Intent.ACTION_SENDTO, 
-								Uri.parse("smsto://" + contact.phone));
-						startActivity(intent1);
-						break;
-					case 2:
-						showDeleteDialog(contact);
-						break;
-					}
-				}
-			})
 			.setNegativeButton("取消", null)
 			.show();
 	}

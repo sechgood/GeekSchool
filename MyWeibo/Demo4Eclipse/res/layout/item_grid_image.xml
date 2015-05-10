@@ -5,8 +5,8 @@
 
     <ImageView
         android:id="@+id/iv_image"
-        android:layout_width="@dimen/width_grid_image"
-        android:layout_height="@dimen/width_grid_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:scaleType="centerCrop" >
     </ImageView>
 

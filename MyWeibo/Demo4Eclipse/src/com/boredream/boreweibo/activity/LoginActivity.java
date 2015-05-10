@@ -118,7 +118,7 @@ public class LoginActivity extends BaseActivity{
 						super.onComplete(response);
 						
 						application.currentUser = new Gson().fromJson(response, User.class);
-						intent2Activity(MainTabActivity.class);
+						intent2Activity(MainActivity.class);
 					}
 
 					@Override

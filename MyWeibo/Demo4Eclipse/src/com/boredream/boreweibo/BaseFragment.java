@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.boredream.boreweibo.activity.MainTabActivity;
+import com.boredream.boreweibo.activity.MainActivity;
 import com.boredream.boreweibo.api.BoreWeiboAPI;
 import com.boredream.boreweibo.utils.DialogUtils;
 import com.google.gson.Gson;
@@ -14,7 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class BaseFragment extends Fragment {
 	
-	protected MainTabActivity activity;
+	protected MainActivity activity;
 	protected Dialog progressDialog;;
 	
 	protected ImageLoader imageLoader;
@@ -25,7 +25,7 @@ public class BaseFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		activity = (MainTabActivity) getActivity();
+		activity = (MainActivity) getActivity();
 		progressDialog = DialogUtils.createLoadingDialog(activity);
 		
 		imageLoader = ImageLoader.getInstance();

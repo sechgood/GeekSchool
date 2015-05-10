@@ -53,7 +53,7 @@
             <com.boredream.boreweibo.widget.WrapHeightGridView
                 android:id="@+id/gv_images"
                 style="@style/GridViewImages"
-                android:layout_width="272dp" />
+                android:layout_width="match_parent" />
 
             <ImageView
                 android:id="@+id/iv_image"

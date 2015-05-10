@@ -8,58 +8,43 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 public class ImageOptHelper {
 	
-	private static DisplayImageOptions imgOptions;
-	private static DisplayImageOptions avatarOptions;
-
 	public static DisplayImageOptions getImgOptions() {
-		if (imgOptions == null) {
-			imgOptions = new DisplayImageOptions.Builder().cacheOnDisk(true)
-					.cacheInMemory(true).bitmapConfig(Bitmap.Config.RGB_565)
-					.showImageForEmptyUri(R.drawable.ic_launcher)
-					.showImageOnFail(R.drawable.ic_launcher)
-					.showImageOnLoading(R.drawable.ic_launcher)
-					.displayer(new RoundedBitmapDisplayer(4)).build();
-		}
+		DisplayImageOptions imgOptions = new DisplayImageOptions.Builder()
+			.cacheOnDisc()
+			.cacheInMemory()
+			.showStubImage(R.drawable.ic_launcher)
+			.bitmapConfig(Bitmap.Config.RGB_565)
+			.showImageForEmptyUri(R.drawable.ic_launcher)
+			.showImageOnFail(R.drawable.ic_launcher)
+			.displayer(new RoundedBitmapDisplayer(4)).build();
 		return imgOptions;
 	}
 	
 	
 	public static DisplayImageOptions getAvatarOptions() {
-		if(avatarOptions == null) {
-			avatarOptions = new DisplayImageOptions.Builder()
-			.cacheOnDisk(true)
-			.cacheInMemory(true)
+		DisplayImageOptions	avatarOptions = new DisplayImageOptions.Builder()
 			.bitmapConfig(Bitmap.Config.RGB_565)
+			.cacheOnDisc()
+			.cacheInMemory()
+			.showStubImage(R.drawable.ic_launcher)
 			.showImageForEmptyUri(R.drawable.ic_launcher)
 			.showImageOnFail(R.drawable.ic_launcher)
-			.showImageOnLoading(R.drawable.ic_launcher)
 			.displayer(new RoundedBitmapDisplayer(999))
 			.build();
-		}
 		return avatarOptions;
 	}
 	
 	
 	public static DisplayImageOptions getCornerOptions(int cornerRadiusPixels) {
 		DisplayImageOptions options = new DisplayImageOptions.Builder()
-				.cacheOnDisk(true).cacheInMemory(true)
-				.bitmapConfig(Bitmap.Config.RGB_565)
-				.showImageForEmptyUri(R.drawable.ic_launcher)
-				.showImageOnFail(R.drawable.ic_launcher)
-				.showImageOnLoading(R.drawable.ic_launcher)
-				.displayer(new RoundedBitmapDisplayer(cornerRadiusPixels)).build();
+			.bitmapConfig(Bitmap.Config.RGB_565)
+			.cacheOnDisc()
+			.cacheInMemory()
+			.showStubImage(R.drawable.ic_launcher)
+			.showImageForEmptyUri(R.drawable.ic_launcher)
+			.showImageOnFail(R.drawable.ic_launcher)
+			.displayer(new RoundedBitmapDisplayer(cornerRadiusPixels)).build();
 		return options;
 	}
 	
-	public static DisplayImageOptions getShopOptions(int cornerRadiusPixels) {
-		DisplayImageOptions options = new DisplayImageOptions.Builder()
-		.cacheOnDisk(true).cacheInMemory(true)
-		.bitmapConfig(Bitmap.Config.RGB_565)
-		.showImageForEmptyUri(R.drawable.ic_launcher)
-		.showImageOnFail(R.drawable.ic_launcher)
-		.showImageOnLoading(R.drawable.ic_launcher)
-		.displayer(new RoundedBitmapDisplayer(cornerRadiusPixels)).build();
-		return options;
-	}
-
 }

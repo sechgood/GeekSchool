@@ -1,12 +1,9 @@
 package com.boredream.boreweibo.activity;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
@@ -20,8 +17,6 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,8 +36,6 @@ import com.boredream.boreweibo.utils.StringUtils;
 import com.boredream.boreweibo.utils.TitleBuilder;
 import com.boredream.boreweibo.widget.WrapHeightGridView;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 public class StatusDetailActivity extends BaseActivity implements OnClickListener, OnItemClickListener {
 
@@ -63,7 +56,7 @@ public class StatusDetailActivity extends BaseActivity implements OnClickListene
 	private ImageView iv_location;
 	private TextView tv_location;
 	
-	private RadioGroup include_tab_infodetail;
+//	private RadioGroup include_tab_infodetail;
 
 	private PullToRefreshListView plv_comment;
 
@@ -80,7 +73,6 @@ public class StatusDetailActivity extends BaseActivity implements OnClickListene
 	private Status status;
 	private List<Comment> comments = new ArrayList<Comment>();
 	private CommentAdapter adapter;
-	private AnimateFirstDisplayListener animateFirstDisplayListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +115,7 @@ public class StatusDetailActivity extends BaseActivity implements OnClickListene
 				.build();
 		
 		initDetailHead();
-		initTabHead();
+//		initTabHead();
 		initListView();
 		initControlBar();
 	}
@@ -149,23 +141,23 @@ public class StatusDetailActivity extends BaseActivity implements OnClickListene
 		iv_image.setOnClickListener(this);
 	}
 
-	private void initTabHead() {
-		include_tab_infodetail = (RadioGroup) View.inflate(
-				this, R.layout.include_status_detail_tab, null);
-		include_tab_infodetail.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				
-			}
-		});
-	}
+//	private void initTabHead() {
+//		include_tab_infodetail = (RadioGroup) View.inflate(
+//				this, R.layout.include_status_detail_tab, null);
+//		include_tab_infodetail.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+//			@Override
+//			public void onCheckedChanged(RadioGroup group, int checkedId) {
+//				
+//			}
+//		});
+//	}
 	
 	private void initListView() {
 		plv_comment = (PullToRefreshListView) findViewById(R.id.plv_comment);
 		adapter = new CommentAdapter(this, comments);
 		plv_comment.setAdapter(adapter);
 		plv_comment.getRefreshableView().addHeaderView(include_status_detail);
-		plv_comment.getRefreshableView().addHeaderView(include_tab_infodetail);
+//		plv_comment.getRefreshableView().addHeaderView(include_tab_infodetail);
 	}
 
 	private void initControlBar() {
@@ -194,7 +186,6 @@ public class StatusDetailActivity extends BaseActivity implements OnClickListene
 		tv_body.setText(DateUtils.getShortTime(status.getCreated_at()) + 
 				"  来自" + Html.fromHtml(status.getSource()));
 
-		animateFirstDisplayListener = new AnimateFirstDisplayListener();
 		setImages(status, fl_imageview, gv_images, iv_image);
 		
 		if(TextUtils.isEmpty(status.getText())) {
@@ -237,7 +228,7 @@ public class StatusDetailActivity extends BaseActivity implements OnClickListene
 			gvImgs.setVisibility(View.GONE);
 			ivImg.setVisibility(View.VISIBLE);
 			
-			imageLoader.displayImage(picUrl, ivImg, animateFirstDisplayListener);
+			imageLoader.displayImage(picUrl, ivImg);
 			
 			ivImg.setOnClickListener(new OnClickListener() {
 				@Override
@@ -253,7 +244,8 @@ public class StatusDetailActivity extends BaseActivity implements OnClickListene
 			gvImgs.setVisibility(View.VISIBLE);
 			ivImg.setVisibility(View.GONE);
 			
-			StatusGridImgsAdapter imagesAdapter = new StatusGridImgsAdapter(this, picUrls);
+			StatusGridImgsAdapter imagesAdapter = new StatusGridImgsAdapter(
+					this, picUrls, gvImgs);
 			gvImgs.setAdapter(imagesAdapter);
 			
 			gvImgs.setOnItemClickListener(new OnItemClickListener() {
@@ -271,23 +263,6 @@ public class StatusDetailActivity extends BaseActivity implements OnClickListene
 		}
 	}
 			
-	private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
-
-		static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
-
-		@Override
-		public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-			if (loadedImage != null) {
-				ImageView imageView = (ImageView) view;
-				boolean firstDisplay = !displayedImages.contains(imageUri);
-				if (firstDisplay) {
-					FadeInBitmapDisplayer.animate(imageView, 500);
-					displayedImages.add(imageUri);
-				}
-			}
-		}
-	}
-
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {

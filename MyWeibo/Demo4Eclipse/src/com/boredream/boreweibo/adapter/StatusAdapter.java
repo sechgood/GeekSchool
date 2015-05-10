@@ -1,14 +1,11 @@
 package com.boredream.boreweibo.adapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
@@ -39,15 +36,12 @@ import com.boredream.boreweibo.utils.DialogUtils;
 import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.boredream.boreweibo.utils.StringUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 public class StatusAdapter extends BaseAdapter {
 
 	private Context context;
 	private List<Status> datas;
 	private ImageLoader imageLoader;
-	private AnimateFirstDisplayListener animateFirstDisplayListener;
 	
 	private Dialog progressDialog;
 
@@ -56,7 +50,6 @@ public class StatusAdapter extends BaseAdapter {
 		this.datas = datas;
 		imageLoader = ImageLoader.getInstance();
 		progressDialog = DialogUtils.createLoadingDialog(context);
-		animateFirstDisplayListener = new AnimateFirstDisplayListener();
 	}
 	
 	@Override
@@ -235,7 +228,7 @@ public class StatusAdapter extends BaseAdapter {
 			gvImgs.setVisibility(View.GONE);
 			ivImg.setVisibility(View.VISIBLE);
 			
-			imageLoader.displayImage(picUrl, ivImg, animateFirstDisplayListener);
+			imageLoader.displayImage(picUrl, ivImg);
 			
 			ivImg.setOnClickListener(new OnClickListener() {
 				@Override
@@ -251,7 +244,8 @@ public class StatusAdapter extends BaseAdapter {
 			gvImgs.setVisibility(View.VISIBLE);
 			ivImg.setVisibility(View.GONE);
 			
-			StatusGridImgsAdapter imagesAdapter = new StatusGridImgsAdapter(context, picUrls);
+			StatusGridImgsAdapter imagesAdapter = new StatusGridImgsAdapter(
+					context, picUrls, gvImgs);
 			gvImgs.setAdapter(imagesAdapter);
 			
 			gvImgs.setOnItemClickListener(new OnItemClickListener() {
@@ -299,20 +293,4 @@ public class StatusAdapter extends BaseAdapter {
 		public TextView tv_like_bottom;
 	}
 	
-	private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
-
-		static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
-
-		@Override
-		public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-			if (loadedImage != null) {
-				ImageView imageView = (ImageView) view;
-				boolean firstDisplay = !displayedImages.contains(imageUri);
-				if (firstDisplay) {
-					FadeInBitmapDisplayer.animate(imageView, 500);
-					displayedImages.add(imageUri);
-				}
-			}
-		}
-	}
 }

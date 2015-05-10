@@ -46,7 +46,7 @@ public abstract class BaseActivity extends Activity {
 		gson = new Gson();
 	}
 	
-	protected void intent2Activity(Class<? extends Activity> tarActivity) {
+	protected void intent2Activity(Class<?> tarActivity) {
 		Intent intent = new Intent(this, tarActivity);
 		startActivity(intent);
 	}

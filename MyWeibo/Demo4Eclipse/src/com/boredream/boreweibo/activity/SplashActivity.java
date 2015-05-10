@@ -22,7 +22,7 @@ import com.boredream.boreweibo.constants.AccessTokenKeeper;
 import com.boredream.boreweibo.entity.User;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 
@@ -53,7 +53,7 @@ public class SplashActivity extends BaseActivity {
 				finish();
 				break;
 			case HANDLER_WHAT_INTENT2MAIN:
-				intent2Activity(MainTabActivity.class);
+				intent2Activity(MainActivity.class);
 				finish();
 				break;
 			case HANDLER_WHAT_SHOW_IMAGE:
@@ -126,7 +126,7 @@ public class SplashActivity extends BaseActivity {
 			
 			@Override
 			public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-				
+				delayHandler(HANDLER_WHAT_INTENT2MAIN, SPLASH_DUR_TIME);
 			}
 			
 			@Override
@@ -137,7 +137,7 @@ public class SplashActivity extends BaseActivity {
 			
 			@Override
 			public void onLoadingCancelled(String imageUri, View view) {
-				
+				delayHandler(HANDLER_WHAT_INTENT2MAIN, SPLASH_DUR_TIME);
 			}
 		});
 	}

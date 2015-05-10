@@ -13,17 +13,18 @@ import android.widget.TextView;
 
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.entity.Comment;
+import com.boredream.boreweibo.entity.Status;
 import com.boredream.boreweibo.entity.User;
 import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class StatusDetailAdapter extends BaseAdapter {
+public class RetweetAdapter extends BaseAdapter {
 
 	private Context context;
-	private List<Comment> datas;
+	private List<Status> datas;
 	private ImageLoader imageLoader;
 
-	public StatusDetailAdapter(Context context, List<Comment> datas) {
+	public RetweetAdapter(Context context, List<Status> datas) {
 		this.context = context;
 		this.datas = datas;
 		this.imageLoader = ImageLoader.getInstance();
@@ -35,7 +36,7 @@ public class StatusDetailAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public Comment getItem(int position) {
+	public Status getItem(int position) {
 		return datas.get(position);
 	}
 
@@ -68,15 +69,15 @@ public class StatusDetailAdapter extends BaseAdapter {
 		}
 
 		// set data
-		Comment comment = getItem(position);
-		User user = comment.getUser();
+		Status rStatus = getItem(position);
+		User user = rStatus.getUser();
 		
 		imageLoader.displayImage(user.getProfile_image_url(), holder.iv_avatar, 
 				ImageOptHelper.getAvatarOptions());
 		holder.tv_subhead.setText(user.getName());
-		holder.tv_body.setText(comment.getCreated_at());
-		holder.tv_like.setText(comment.getFloor_num()+"");
-		holder.tv_comment.setText(comment.getText());
+		holder.tv_body.setText(rStatus.getCreated_at());
+		holder.tv_like.setVisibility(View.INVISIBLE);
+		holder.tv_comment.setText(rStatus.getText());
 		
 		holder.ll_comments.setOnClickListener(new OnClickListener() {
 			@Override

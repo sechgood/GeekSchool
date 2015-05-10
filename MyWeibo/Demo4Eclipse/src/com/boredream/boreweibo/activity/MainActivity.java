@@ -1,5 +1,6 @@
 package com.boredream.boreweibo.activity;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.RadioButton;
@@ -20,6 +21,7 @@ public class MainActivity extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main_tab);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		
 		initView();
 		

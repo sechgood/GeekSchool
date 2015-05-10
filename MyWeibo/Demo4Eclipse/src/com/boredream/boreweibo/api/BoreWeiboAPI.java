@@ -8,8 +8,8 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.boredream.boreweibo.constants.AccessTokenKeeper;
+import com.boredream.boreweibo.constants.URLs;
 import com.boredream.boreweibo.utils.Logger;
-import com.boredream.boreweibo.utils.URLs;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboParameters;
 import com.sina.weibo.sdk.exception.WeiboException;
@@ -143,7 +143,7 @@ public class BoreWeiboAPI extends WeiboAPI{
 	 * @param id
 	 *            需要查询的微博ID。
 	 * @param page
-	 *            返回结果的页码，默认为1。(单页返回的记录条数，默认为50。)
+	 *            返回结果的页码。(单页返回的记录条数，默认为50。)
 	 * @param listener
 	 */
 	public void commentsShow(long id, int page, RequestListener listener) {
@@ -151,6 +151,22 @@ public class BoreWeiboAPI extends WeiboAPI{
 		params.add("id", id);
 		params.add("page", page);
 		requestInMainLooper(URLs.commentsShow, params , WeiboAPI.HTTPMETHOD_GET, listener);
+	}
+
+	/**
+	 * 获取指定微博的转发微博列表
+	 * 
+	 * @param id
+	 *            要转发的微博ID。
+	 * @param page
+	 *            返回结果的页码(单页返回的记录条数，默认为20。)
+	 * @param listener
+	 */
+	public void statusesRepostTimeline(long id, int page, RequestListener listener) {
+		WeiboParameters params = new WeiboParameters();
+		params.add("id", id);
+		params.add("page", page);
+		requestInMainLooper(URLs.statusesRepostTimeline, params , WeiboAPI.HTTPMETHOD_GET, listener);
 	}
 	
 }

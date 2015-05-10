@@ -47,7 +47,7 @@ public class StatusGridImgsAdapter extends BaseAdapter {
 	@SuppressLint("NewApi")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder holder;
+		final ViewHolder holder;
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = View.inflate(context, R.layout.item_grid_image, null);

@@ -22,8 +22,8 @@ import android.widget.TextView;
 
 import com.boredream.boreweibo.BaseActivity;
 import com.boredream.boreweibo.R;
-import com.boredream.boreweibo.adapter.CommentAdapter;
 import com.boredream.boreweibo.adapter.StatusGridImgsAdapter;
+import com.boredream.boreweibo.adapter.TabCommentAdapter;
 import com.boredream.boreweibo.api.SimpleRequestListener;
 import com.boredream.boreweibo.entity.Comment;
 import com.boredream.boreweibo.entity.PicUrls;
@@ -34,12 +34,14 @@ import com.boredream.boreweibo.utils.DateUtils;
 import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.boredream.boreweibo.utils.StringUtils;
 import com.boredream.boreweibo.utils.TitleBuilder;
+import com.boredream.boreweibo.widget.PinnedSectionListView;
+import com.boredream.boreweibo.widget.PullToRefreshPSListView;
 import com.boredream.boreweibo.widget.WrapHeightGridView;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-public class StatusDetailActivity extends BaseActivity implements OnClickListener, OnItemClickListener {
+public class StatusDetailActivity extends BaseActivity implements 
+	OnClickListener, OnItemClickListener {
 
-	private View include_status_detail;
+	private View status_detail_head;
 	private ImageView iv_avatar;
 	private RelativeLayout rl_content;
 	private TextView tv_subhead;
@@ -55,10 +57,8 @@ public class StatusDetailActivity extends BaseActivity implements OnClickListene
 	private ImageView iv_retweeted_image;
 	private ImageView iv_location;
 	private TextView tv_location;
-	
-//	private RadioGroup include_tab_infodetail;
 
-	private PullToRefreshListView plv_comment;
+	private PullToRefreshPSListView lv_comment;
 
 	private LinearLayout ll_share_bottom;
 	private ImageView iv_share_bottom;
@@ -72,7 +72,7 @@ public class StatusDetailActivity extends BaseActivity implements OnClickListene
 
 	private Status status;
 	private List<Comment> comments = new ArrayList<Comment>();
-	private CommentAdapter adapter;
+	private TabCommentAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,25 +86,7 @@ public class StatusDetailActivity extends BaseActivity implements OnClickListene
 		
 		setData();
 		
-		progressDialog.show();
-		weiboApi.commentsShow(status.getId(), 1,
-				new SimpleRequestListener(this, progressDialog) {
-
-					@Override
-					public void onComplete(String response) {
-						super.onComplete(response);
-
-						showLog("status comments = " + response);
-						CommentsResponse loadComments = gson.fromJson(response, CommentsResponse.class);
-						comments.addAll(loadComments.getComments());
-					}
-
-					@Override
-					public void onDone() {
-						super.onDone();
-					}
-
-				});
+		loadComments();
 	}
 
 	private void initView() {
@@ -115,49 +97,38 @@ public class StatusDetailActivity extends BaseActivity implements OnClickListene
 				.build();
 		
 		initDetailHead();
-//		initTabHead();
 		initListView();
 		initControlBar();
 	}
 	
 	private void initDetailHead() {
-		include_status_detail = View.inflate(this, R.layout.include_status_detail_head, null);
-		iv_avatar = (ImageView) include_status_detail.findViewById(R.id.iv_avatar);
-		rl_content = (RelativeLayout) include_status_detail.findViewById(R.id.rl_content);
-		tv_subhead = (TextView) include_status_detail.findViewById(R.id.tv_subhead);
-		tv_body = (TextView) include_status_detail.findViewById(R.id.tv_body);
-		fl_imageview = (FrameLayout) include_status_detail.findViewById(R.id.fl_imageview);
-		gv_images = (WrapHeightGridView) include_status_detail.findViewById(R.id.gv_images);
-		iv_image = (ImageView) include_status_detail.findViewById(R.id.iv_image);
-		tv_content = (TextView) include_status_detail.findViewById(R.id.tv_content);
-		include_retweeted_status = include_status_detail.findViewById(R.id.include_retweeted_status);
-		tv_retweeted_content = (TextView) include_status_detail.findViewById(R.id.tv_retweeted_content);
-		fl_retweeted_imageview = (FrameLayout) findViewById(R.id.fl_retweeted_imageview);
-		gv_retweeted_images = (GridView) findViewById(R.id.gv_retweeted_images);
-		iv_retweeted_image = (ImageView) findViewById(R.id.iv_retweeted_image);
-		iv_location = (ImageView) include_status_detail.findViewById(R.id.iv_location);
-		tv_location = (TextView) include_status_detail.findViewById(R.id.tv_location);
+		status_detail_head = View.inflate(this, R.layout.status_detail_head, null);
+		iv_avatar = (ImageView) status_detail_head.findViewById(R.id.iv_avatar);
+		rl_content = (RelativeLayout) status_detail_head.findViewById(R.id.rl_content);
+		tv_subhead = (TextView) status_detail_head.findViewById(R.id.tv_subhead);
+		tv_body = (TextView) status_detail_head.findViewById(R.id.tv_body);
+		fl_imageview = (FrameLayout) status_detail_head.findViewById(R.id.fl_imageview);
+		gv_images = (WrapHeightGridView) status_detail_head.findViewById(R.id.gv_images);
+		iv_image = (ImageView) status_detail_head.findViewById(R.id.iv_image);
+		tv_content = (TextView) status_detail_head.findViewById(R.id.tv_content);
+		include_retweeted_status = status_detail_head.findViewById(R.id.include_retweeted_status);
+		tv_retweeted_content = (TextView) status_detail_head.findViewById(R.id.tv_retweeted_content);
+		fl_retweeted_imageview = (FrameLayout) status_detail_head.findViewById(R.id.fl_retweeted_imageview);
+		gv_retweeted_images = (GridView) status_detail_head.findViewById(R.id.gv_retweeted_images);
+		iv_retweeted_image = (ImageView) status_detail_head.findViewById(R.id.iv_retweeted_image);
+		iv_location = (ImageView) status_detail_head.findViewById(R.id.iv_location);
+		tv_location = (TextView) status_detail_head.findViewById(R.id.tv_location);
 		gv_images.setOnItemClickListener(this);
 		iv_image.setOnClickListener(this);
 	}
-
-//	private void initTabHead() {
-//		include_tab_infodetail = (RadioGroup) View.inflate(
-//				this, R.layout.include_status_detail_tab, null);
-//		include_tab_infodetail.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-//			@Override
-//			public void onCheckedChanged(RadioGroup group, int checkedId) {
-//				
-//			}
-//		});
-//	}
 	
 	private void initListView() {
-		plv_comment = (PullToRefreshListView) findViewById(R.id.plv_comment);
-		adapter = new CommentAdapter(this, comments);
-		plv_comment.setAdapter(adapter);
-		plv_comment.getRefreshableView().addHeaderView(include_status_detail);
-//		plv_comment.getRefreshableView().addHeaderView(include_tab_infodetail);
+		lv_comment = (PullToRefreshPSListView) findViewById(R.id.lv_comment);
+		PinnedSectionListView plv = lv_comment.getRefreshableView();
+		adapter = new TabCommentAdapter(this, status, comments);
+		lv_comment.setAdapter(adapter);
+		plv.addHeaderView(status_detail_head);
+		plv.setShadowVisible(false);
 	}
 
 	private void initControlBar() {
@@ -174,8 +145,6 @@ public class StatusDetailActivity extends BaseActivity implements OnClickListene
 		ll_comment_bottom.setOnClickListener(this);
 		ll_like_bottom.setOnClickListener(this);
 	}
-
-	
 
 	private void setData() {
 		// set data
@@ -199,8 +168,10 @@ public class StatusDetailActivity extends BaseActivity implements OnClickListene
 		Status retweetedStatus = status.getRetweeted_status();
 		if(retweetedStatus != null) {
 			include_retweeted_status.setVisibility(View.VISIBLE);
-			tv_retweeted_content.setText("@" + retweetedStatus.getUser().getName()
-					+ ":" + retweetedStatus.getText());
+			String retweetContent = "@" + retweetedStatus.getUser().getName()
+					+ ":" + retweetedStatus.getText();
+			tv_retweeted_content.setText(StringUtils.getWeiboContent(
+					this, retweetContent));
 			setImages(retweetedStatus, fl_retweeted_imageview, 
 					gv_retweeted_images, iv_retweeted_image);
 		} else {
@@ -262,7 +233,24 @@ public class StatusDetailActivity extends BaseActivity implements OnClickListene
 			vgContainer.setVisibility(View.GONE);
 		}
 	}
-			
+	
+	private void loadComments() {
+		weiboApi.commentsShow(status.getId(), 1,
+				new SimpleRequestListener(this, progressDialog) {
+
+					@Override
+					public void onComplete(String response) {
+						super.onComplete(response);
+
+						showLog("status comments = " + response);
+						CommentsResponse loadComments = gson.fromJson(response, CommentsResponse.class);
+						comments.addAll(loadComments.getComments());
+						adapter.notifyDataSetChanged();
+					}
+
+				});
+	}
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -288,4 +276,5 @@ public class StatusDetailActivity extends BaseActivity implements OnClickListene
 		intent.putExtra("position", position);
 		startActivity(intent);
 	}
+
 }

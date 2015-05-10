@@ -138,13 +138,24 @@ public class StatusAdapter extends BaseAdapter {
 		}
 		
 		// retweeted
-		Status retweetedStatus = status.getRetweeted_status();
+		final Status retweetedStatus = status.getRetweeted_status();
 		if(retweetedStatus != null) {
 			holder.include_retweeted_status.setVisibility(View.VISIBLE);
-			holder.tv_retweeted_content.setText("@" + retweetedStatus.getUser().getName()
-					+ ":" + retweetedStatus.getText());
+			String retweetContent = "@" + retweetedStatus.getUser().getName()
+					+ ":" + retweetedStatus.getText();
+			holder.tv_retweeted_content.setText(StringUtils.getWeiboContent(
+					context, retweetContent));
 			setImages(retweetedStatus, holder.fl_retweeted_imageview, 
 					holder.gv_retweeted_images, holder.iv_retweeted_image);
+			
+			holder.include_retweeted_status.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, StatusDetailActivity.class);
+					intent.putExtra("status", retweetedStatus);
+					context.startActivity(intent);
+				}
+			});
 		} else {
 			holder.include_retweeted_status.setVisibility(View.GONE);
 		}
@@ -165,9 +176,7 @@ public class StatusAdapter extends BaseAdapter {
 		holder.ll_comment_bottom.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				Intent intent = new Intent(context, InfoDetailActivity.class);
-//				intent.putExtra("info", item);
-//				context.startActivity(intent);
+				
 			}
 		});
 		
@@ -176,8 +185,6 @@ public class StatusAdapter extends BaseAdapter {
 		holder.ll_like_bottom.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				sendLike(item);
-				
 				
 				final ScaleAnimation scaleAnimation2 = new ScaleAnimation(1.5f, 1f, 1.5f, 1f, 
 						Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);

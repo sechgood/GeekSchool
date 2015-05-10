@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.boredream.boreweibo.api.BoreWeiboAPI;
@@ -41,6 +43,7 @@ public abstract class BaseActivity extends Activity {
 		progressDialog = DialogUtils.createLoadingDialog(this);
 		application.addActivity(this);
 		
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		imageLoader = ImageLoader.getInstance();
 		weiboApi = new BoreWeiboAPI(this);
 		gson = new Gson();

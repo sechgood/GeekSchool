@@ -1,4 +1,4 @@
-package com.boredream.boreweibo.utils;
+package com.boredream.boreweibo.constants;
 
 public interface URLs {
 
@@ -8,5 +8,6 @@ public interface URLs {
 	String statusesHome_timeline = BASE_URL + "statuses/home_timeline.json";
 	String statusesRepost = BASE_URL + "statuses/repost.json";
 	String commentsShow = BASE_URL + "comments/show.json";
+	String statusesRepostTimeline = BASE_URL + "statuses/repost_timeline.json";
 	
 }

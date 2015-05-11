@@ -6,6 +6,7 @@ import java.io.IOException;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 
 import com.boredream.boreweibo.constants.AccessTokenKeeper;
 import com.boredream.boreweibo.constants.URLs;
@@ -105,10 +106,22 @@ public class BoreWeiboAPI extends WeiboAPI{
 		return newUrl.toString();
 	}
 
-	// Weibo API
-	public void usersShow(String uid, RequestListener listener) {
+	/**
+	 * 根据用户ID获取用户信息(uid和screen_name二选一)
+	 * 
+	 * @param uid
+	 *            根据用户ID获取用户信息
+	 * @param screen_name
+	 *            需要查询的用户昵称。
+	 * @param listener
+	 */
+	public void usersShow(String uid, String screen_name, RequestListener listener) {
 		WeiboParameters params = new WeiboParameters();
-		params.add("uid", uid);
+		if(!TextUtils.isEmpty(uid)) {
+			params.add("uid", uid);
+		} else if(!TextUtils.isEmpty(screen_name)) {
+			params.add("screen_name", screen_name);
+		}
 		requestInMainLooper(URLs.usersShow, params , WeiboAPI.HTTPMETHOD_GET, listener);
 	}
 	
@@ -116,6 +129,28 @@ public class BoreWeiboAPI extends WeiboAPI{
 		WeiboParameters params = new WeiboParameters();
 		params.add("page", page);
 		requestInMainLooper(URLs.statusesHome_timeline, params , WeiboAPI.HTTPMETHOD_GET, listener);
+	}
+	
+	/**
+	 * 获取某个用户最新发表的微博列表(uid和screen_name二选一)
+	 * 
+	 * @param uid
+	 *            需要查询的用户ID。
+	 * @param screen_name
+	 *            需要查询的用户昵称。
+	 * @param page
+	 *            返回结果的页码。(单页返回的记录条数，默认为20。)
+	 * @param listener
+	 */
+	public void statusesUser_timeline(long uid, String screen_name, long page, RequestListener listener) {
+		WeiboParameters params = new WeiboParameters();
+		if(uid > 0) {
+			params.add("uid", uid);
+		} else if(!TextUtils.isEmpty(screen_name)) {
+			params.add("screen_name", screen_name);
+		}
+		params.add("page", page);
+		requestInMainLooper(URLs.statusesUser_timeline, params , WeiboAPI.HTTPMETHOD_GET, listener);
 	}
 	
 	/**
@@ -166,7 +201,7 @@ public class BoreWeiboAPI extends WeiboAPI{
 		WeiboParameters params = new WeiboParameters();
 		params.add("id", id);
 		params.add("page", page);
-		requestInMainLooper(URLs.statusesRepostTimeline, params , WeiboAPI.HTTPMETHOD_GET, listener);
+		requestInMainLooper(URLs.statusesRepost_timeline, params , WeiboAPI.HTTPMETHOD_GET, listener);
 	}
 	
 }

@@ -14,7 +14,7 @@ import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.adapter.StatusAdapter;
 import com.boredream.boreweibo.api.SimpleRequestListener;
 import com.boredream.boreweibo.entity.Status;
-import com.boredream.boreweibo.entity.response.HomeTimeLineResponse;
+import com.boredream.boreweibo.entity.response.StatusTimeLineResponse;
 import com.boredream.boreweibo.utils.TitleBuilder;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
@@ -107,7 +107,7 @@ public class HomeFragment extends BaseFragment {
 						}
 						curPage = requestPage;
 						
-						addData(gson.fromJson(response, HomeTimeLineResponse.class));
+						addData(gson.fromJson(response, StatusTimeLineResponse.class));
 					}
 
 					@Override
@@ -120,7 +120,7 @@ public class HomeFragment extends BaseFragment {
 		});
 	}
 
-	private void addData(HomeTimeLineResponse resBean) {
+	private void addData(StatusTimeLineResponse resBean) {
 		for(Status status : resBean.getStatuses()) {
 			if(!statuses.contains(status)) {
 				statuses.add(status);

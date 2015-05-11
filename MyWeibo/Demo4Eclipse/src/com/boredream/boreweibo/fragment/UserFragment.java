@@ -1,13 +1,14 @@
 package com.boredream.boreweibo.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.boredream.boreweibo.BaseFragment;
 import com.boredream.boreweibo.R;
+import com.boredream.boreweibo.activity.UserInfoActivity;
 import com.boredream.boreweibo.utils.TitleBuilder;
 import com.boredream.boreweibo.utils.ToastUtils;
 import com.boredream.boreweibo.widget.GroupSettingListView;
@@ -41,7 +42,10 @@ public class UserFragment extends BaseFragment {
 		gslv.setOnSettingItemClickLister(new OnSettingItemClickLister() {
 			@Override
 			public void onItemClick(ViewGroup parent, View item, int position) {
-				ToastUtils.showToast(activity, position + "", Toast.LENGTH_SHORT);
+				if(position == 0) {
+					Intent intent = new Intent(activity, UserInfoActivity.class);
+					startActivity(intent);
+				}
 			}
 		});
 	}

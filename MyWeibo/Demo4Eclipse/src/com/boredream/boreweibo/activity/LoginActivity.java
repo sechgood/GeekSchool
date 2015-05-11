@@ -110,7 +110,7 @@ public class LoginActivity extends BaseActivity{
     }
 
 	private void login() {
-		weiboApi.usersShow(mAccessToken.getUid(),
+		weiboApi.usersShow(mAccessToken.getUid(), "",
 				new SimpleRequestListener(this, progressDialog) {
 
 					@Override

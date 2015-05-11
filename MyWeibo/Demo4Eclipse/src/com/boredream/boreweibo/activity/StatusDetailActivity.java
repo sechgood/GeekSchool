@@ -278,10 +278,14 @@ public class StatusDetailActivity extends BaseActivity implements
 	}
 
 	private void setImages(final Status status, ViewGroup vgContainer, GridView gvImgs, final ImageView ivImg) {
+		if(status == null) {
+			return;
+		}
+		
 		ArrayList<PicUrls> picUrls = status.getPic_urls();
 		String picUrl = status.getBmiddle_pic();
 		
-		if(picUrls.size() == 1) {
+		if(picUrls != null && picUrls.size() == 1) {
 			vgContainer.setVisibility(View.VISIBLE);
 			gvImgs.setVisibility(View.GONE);
 			ivImg.setVisibility(View.VISIBLE);
@@ -297,7 +301,7 @@ public class StatusDetailActivity extends BaseActivity implements
 					startActivity(intent);
 				}
 			});
-		} else if(picUrls.size() > 1) {
+		} else if(picUrls != null && picUrls.size() > 1) {
 			vgContainer.setVisibility(View.VISIBLE);
 			gvImgs.setVisibility(View.VISIBLE);
 			ivImg.setVisibility(View.GONE);

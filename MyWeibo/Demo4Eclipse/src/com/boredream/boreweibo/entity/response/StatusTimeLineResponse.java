@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import com.boredream.boreweibo.entity.Ad;
 import com.boredream.boreweibo.entity.Status;
 
-public class HomeTimeLineResponse {
+public class StatusTimeLineResponse {
 
 	private ArrayList<Status> statuses;
-	private ArrayList<Ad> ad;
 	private int total_number;
 
 	public ArrayList<Status> getStatuses() {
@@ -17,14 +16,6 @@ public class HomeTimeLineResponse {
 
 	public void setStatuses(ArrayList<Status> statuses) {
 		this.statuses = statuses;
-	}
-
-	public ArrayList<Ad> getAd() {
-		return ad;
-	}
-
-	public void setAd(ArrayList<Ad> ad) {
-		this.ad = ad;
 	}
 
 	public int getTotal_number() {

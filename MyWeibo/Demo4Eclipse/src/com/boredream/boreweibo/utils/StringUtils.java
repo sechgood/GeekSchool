@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.boredream.boreweibo.R;
+import com.boredream.boreweibo.activity.UserInfoActivity;
 
 public class StringUtils {
 
@@ -61,7 +63,9 @@ public class StringUtils {
 					@Override
 					public void onClick(View widget) {
 						if(key.startsWith("@")) {
-							ToastUtils.showToast(context, "查看个人详情 :" + key, 0);
+							Intent intent = new Intent(context, UserInfoActivity.class);
+							intent.putExtra("userName", key.substring(1));
+							context.startActivity(intent);
 						} else if(key.startsWith("#")) {
 							ToastUtils.showToast(context, "查看话题 :" + key, 0);
 						} else if(tv.getParent() instanceof LinearLayout){

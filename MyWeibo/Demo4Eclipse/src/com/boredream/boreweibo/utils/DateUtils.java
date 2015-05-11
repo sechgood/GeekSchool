@@ -1,9 +1,11 @@
 package com.boredream.boreweibo.utils;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.annotation.SuppressLint;
 import android.text.format.DateFormat;
 
 public class DateUtils {
@@ -12,6 +14,16 @@ public class DateUtils {
 	public static final long ONE_HOUR_MILLIONS = 60 * ONE_MINUTE_MILLIONS;
 	public static final long ONE_DAY_MILLIONS = 24 * ONE_HOUR_MILLIONS;
 
+	/**
+	 * MM-dd HH:mm
+	 */
+	@SuppressLint("SimpleDateFormat")
+	public static String getDateTime(String dateStr) {
+		@SuppressWarnings("deprecation")
+		Date date = new Date(dateStr);
+		return DateFormat.format("MM-dd HH:mm", date).toString();
+	}
+	
 	public static String getShortTime(String dateStr) {
 		String str = "";
 		

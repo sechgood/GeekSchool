@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
@@ -36,7 +37,6 @@ import com.boredream.boreweibo.utils.DateUtils;
 import com.boredream.boreweibo.utils.DialogUtils;
 import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.boredream.boreweibo.utils.StringUtils;
-import com.boredream.boreweibo.utils.StringUtils.LinkTouchMovementMethod;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class StatusAdapter extends BaseAdapter {
@@ -136,8 +136,9 @@ public class StatusAdapter extends BaseAdapter {
 			holder.tv_content.setVisibility(View.GONE);
 		} else {
 			holder.tv_content.setVisibility(View.VISIBLE);
-			holder.tv_content.setText(StringUtils.getWeiboContent(context, status.getText()));
-			holder.tv_content.setMovementMethod(new StringUtils.LinkTouchMovementMethod());
+			SpannableString weiboContent = StringUtils.getWeiboContent(
+					context, holder.tv_content, status.getText());
+			holder.tv_content.setText(weiboContent);
 		}
 		
 		// retweeted
@@ -146,10 +147,9 @@ public class StatusAdapter extends BaseAdapter {
 			holder.include_retweeted_status.setVisibility(View.VISIBLE);
 			String retweetContent = "@" + retweetedStatus.getUser().getName()
 					+ ":" + retweetedStatus.getText();
-			holder.tv_retweeted_content.setText(StringUtils.getWeiboContent(
-					context, retweetContent));
-			holder.tv_retweeted_content.setMovementMethod(
-					new StringUtils.LinkTouchMovementMethod());
+			SpannableString weiboContent = StringUtils.getWeiboContent(
+					context, holder.tv_retweeted_content, retweetContent);
+			holder.tv_retweeted_content.setText(weiboContent);
 			setImages(retweetedStatus, holder.fl_retweeted_imageview, 
 					holder.gv_retweeted_images, holder.iv_retweeted_image);
 			

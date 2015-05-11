@@ -3,18 +3,14 @@ package com.boredream.boreweibo.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.boredream.boreweibo.BaseFragment;
 import com.boredream.boreweibo.R;
-import com.boredream.boreweibo.activity.StatusDetailActivity;
 import com.boredream.boreweibo.adapter.StatusAdapter;
 import com.boredream.boreweibo.api.SimpleRequestListener;
 import com.boredream.boreweibo.entity.Status;

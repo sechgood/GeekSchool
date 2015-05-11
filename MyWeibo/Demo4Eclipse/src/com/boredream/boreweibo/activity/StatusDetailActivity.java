@@ -6,10 +6,13 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
@@ -17,6 +20,10 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,12 +41,14 @@ import com.boredream.boreweibo.utils.DateUtils;
 import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.boredream.boreweibo.utils.StringUtils;
 import com.boredream.boreweibo.utils.TitleBuilder;
-import com.boredream.boreweibo.widget.PinnedSectionListView;
-import com.boredream.boreweibo.widget.PullToRefreshPSListView;
 import com.boredream.boreweibo.widget.WrapHeightGridView;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class StatusDetailActivity extends BaseActivity implements 
-	OnClickListener, OnItemClickListener {
+	OnClickListener, OnItemClickListener, OnCheckedChangeListener {
 
 	private View status_detail_head;
 	private ImageView iv_avatar;
@@ -58,7 +67,19 @@ public class StatusDetailActivity extends BaseActivity implements
 	private ImageView iv_location;
 	private TextView tv_location;
 
-	private PullToRefreshPSListView lv_comment;
+	private PullToRefreshListView lv_comment;
+	private View footView;
+	
+	private View shadow_status_detail_tab;
+	private RadioGroup shadow_rg_status_detail;
+	private RadioButton shadow_rb_retweets;
+	private RadioButton shadow_rb_comments;
+	private RadioButton shadow_rb_likes;
+	private View status_detail_tab;
+	private RadioGroup rg_status_detail;
+	private RadioButton rb_retweets;
+	private RadioButton rb_comments;
+	private RadioButton rb_likes;
 
 	private LinearLayout ll_share_bottom;
 	private ImageView iv_share_bottom;
@@ -73,6 +94,8 @@ public class StatusDetailActivity extends BaseActivity implements
 	private Status status;
 	private List<Comment> comments = new ArrayList<Comment>();
 	private TabCommentAdapter adapter;
+	private long curPage = 1;
+	private boolean isLoadingMore;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +109,7 @@ public class StatusDetailActivity extends BaseActivity implements
 		
 		setData();
 		
-		loadComments();
+		loadComments(1);
 	}
 
 	private void initView() {
@@ -97,10 +120,11 @@ public class StatusDetailActivity extends BaseActivity implements
 				.build();
 		
 		initDetailHead();
+		initTab();
 		initListView();
 		initControlBar();
 	}
-	
+
 	private void initDetailHead() {
 		status_detail_head = View.inflate(this, R.layout.status_detail_head, null);
 		iv_avatar = (ImageView) status_detail_head.findViewById(R.id.iv_avatar);
@@ -121,14 +145,74 @@ public class StatusDetailActivity extends BaseActivity implements
 		gv_images.setOnItemClickListener(this);
 		iv_image.setOnClickListener(this);
 	}
+
+	private void initTab() {
+		shadow_status_detail_tab = findViewById(R.id.status_detail_tab);
+		shadow_rg_status_detail = (RadioGroup) shadow_status_detail_tab
+				.findViewById(R.id.rg_status_detail);
+		shadow_rb_retweets = (RadioButton) shadow_status_detail_tab
+				.findViewById(R.id.rb_retweets);
+		shadow_rb_comments = (RadioButton) shadow_status_detail_tab
+				.findViewById(R.id.rb_comments);
+		shadow_rb_likes = (RadioButton) shadow_status_detail_tab
+				.findViewById(R.id.rb_likes);
+		shadow_rg_status_detail.setOnCheckedChangeListener(this);
+		shadow_rb_retweets.setText("转发 " + status.getReposts_count());
+		shadow_rb_comments.setText("评论 " + status.getComments_count());
+		shadow_rb_likes.setText("赞 " + status.getAttitudes_count());
+		
+		status_detail_tab = View.inflate(this, R.layout.status_detail_tab, null);
+		rg_status_detail = (RadioGroup) status_detail_tab
+				.findViewById(R.id.rg_status_detail);
+		rb_retweets = (RadioButton) status_detail_tab
+				.findViewById(R.id.rb_retweets);
+		rb_comments = (RadioButton) status_detail_tab
+				.findViewById(R.id.rb_comments);
+		rb_likes = (RadioButton) status_detail_tab
+				.findViewById(R.id.rb_likes);
+		rg_status_detail.setOnCheckedChangeListener(this);
+		rb_retweets.setText("转发 " + status.getReposts_count());
+		rb_comments.setText("评论 " + status.getComments_count());
+		rb_likes.setText("赞 " + status.getAttitudes_count());
+	}
 	
 	private void initListView() {
-		lv_comment = (PullToRefreshPSListView) findViewById(R.id.lv_comment);
-		PinnedSectionListView plv = lv_comment.getRefreshableView();
+		lv_comment = (PullToRefreshListView) findViewById(R.id.lv_comment);
+		footView = View.inflate(this, R.layout.footview_loading, null);
+		final ListView lv = lv_comment.getRefreshableView();
 		adapter = new TabCommentAdapter(this, status, comments);
 		lv_comment.setAdapter(adapter);
-		plv.addHeaderView(status_detail_head);
-		plv.setShadowVisible(false);
+		lv.addHeaderView(status_detail_head);
+		lv.addHeaderView(status_detail_tab);
+		lv_comment.setOnRefreshListener(new OnRefreshListener<ListView>() {
+
+			@Override
+			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				loadComments(1);
+			}
+		});
+		lv_comment.setOnLastItemVisibleListener(
+				new OnLastItemVisibleListener() {
+
+					@Override
+					public void onLastItemVisible() {
+						loadComments(curPage + 1);
+					}
+				});
+		lv_comment.setOnScrollListener(new OnScrollListener() {
+			
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				// 0-pullHead 1-detailHead 2-tab
+				shadow_status_detail_tab.setVisibility(firstVisibleItem >= 2 ?
+						View.VISIBLE : View.GONE);
+			}
+		});
 	}
 
 	private void initControlBar() {
@@ -161,8 +245,9 @@ public class StatusDetailActivity extends BaseActivity implements
 			tv_content.setVisibility(View.GONE);
 		} else {
 			tv_content.setVisibility(View.VISIBLE);
-			tv_content.setText(StringUtils.getWeiboContent(this, status.getText()));
-			tv_content.setMovementMethod(new StringUtils.LinkTouchMovementMethod());
+			SpannableString weiboContent = StringUtils.getWeiboContent(
+					this, tv_content, status.getText());
+			tv_content.setText(weiboContent);
 		}
 		
 		// retweeted
@@ -171,8 +256,9 @@ public class StatusDetailActivity extends BaseActivity implements
 			include_retweeted_status.setVisibility(View.VISIBLE);
 			String retweetContent = "@" + retweetedStatus.getUser().getName()
 					+ ":" + retweetedStatus.getText();
-			tv_retweeted_content.setText(StringUtils.getWeiboContent(
-					this, retweetContent));
+			SpannableString weiboContent = StringUtils.getWeiboContent(
+					this, tv_retweeted_content, retweetContent);
+			tv_retweeted_content.setText(weiboContent);
 			setImages(retweetedStatus, fl_retweeted_imageview, 
 					gv_retweeted_images, iv_retweeted_image);
 		} else {
@@ -235,21 +321,66 @@ public class StatusDetailActivity extends BaseActivity implements
 		}
 	}
 	
-	private void loadComments() {
-		weiboApi.commentsShow(status.getId(), 1,
+	private void loadComments(final long requestPage) {
+		if(isLoadingMore) {
+			return;
+		}
+		
+		isLoadingMore = true;
+		weiboApi.commentsShow(status.getId(), requestPage,
 				new SimpleRequestListener(this, progressDialog) {
 
 					@Override
 					public void onComplete(String response) {
 						super.onComplete(response);
-
+						
 						showLog("status comments = " + response);
-						CommentsResponse loadComments = gson.fromJson(response, CommentsResponse.class);
-						comments.addAll(loadComments.getComments());
-						adapter.notifyDataSetChanged();
+						
+						if(requestPage == 1) {
+							comments.clear();
+						}
+
+						addData(gson.fromJson(response, CommentsResponse.class));
+					}
+					
+					@Override
+					public void onDone() {
+						super.onDone();
+						
+						isLoadingMore = false;
+						lv_comment.onRefreshComplete();
 					}
 
 				});
+	}
+	
+	private void addData(CommentsResponse response) {
+		for(Comment comment : response.getComments()) {
+			if(!comments.contains(comment)) {
+				comments.add(comment);
+			}
+		}
+		adapter.notifyDataSetChanged();
+		
+		if(curPage < response.getTotal_number()) {
+			addFootView(lv_comment, footView);
+		} else {
+			removeFootView(lv_comment, footView);
+		}
+	}
+	
+	private void addFootView(PullToRefreshListView plv, View footView) {
+		ListView lv = plv.getRefreshableView();
+		if(lv.getFooterViewsCount() == 1) {
+			lv.addFooterView(footView);
+		}
+	}
+	
+	private void removeFootView(PullToRefreshListView plv, View footView) {
+		ListView lv = plv.getRefreshableView();
+		if(lv.getFooterViewsCount() > 1) {
+			lv.removeFooterView(footView);
+		}
 	}
 	
 	@Override
@@ -276,6 +407,31 @@ public class StatusDetailActivity extends BaseActivity implements
 		intent.putExtra("status", status);
 		intent.putExtra("position", position);
 		startActivity(intent);
+	}
+
+	@Override
+	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		
+		switch (checkedId) {
+		case R.id.rb_retweets:
+			rb_retweets.setChecked(true);
+			shadow_rb_retweets.setChecked(true);
+			
+			break;
+		case R.id.rb_comments:
+			rb_comments.setChecked(true);
+			shadow_rb_comments.setChecked(true);
+			
+			break;
+		case R.id.rb_likes:
+			rb_likes.setChecked(true);
+			shadow_rb_likes.setChecked(true);
+			
+			break;
+
+		default:
+			break;
+		}
 	}
 
 }

@@ -146,7 +146,7 @@ public class BoreWeiboAPI extends WeiboAPI{
 	 *            返回结果的页码。(单页返回的记录条数，默认为50。)
 	 * @param listener
 	 */
-	public void commentsShow(long id, int page, RequestListener listener) {
+	public void commentsShow(long id, long page, RequestListener listener) {
 		WeiboParameters params = new WeiboParameters();
 		params.add("id", id);
 		params.add("page", page);

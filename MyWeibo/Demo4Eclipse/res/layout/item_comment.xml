@@ -27,37 +27,17 @@
             android:padding="16dp" >
 
             <TextView
-                android:id="@+id/tv_subhead"
-                style="@style/TextViewSubhead"
+                android:id="@+id/tv_name"
+                style="@style/TextViewBody"
+                android:textSize="@dimen/txtsize_body"
                 android:text="吴彦祖" />
 
             <TextView
-                android:id="@+id/tv_body"
-                style="@style/TextViewBody"
+                android:id="@+id/tv_time"
+                style="@style/TextViewCaption"
                 android:layout_alignParentBottom="true"
                 android:text="2013-12-21"
                 android:textColor="@color/txt_gray_alpha" />
-
-            <LinearLayout
-                android:id="@+id/ll_like"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_alignParentRight="true"
-                android:gravity="right|center_vertical"
-                android:minWidth="48dp"
-                android:orientation="horizontal" >
-
-                <ImageView
-                    android:id="@+id/iv_like"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_launcher" />
-
-                <TextView
-                    android:id="@+id/tv_like"
-                    style="@style/TextViewCaption"
-                    android:layout_marginLeft="8dp" />
-            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 

@@ -6,27 +6,23 @@
     android:orientation="vertical" >
 
     <include layout="@layout/include_titlebar" />
-
+    
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" >
 
         <com.handmark.pulltorefresh.library.PullToRefreshListView
-            android:id="@+id/lv_comment"
+            android:id="@+id/lv_user_info"
             style="@style/ListViewCommon"
             android:divider="@color/divider_black_alpha"
             android:dividerHeight="1px" >
         </com.handmark.pulltorefresh.library.PullToRefreshListView>
 
         <include
-            android:id="@+id/status_detail_tab"
-            layout="@layout/status_detail_tab"
+            android:id="@+id/user_info_tab"
+            layout="@layout/user_info_tab"
             android:visibility="gone" />
     </RelativeLayout>
-
-    <include
-        android:id="@+id/ll_bottom_control"
-        layout="@layout/include_status_controlbar" />
 
 </LinearLayout>

@@ -1,28 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_gray"
-    android:orientation="vertical" >
+    android:background="@color/bg_gray" >
 
-    <include layout="@layout/include_titlebar" />
-    
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/iv_user_info_head"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_height="244dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/visitor_me_cover" />
 
-        <com.handmark.pulltorefresh.library.PullToRefreshListView
-            android:id="@+id/lv_user_info"
-            style="@style/ListViewCommon"
-            android:divider="@color/divider_black_alpha"
-            android:dividerHeight="1px" >
-        </com.handmark.pulltorefresh.library.PullToRefreshListView>
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/plv_user_info"
+        style="@style/ListViewCommon"
+        android:divider="@color/divider_black_alpha"
+        android:dividerHeight="1px" >
+    </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <include
+            layout="@layout/include_titlebar"
+            android:background="@color/transparent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/divider_gray" />
 
         <include
             android:id="@+id/user_info_tab"
             layout="@layout/user_info_tab"
             android:visibility="gone" />
-    </RelativeLayout>
 
-</LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/divider_gray" />
+    </LinearLayout>
+
+</RelativeLayout>

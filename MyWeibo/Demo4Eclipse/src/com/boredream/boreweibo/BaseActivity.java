@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.view.Window;
 import android.widget.Toast;
 
 import com.boredream.boreweibo.api.BoreWeiboAPI;

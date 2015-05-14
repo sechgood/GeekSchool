@@ -37,7 +37,7 @@ public class MainActivity extends FragmentActivity implements
 		fc = FragmentController.getInstance(this, R.id.fl_content);
 		((RadioButton)rg_tab.getChildAt(0)).setChecked(true);
 	}
-
+	
 	@Override
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
 		switch (checkedId) {

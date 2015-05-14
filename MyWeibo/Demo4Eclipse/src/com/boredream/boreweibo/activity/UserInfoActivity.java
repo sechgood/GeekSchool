@@ -4,53 +4,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
+import android.view.View.OnLayoutChangeListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.CheckBox;
-import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.boredream.boreweibo.BaseActivity;
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.adapter.StatusAdapter;
-import com.boredream.boreweibo.adapter.StatusGridImgsAdapter;
-import com.boredream.boreweibo.adapter.TabCommentAdapter;
 import com.boredream.boreweibo.api.SimpleRequestListener;
-import com.boredream.boreweibo.entity.Comment;
-import com.boredream.boreweibo.entity.PicUrls;
 import com.boredream.boreweibo.entity.Status;
 import com.boredream.boreweibo.entity.User;
-import com.boredream.boreweibo.entity.response.CommentsResponse;
 import com.boredream.boreweibo.entity.response.StatusTimeLineResponse;
-import com.boredream.boreweibo.utils.DateUtils;
+import com.boredream.boreweibo.utils.DisplayUtils;
 import com.boredream.boreweibo.utils.ImageOptHelper;
-import com.boredream.boreweibo.utils.StringUtils;
 import com.boredream.boreweibo.utils.TitleBuilder;
-import com.boredream.boreweibo.widget.WrapHeightGridView;
+import com.boredream.boreweibo.widget.UnderlineIndicatorView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.handmark.pulltorefresh.library.PullToRefreshListView.OnPlvScrollListener;
 
 public class UserInfoActivity extends BaseActivity implements 
 	OnClickListener, OnItemClickListener, OnCheckedChangeListener {
+	
+	private View title;
 	
 	private View user_info_head;
 	private ImageView iv_avatar;
@@ -66,14 +58,17 @@ public class UserInfoActivity extends BaseActivity implements
 	private RadioButton shadow_rb_status;
 	private RadioButton shadow_rb_photos;
 	private RadioButton shadow_rb_manager;
+	private UnderlineIndicatorView shadow_uliv_user_info;
 	private View user_info_tab;
 	private RadioGroup rg_user_info;
 	private RadioButton rb_info;
 	private RadioButton rb_status;
 	private RadioButton rb_photos;
 	private RadioButton rb_manager;
+	private UnderlineIndicatorView uliv_user_info;
 	
-	private PullToRefreshListView lv_user_info;
+	private ImageView iv_user_info_head;
+	private PullToRefreshListView plv_user_info;
 	private View footView;
 	
 	private boolean isCurrentUser;
@@ -84,6 +79,7 @@ public class UserInfoActivity extends BaseActivity implements
 	private StatusAdapter statusAdapter;
 	private long curPage = 1;
 	private boolean isLoadingMore;
+	private int curScrollY;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +101,7 @@ public class UserInfoActivity extends BaseActivity implements
 	}
 
 	private void initView() {
-		new TitleBuilder(this)
+		title = new TitleBuilder(this)
 				.setLeftImage(R.drawable.ic_launcher)
 				.setLeftOnClickListener(this)
 				.build();
@@ -116,6 +112,8 @@ public class UserInfoActivity extends BaseActivity implements
 	}
 
 	private void initInfoHead() {
+		iv_user_info_head = (ImageView) findViewById(R.id.iv_user_info_head);
+		
 		user_info_head = View.inflate(this, R.layout.user_info_head, null);
 		iv_avatar = (ImageView) user_info_head.findViewById(R.id.iv_avatar);
 		tv_name = (TextView) user_info_head.findViewById(R.id.tv_name);
@@ -123,6 +121,8 @@ public class UserInfoActivity extends BaseActivity implements
 		tv_fans = (TextView) user_info_head.findViewById(R.id.tv_fans);
 		ll_edit_sign = (LinearLayout) user_info_head.findViewById(R.id.ll_edit_sign);
 		tv_sign = (TextView) user_info_head.findViewById(R.id.tv_sign);
+		
+		iv_avatar.setOnClickListener(this);
 	}
 
 	private void initTab() {
@@ -132,8 +132,10 @@ public class UserInfoActivity extends BaseActivity implements
 		shadow_rb_status = (RadioButton) findViewById(R.id.rb_status);
 		shadow_rb_photos = (RadioButton) findViewById(R.id.rb_photos);
 		shadow_rb_manager = (RadioButton) findViewById(R.id.rb_manager);
+		shadow_uliv_user_info = (UnderlineIndicatorView) findViewById(R.id.uliv_user_info);
 		
 		shadow_rg_user_info.setOnCheckedChangeListener(this);
+		shadow_uliv_user_info.setCurrentItemWithoutAnim(1);
 		
 		user_info_tab = View.inflate(this, R.layout.user_info_tab, null);
 		rg_user_info = (RadioGroup) user_info_tab.findViewById(R.id.rg_user_info);
@@ -141,34 +143,68 @@ public class UserInfoActivity extends BaseActivity implements
 		rb_status = (RadioButton) user_info_tab.findViewById(R.id.rb_status);
 		rb_photos = (RadioButton) user_info_tab.findViewById(R.id.rb_photos);
 		rb_manager = (RadioButton) user_info_tab.findViewById(R.id.rb_manager);
+		uliv_user_info = (UnderlineIndicatorView) user_info_tab.findViewById(R.id.uliv_user_info);
 		
 		rg_user_info.setOnCheckedChangeListener(this);
+		uliv_user_info.setCurrentItemWithoutAnim(1);
 	}
 	
 	private void initListView() {
-		lv_user_info = (PullToRefreshListView) findViewById(R.id.lv_user_info);
+		plv_user_info = (PullToRefreshListView) findViewById(R.id.plv_user_info);
 		footView = View.inflate(this, R.layout.footview_loading, null);
-		final ListView lv = lv_user_info.getRefreshableView();
+		final ListView lv = plv_user_info.getRefreshableView();
 		statusAdapter = new StatusAdapter(this, statuses);
-		lv_user_info.setAdapter(statusAdapter);
+		plv_user_info.setAdapter(statusAdapter);
 		lv.addHeaderView(user_info_head);
 		lv.addHeaderView(user_info_tab);
-		lv_user_info.setOnRefreshListener(new OnRefreshListener<ListView>() {
+		plv_user_info.setOnRefreshListener(new OnRefreshListener<ListView>() {
 
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-//				loadComments(1);
+				loadStatuses(1);
 			}
 		});
-		lv_user_info.setOnLastItemVisibleListener(
+		plv_user_info.setOnLastItemVisibleListener(
 				new OnLastItemVisibleListener() {
 
 					@Override
 					public void onLastItemVisible() {
-//						loadComments(curPage + 1);
+						loadStatuses(curPage + 1);
 					}
 				});
-		lv_user_info.setOnScrollListener(new OnScrollListener() {
+		
+		plv_user_info.setOnPlvScrollListener(new OnPlvScrollListener() {
+			
+			@Override
+			public void onScrollChanged(int l, int t, int oldl, int oldt) {
+				int scrollY = curScrollY = t;
+				int minImageHeight = DisplayUtils.dp2px(UserInfoActivity.this, 244);
+				int maxImageHeight = DisplayUtils.dp2px(UserInfoActivity.this, 360);
+				int scaleImageDistance = maxImageHeight - minImageHeight;
+				
+				if(-scrollY < scaleImageDistance) {
+					iv_user_info_head.layout(0, 0, 
+							iv_user_info_head.getWidth(), 
+							minImageHeight - scrollY);
+				} else {
+					iv_user_info_head.layout(0, - scaleImageDistance - scrollY, 
+							iv_user_info_head.getWidth(), 
+							- scaleImageDistance - scrollY + iv_user_info_head.getHeight());
+				}
+			}
+		});
+		iv_user_info_head.addOnLayoutChangeListener(new OnLayoutChangeListener() {
+			@Override
+			public void onLayoutChange(View v, int left, int top, int right, int bottom, 
+					int oldLeft, int oldTop, int oldRight, int oldBottom) {
+				if(curScrollY == bottom - oldBottom) {
+					iv_user_info_head.layout(0, 0, 
+							iv_user_info_head.getWidth(), 
+							oldBottom);
+				}
+			}
+		});
+		plv_user_info.setOnScrollListener(new OnScrollListener() {
 			
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -177,9 +213,16 @@ public class UserInfoActivity extends BaseActivity implements
 			
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				iv_user_info_head.layout(0,
+						user_info_head.getTop(), 
+						iv_user_info_head.getWidth(), 
+						user_info_head.getTop() + iv_user_info_head.getHeight());
+				
 				// 0-pullHead 1-detailHead 2-tab
-				shadow_user_info_tab.setVisibility(firstVisibleItem >= 2 ?
+				shadow_user_info_tab.setVisibility(user_info_head.getBottom() < title.getBottom() ?
 						View.VISIBLE : View.GONE);
+				title.setBackgroundColor(user_info_head.getBottom() < title.getBottom() ?
+						Color.WHITE : Color.TRANSPARENT);
 			}
 		});
 	}
@@ -202,6 +245,8 @@ public class UserInfoActivity extends BaseActivity implements
 		imageLoader.displayImage(user.getProfile_image_url(), iv_avatar,
 				ImageOptHelper.getAvatarOptions());
 		tv_follows.setText("关注 " + user.getFollowers_count());
+		tv_fans.setText("粉丝 " + user.getFavourites_count());
+		tv_sign.setText(user.getDescription());
 	}
 	
 	private void loadUserInfo() {
@@ -248,7 +293,7 @@ public class UserInfoActivity extends BaseActivity implements
 						super.onDone();
 						
 						isLoadingMore = false;
-						lv_user_info.onRefreshComplete();
+						plv_user_info.onRefreshComplete();
 					}
 
 				});
@@ -263,9 +308,9 @@ public class UserInfoActivity extends BaseActivity implements
 		statusAdapter.notifyDataSetChanged();
 		
 		if(curPage < response.getTotal_number()) {
-			addFootView(lv_user_info, footView);
+			addFootView(plv_user_info, footView);
 		} else {
-			removeFootView(lv_user_info, footView);
+			removeFootView(plv_user_info, footView);
 		}
 	}
 	
@@ -286,7 +331,8 @@ public class UserInfoActivity extends BaseActivity implements
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.iv_image:
+		case R.id.iv_avatar:
+			System.out.println(user_info_head.getHeight());
 			break;
 		case R.id.ll_share_bottom:
 			break;
@@ -315,23 +361,31 @@ public class UserInfoActivity extends BaseActivity implements
 		switch (checkedId) {
 		case R.id.rb_info:
 			rb_info.setChecked(true);
-			shadow_rb_info.setChecked(true);
+			uliv_user_info.setCurrentItem(0);
 			
+			shadow_rb_info.setChecked(true);
+			shadow_uliv_user_info.setCurrentItem(0);
 			break;
 		case R.id.rb_status:
 			rb_status.setChecked(true);
-			shadow_rb_status.setChecked(true);
+			uliv_user_info.setCurrentItem(1);
 			
+			shadow_rb_status.setChecked(true);
+			shadow_uliv_user_info.setCurrentItem(1);
 			break;
 		case R.id.rb_photos:
 			rb_photos.setChecked(true);
-			shadow_rb_photos.setChecked(true);
+			uliv_user_info.setCurrentItem(2);
 			
+			shadow_rb_photos.setChecked(true);
+			shadow_uliv_user_info.setCurrentItem(2);
 			break;
 		case R.id.rb_manager:
 			rb_manager.setChecked(true);
-			shadow_rb_manager.setChecked(true);
+			uliv_user_info.setCurrentItem(3);
 			
+			shadow_rb_manager.setChecked(true);
+			shadow_uliv_user_info.setCurrentItem(3);
 			break;
 
 		default:

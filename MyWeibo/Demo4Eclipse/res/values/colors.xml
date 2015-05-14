@@ -28,9 +28,11 @@
     <color name="primary">#795548</color>
     <color name="primary_light">#d7ccc8</color>
     <color name="orange">#ff8200</color>
+    <color name="orange_dark">#d46303</color>
 
     <!-- customer -->
     <color name="bg_gray_pressed">#d2d2d2</color>
     <color name="txt_at_blue">#507daf</color>
+    <color name="bg_gray_bar">#f9f9f9</color>
 
 </resources>

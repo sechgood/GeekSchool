@@ -13,7 +13,7 @@
 		</layer-list>
     </item>
     
-    <item android:state_pressed="true">
+    <!-- <item android:state_pressed="true">
 		<layer-list>
 		    <item>
 		        <shape android:shape="rectangle" >
@@ -21,7 +21,7 @@
 		        </shape>
 		    </item>
 		</layer-list>
-    </item>
+    </item> -->
     
     <item android:drawable="@color/transparent"></item>
 

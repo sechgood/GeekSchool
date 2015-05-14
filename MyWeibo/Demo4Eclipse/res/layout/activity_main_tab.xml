@@ -13,9 +13,10 @@
     <RadioGroup
         android:id="@+id/rg_tab"
         android:layout_width="fill_parent"
-        android:layout_height="48dp"
+        android:layout_height="56dp"
         android:layout_gravity="bottom"
-        android:gravity="bottom"
+        android:background="@color/primary"
+        android:gravity="center_vertical"
         android:orientation="horizontal" >
 
         <RadioButton
@@ -29,6 +30,14 @@
             style="@style/RadioButtonBottomTab"
             android:gravity="center"
             android:text="咖店" />
+
+        <ImageView
+            android:id="@+id/iv_add"
+            android:layout_width="64dp"
+            android:padding="8dp"
+            android:layout_height="48dp"
+            android:background="@drawable/correct_oran_selector"
+            android:src="@drawable/tabbar_add_icon_sel" />
 
         <RadioButton
             android:id="@+id/rb_search"

@@ -1,8 +1,12 @@
 package com.boredream.boreweibo.activity;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -14,6 +18,7 @@ public class MainActivity extends FragmentActivity implements
 		OnCheckedChangeListener {
 	
 	private RadioGroup rg_tab;
+	private ImageView iv_add;
 	private FragmentController fc;
 	
 	@Override
@@ -30,7 +35,16 @@ public class MainActivity extends FragmentActivity implements
 	
 	private void initView() {
 		rg_tab = (RadioGroup) findViewById(R.id.rg_tab);
+		iv_add = (ImageView) findViewById(R.id.iv_add);
+		
 		rg_tab.setOnCheckedChangeListener(this);
+		iv_add.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this, WriteStatusActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 
 	private void initData() {

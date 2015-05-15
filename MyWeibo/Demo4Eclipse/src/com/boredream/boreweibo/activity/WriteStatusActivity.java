@@ -1,5 +1,6 @@
 package com.boredream.boreweibo.activity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +17,15 @@ import android.widget.ImageView;
 import com.boredream.boreweibo.BaseActivity;
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.adapter.WriteStatusGridImgsAdapter;
+import com.boredream.boreweibo.api.BoreWeiboAPI;
+import com.boredream.boreweibo.constants.AccessTokenKeeper;
+import com.boredream.boreweibo.constants.URLs;
 import com.boredream.boreweibo.utils.DialogUtils;
 import com.boredream.boreweibo.utils.ImageUtils;
 import com.boredream.boreweibo.widget.WrapHeightGridView;
+import com.sina.weibo.sdk.auth.WeiboParameters;
+import com.sina.weibo.sdk.net.HttpManager;
+import com.sina.weibo.sdk.openapi.legacy.WeiboAPI;
 
 public class WriteStatusActivity extends BaseActivity implements OnClickListener, OnItemClickListener {
 	private EditText et_write_status;
@@ -78,13 +85,10 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 
 			break;
 		case R.id.iv_topic:
-
 			break;
 		case R.id.iv_emoji:
-
 			break;
 		case R.id.iv_add:
-
 			break;
 		}
 	}

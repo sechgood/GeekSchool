@@ -1,19 +1,32 @@
 package com.boredream.boreweibo.api;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+
+import org.apache.http.protocol.HTTP;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
+import com.boredream.boreweibo.activity.WriteStatusActivity;
 import com.boredream.boreweibo.constants.AccessTokenKeeper;
 import com.boredream.boreweibo.constants.URLs;
+import com.boredream.boreweibo.utils.ImageUtils;
 import com.boredream.boreweibo.utils.Logger;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboParameters;
 import com.sina.weibo.sdk.exception.WeiboException;
+import com.sina.weibo.sdk.net.AsyncWeiboRunner;
+import com.sina.weibo.sdk.net.HttpManager;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.openapi.legacy.WeiboAPI;
 
@@ -36,9 +49,6 @@ public class BoreWeiboAPI extends WeiboAPI{
 
 	public void requestInMainLooper(String url, WeiboParameters params, String httpMethod, 
 			final RequestListener listener) {
-		
-		// 通用必要参数
-		params.add("access_token", mAccessToken.getToken());
 		
 		Logger.show("API", "url = " + parseGetUrlWithParams(url, params));
 		// 主线程处理
@@ -123,6 +133,23 @@ public class BoreWeiboAPI extends WeiboAPI{
 			params.add("screen_name", screen_name);
 		}
 		requestInMainLooper(URLs.usersShow, params , WeiboAPI.HTTPMETHOD_GET, listener);
+	}
+	
+	/**
+	 * 上传图片并发布一条新微博
+	 * 
+	 * @param context
+	 * @param status
+	 *            要发布的微博文本内容。
+	 * @param imgFilePath
+	 *            要上传的图片绝对路径。
+	 * @param listener
+	 */
+	public void statusesUpload(Context context, String status, String imgFilePath, RequestListener listener) {
+		WeiboParameters params = new WeiboParameters();
+		params.add("status", "微博图片测试");
+		params.add("pic", imgFilePath);
+		AsyncWeiboRunner.request4Binary(context, URLs.statusesUpload, params, WeiboAPI.HTTPMETHOD_POST, listener);
 	}
 	
 	public void statusesHome_timeline(long page, RequestListener listener) {

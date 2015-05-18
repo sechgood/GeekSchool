@@ -1,7 +1,5 @@
 package com.boredream.boreweibo.utils;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,6 +16,7 @@ import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,10 +26,15 @@ import android.widget.TextView;
 
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.activity.UserInfoActivity;
+import com.boredream.boreweibo.entity.Emotion;
 
 public class StringUtils {
-
+	
 	public static SpannableString getWeiboContent(final Context context, final TextView tv, String source) {
+		return getWeiboContent(context, tv, source, true);
+	}
+
+	public static SpannableString getWeiboContent(final Context context, final TextView tv, String source, boolean clickable) {
 		SpannableString spannableString = new SpannableString(source);
 		Resources res = context.getResources();
 		
@@ -38,18 +42,11 @@ public class StringUtils {
 		Pattern patternLink = Pattern.compile(regexLink);
 		Matcher matcherLink = patternLink.matcher(spannableString);
 		
-		String regexEmoji = "\\[([\u4e00-\u9fa5])+\\]";
+		String regexEmoji = "\\[([\u4e00-\u9fa5a-zA-Z0-9])+\\]";
 		Pattern patternEmoji = Pattern.compile(regexEmoji);
 		Matcher matcherEmoji = patternEmoji.matcher(spannableString);
-		Map<String, Integer> emojiMap = new HashMap<String, Integer>();
-		emojiMap.put("[爱你]", R.drawable.d_aini);
-		emojiMap.put("[哈哈]", R.drawable.d_haha);
-		emojiMap.put("[钱]", R.drawable.d_qian);
-		emojiMap.put("[嘻嘻]", R.drawable.d_xixi);
-		emojiMap.put("[最右]", R.drawable.d_zuiyou);
-		emojiMap.put("[亲亲]", R.drawable.d_qinqin);
 		
-		if(matcherLink.find()) {
+		if(matcherLink.find() && clickable) {
 			tv.setMovementMethod(new LinkTouchMovementMethod());
 			matcherLink.reset();
 		}
@@ -59,28 +56,37 @@ public class StringUtils {
 				final String key = matcherLink.group(); // 获取匹配到的具体字符
 				int start = matcherLink.start(); // 匹配字符串的开始位置
 				
-				TouchableSpan clickableSpan = new TouchableSpan(context) {
-					@Override
-					public void onClick(View widget) {
-						if(key.startsWith("@")) {
-							Intent intent = new Intent(context, UserInfoActivity.class);
-							intent.putExtra("userName", key.substring(1));
-							context.startActivity(intent);
-						} else if(key.startsWith("#")) {
-							ToastUtils.showToast(context, "查看话题 :" + key, 0);
-						} else if(tv.getParent() instanceof LinearLayout){
-							((LinearLayout) tv.getParent()).performClick();
+				if(clickable) {
+					// @和#可点击
+					TouchableSpan clickableSpan = new TouchableSpan(context) {
+						@Override
+						public void onClick(View widget) {
+							if(key.startsWith("@")) {
+								Intent intent = new Intent(context, UserInfoActivity.class);
+								intent.putExtra("userName", key.substring(1));
+								context.startActivity(intent);
+							} else if(key.startsWith("#")) {
+								ToastUtils.showToast(context, "查看话题 :" + key, 0);
+							} else if(tv.getParent() instanceof LinearLayout){
+								((LinearLayout) tv.getParent()).performClick();
+							}
 						}
-					}
-				};
-				spannableString.setSpan(clickableSpan, start, start + key.length(), 
-						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					};
+					spannableString.setSpan(clickableSpan, start, start + key.length(), 
+							Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				} else {
+					// @和#不可点击
+					int blueColor = context.getResources().getColor(R.color.txt_at_blue);
+					ForegroundColorSpan colorSpan = new ForegroundColorSpan(blueColor);
+					spannableString.setSpan(colorSpan, start, start + key.length(), 
+							Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				}
 				
 			} else if(matcherEmoji.find()) {
 				String key = matcherEmoji.group(); // 获取匹配到的具体字符
 				int start = matcherEmoji.start(); // 匹配字符串的开始位置
 				
-				Integer imgRes = emojiMap.get(key);
+				Integer imgRes = Emotion.getImgByName(key);
 				if(imgRes != null) {
 					Options options = new Options();
 					options.inJustDecodeBounds = true;

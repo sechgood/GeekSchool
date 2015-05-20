@@ -10,21 +10,24 @@ import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.utils.TitleBuilder;
 
 public class ShopFragment extends BaseFragment {
-	
+
 	private View view;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		view = View.inflate(getActivity(), R.layout.frag_home, null);
+		view = View.inflate(getActivity(), R.layout.frag_message, null);
 
 		initView();
-		
+
 		return view;
 	}
-	
+
 	private void initView() {
-		new TitleBuilder(view).setTitleText("咖店").build();
+		new TitleBuilder(view)
+			.setTitleText("消息")
+			.setRightText("发起回话")
+			.build();
 	}
-	
+
 }

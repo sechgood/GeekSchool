@@ -8,8 +8,8 @@
     <include layout="@layout/include_titlebar" />
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:id="@+id/plv_home"
-        style="@style/ListViewCard" >
+        android:id="@+id/plv_message"
+        style="@style/ListViewLineDivider" >
     </com.handmark.pulltorefresh.library.PullToRefreshListView>
 
 </LinearLayout>

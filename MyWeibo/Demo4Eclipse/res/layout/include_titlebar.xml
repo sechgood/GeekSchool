@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_titlebar"
     android:layout_width="match_parent"
-    android:background="@color/primary"
-    android:layout_height="56dp"
+    android:layout_height="48dp"
+    android:background="@drawable/navigationbar_background"
     android:orientation="horizontal" >
 
     <ImageView
@@ -17,11 +17,12 @@
 
     <TextView
         android:id="@+id/titlebar_tv_left"
-        style="@style/TextViewSubhead"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:padding="16dp"
-        android:textColor="@color/txt_black_alpha"
+        android:textColor="@drawable/txtcolor_oran2alpha_sel"
+        android:textSize="@dimen/txtsize_subhead"
         android:visibility="gone" />
 
     <TextView
@@ -43,12 +44,19 @@
 
     <TextView
         android:id="@+id/titlebar_tv_right"
-        style="@style/TextViewSubhead"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:gravity="center_vertical"
         android:padding="16dp"
-        android:visibility="gone"
-        android:textColor="@color/txt_black_alpha" />
+        android:textColor="@drawable/txtcolor_oran2alpha_sel"
+        android:textSize="@dimen/txtsize_subhead"
+        android:visibility="gone" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/divider_gray" />
 
 </RelativeLayout>

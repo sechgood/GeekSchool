@@ -14,9 +14,7 @@
 
         <com.handmark.pulltorefresh.library.PullToRefreshListView
             android:id="@+id/lv_comment"
-            style="@style/ListViewCommon"
-            android:divider="@color/divider_black_alpha"
-            android:dividerHeight="1px" >
+            style="@style/ListViewLineDivider" >
         </com.handmark.pulltorefresh.library.PullToRefreshListView>
 
         <include

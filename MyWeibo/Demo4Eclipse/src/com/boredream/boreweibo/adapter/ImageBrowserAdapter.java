@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -45,11 +44,7 @@ public class ImageBrowserAdapter extends PagerAdapter {
 		iv.setLayoutParams(params);
 		
 		PicUrls url = picUrls.get(position % picUrls.size());
-		mImageLoader.displayImage(url.getThumbnail_pic(), iv);
-		if(!TextUtils.isEmpty(url.getOriginal_pic())) {
-			mImageLoader.displayImage(url.getOriginal_pic(), iv);
-		}
-		
+		mImageLoader.displayImage(url.getBmiddle_pic(), iv);
 		container.addView(iv, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		return iv;
 	}

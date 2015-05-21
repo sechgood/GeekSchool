@@ -24,7 +24,9 @@ public class SearchFragment extends BaseFragment {
 	}
 	
 	private void initView() {
-		new TitleBuilder(view).setTitleText("搜索").build();
+		new TitleBuilder(view)
+			.setTitleText("发现")
+			.build();
 	}
 	
 }

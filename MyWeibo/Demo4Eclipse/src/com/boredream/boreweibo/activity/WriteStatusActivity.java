@@ -1,5 +1,6 @@
 package com.boredream.boreweibo.activity;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +9,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,11 +28,13 @@ import com.boredream.boreweibo.adapter.EmotionGvAdapter;
 import com.boredream.boreweibo.adapter.EmotionPagerAdapter;
 import com.boredream.boreweibo.adapter.StatusGridImgsAdapter;
 import com.boredream.boreweibo.adapter.WriteStatusGridImgsAdapter;
+import com.boredream.boreweibo.api.SimpleRequestListener;
 import com.boredream.boreweibo.entity.Emotion;
 import com.boredream.boreweibo.utils.DialogUtils;
 import com.boredream.boreweibo.utils.DisplayUtils;
 import com.boredream.boreweibo.utils.ImageUtils;
 import com.boredream.boreweibo.utils.StringUtils;
+import com.boredream.boreweibo.utils.TitleBuilder;
 import com.boredream.boreweibo.widget.WrapHeightGridView;
 
 public class WriteStatusActivity extends BaseActivity implements OnClickListener, OnItemClickListener {
@@ -69,6 +70,24 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 	}
 
 	private void initView() {
+		new TitleBuilder(this)
+				.setTitleText("发微博")
+				.setLeftText("取消")
+				.setLeftOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						WriteStatusActivity.this.finish();
+					}
+				})
+				.setRightText("发送")
+				.setRightOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						uploadStatus();
+					}
+				})
+				.build();
+
 		et_write_status = (EditText) findViewById(R.id.et_write_status);
 		gv_write_status = (WrapHeightGridView) findViewById(R.id.gv_write_status);
 		iv_image = (ImageView) findViewById(R.id.iv_image);
@@ -94,38 +113,58 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 		iv_topic.setOnClickListener(this);
 		iv_emoji.setOnClickListener(this);
 		iv_add.setOnClickListener(this);
-		
+
 		initEmotion();
 	}
-	
+
+	private void uploadStatus() {
+		String imgFilePath = null;
+		if (imgUris.size() > 0) {
+			Uri uri = imgUris.get(0);
+			imgFilePath = ImageUtils.getImageAbsolutePath(this, uri);
+		}
+
+		weiboApi.statusesUpload(et_write_status.getText().toString(), imgFilePath,
+				new SimpleRequestListener(this, progressDialog) {
+
+					@Override
+					public void onComplete4binary(ByteArrayOutputStream responseOS) {
+						super.onComplete4binary(responseOS);
+						
+						showToast("微博发送成功");
+						WriteStatusActivity.this.finish();
+					}
+				});
+	}
+
 	private void initEmotion() {
 		List<GridView> gvs = new ArrayList<GridView>();
 		List<String> emotionNames = null;
-		
+
 		int gvWidth = DisplayUtils.getScreenWidthPixels(this);
 		int padding = DisplayUtils.dp2px(this, 8);
-		
+
 		int itemWidth = (gvWidth - padding * 8) / 7;
 		int gvHeight = itemWidth * 3 + 4 * padding;
-		
-		for(Map.Entry<String, Integer> entry : Emotion.emojiMap.entrySet()) {
-			if(emotionNames == null) {
+
+		for (Map.Entry<String, Integer> entry : Emotion.emojiMap.entrySet()) {
+			if (emotionNames == null) {
 				emotionNames = new ArrayList<String>();
 			}
-			
+
 			emotionNames.add(entry.getKey());
-			
-			if(emotionNames.size() == 20) {
+
+			if (emotionNames.size() == 20) {
 				createEmotionGridView(gvs, emotionNames, gvWidth, padding, itemWidth, gvHeight);
 				emotionNames = null;
 			}
 		}
-		
-		if(emotionNames != null) {
+
+		if (emotionNames != null) {
 			createEmotionGridView(gvs, emotionNames, gvWidth, padding, itemWidth, gvHeight);
 			emotionNames = null;
 		}
-		
+
 		emotionPagerGvAdapter = new EmotionPagerAdapter(gvs);
 		vp_emotion_dashboard.setAdapter(emotionPagerGvAdapter);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(gvWidth, gvHeight);
@@ -140,7 +179,7 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 		gv.setVerticalSpacing(padding);
 		LayoutParams params = new LayoutParams(gvWidth, gvHeight);
 		gv.setLayoutParams(params);
-		
+
 		EmotionGvAdapter adapter = new EmotionGvAdapter(this, emotionNames, itemWidth);
 		gv.setAdapter(adapter);
 		gv.setOnItemClickListener(this);
@@ -165,7 +204,7 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 		case R.id.iv_emoji:
 			ll_emotion_dashboard.setVisibility(
 					ll_emotion_dashboard.getVisibility() == View.VISIBLE ?
-					View.GONE : View.VISIBLE);
+							View.GONE : View.VISIBLE);
 			break;
 		case R.id.iv_add:
 			break;
@@ -175,33 +214,33 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Object itemAdapter = parent.getAdapter();
-		
-		if(itemAdapter instanceof StatusGridImgsAdapter) {
+
+		if (itemAdapter instanceof WriteStatusGridImgsAdapter) {
 			if (position < statusImgsAdapter.getCount() - 1) {
-				
+
 			} else {
 				DialogUtils.showImagePickDialog(this);
 			}
-		} else if(itemAdapter instanceof EmotionGvAdapter) {
+		} else if (itemAdapter instanceof EmotionGvAdapter) {
 			EmotionGvAdapter emotionGvAdapter = (EmotionGvAdapter) itemAdapter;
-			
-			if(position == emotionGvAdapter.getCount() - 1) {
+
+			if (position == emotionGvAdapter.getCount() - 1) {
 				et_write_status.dispatchKeyEvent(new KeyEvent(
 						KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
 			} else {
 				String emotionName = emotionGvAdapter.getItem(position);
-				
+
 				int curPosition = et_write_status.getSelectionStart();
 				StringBuilder sb = new StringBuilder(et_write_status.getText().toString());
 				sb.insert(curPosition, emotionName);
-				
+
 				et_write_status.setText(StringUtils.getWeiboContent(
 						this, et_write_status, sb.toString()));
 				et_write_status.setSelection(curPosition + emotionName.length());
 			}
-			
+
 		}
-		
+
 	}
 
 	@Override

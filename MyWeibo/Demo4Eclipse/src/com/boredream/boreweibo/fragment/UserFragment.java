@@ -10,7 +10,6 @@ import com.boredream.boreweibo.BaseFragment;
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.activity.UserInfoActivity;
 import com.boredream.boreweibo.utils.TitleBuilder;
-import com.boredream.boreweibo.utils.ToastUtils;
 import com.boredream.boreweibo.widget.GroupSettingListView;
 import com.boredream.boreweibo.widget.GroupSettingListView.OnSettingItemClickLister;
 
@@ -33,10 +32,13 @@ public class UserFragment extends BaseFragment {
 		new TitleBuilder(view).setTitleText("我").build();
 
 		gslv = (GroupSettingListView) view.findViewById(R.id.gslv);
-		int[] indexs = {1, 3};
-		int[] imgs = {R.drawable.ic_launcher, R.drawable.ic_launcher, R.drawable.ic_launcher, 
-				R.drawable.ic_launcher, R.drawable.ic_launcher, R.drawable.ic_launcher};
-		String[] infos = {"Setting1", "Setting2", "Setting3", "Setting4", "Setting5", "Setting6"};
+		int[] indexs = {2, 5, 7};
+		int[] imgs = {R.drawable.push_icon_app_small_2, R.drawable.push_icon_app_small_2, 
+				R.drawable.push_icon_app_small_2, R.drawable.push_icon_app_small_2, 
+				R.drawable.push_icon_app_small_2, R.drawable.push_icon_app_small_2, 
+				R.drawable.push_icon_app_small_2, R.drawable.push_icon_app_small_2,
+				R.drawable.push_icon_app_small_2};
+		String[] infos = {"新的朋友", "微博等级", "我的相册", "我的收藏", "赞", "微博支付", "个性化", "草稿箱", "更多"};
 		gslv.setAdapterData(indexs, imgs, infos);
 		
 		gslv.setOnSettingItemClickLister(new OnSettingItemClickLister() {

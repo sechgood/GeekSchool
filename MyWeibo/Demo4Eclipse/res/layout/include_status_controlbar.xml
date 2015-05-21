@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="40dp"
         android:baselineAligned="false"
         android:gravity="center_vertical"
         android:background="@color/white"
@@ -28,8 +28,8 @@
 
             <ImageView
                 android:id="@+id/iv_share_bottom"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/timeline_icon_retweet" />
 
             <TextView
@@ -56,8 +56,8 @@
 
             <ImageView
                 android:id="@+id/iv_comment_bottom"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/timeline_icon_comment" />
 
             <TextView
@@ -84,8 +84,8 @@
 
             <com.boredream.boreweibo.widget.InsideCheckBox
                 android:id="@+id/cb_like_bottom"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:button="@drawable/timeline_icon_like_sel" />
 
             <TextView

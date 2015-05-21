@@ -17,10 +17,11 @@
 
     <TextView
         android:id="@+id/titlebar_tv_left"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:padding="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:textColor="@drawable/txtcolor_oran2alpha_sel"
         android:textSize="@dimen/txtsize_subhead"
         android:visibility="gone" />
@@ -44,11 +45,12 @@
 
     <TextView
         android:id="@+id/titlebar_tv_right"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:gravity="center_vertical"
-        android:padding="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:textColor="@drawable/txtcolor_oran2alpha_sel"
         android:textSize="@dimen/txtsize_subhead"
         android:visibility="gone" />

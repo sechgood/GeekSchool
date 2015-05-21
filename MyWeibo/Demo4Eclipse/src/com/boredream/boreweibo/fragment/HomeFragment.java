@@ -81,7 +81,7 @@ public class HomeFragment extends BaseFragment {
 		}
 	}
 	
-	private void initData() {
+	public void initData() {
 		statuses = new ArrayList<Status>();
 		adapter = new StatusAdapter(activity, statuses);
 		plv_home.setAdapter(adapter);

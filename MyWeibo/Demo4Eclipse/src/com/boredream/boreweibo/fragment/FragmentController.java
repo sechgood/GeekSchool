@@ -33,7 +33,7 @@ public class FragmentController {
 	private void initFragments() {
 		fragments = new ArrayList<BaseFragment>();
 		fragments.add(new HomeFragment());
-		fragments.add(new ShopFragment());
+		fragments.add(new MessageFragment());
 		fragments.add(new SearchFragment());
 		fragments.add(new UserFragment());
 		
@@ -60,6 +60,10 @@ public class FragmentController {
 		ft.show(fragment);
 		
 		ft.commit();
+	}
+	
+	public Fragment getFragment(int position) {
+		return fragments.get(position);
 	}
 
 }

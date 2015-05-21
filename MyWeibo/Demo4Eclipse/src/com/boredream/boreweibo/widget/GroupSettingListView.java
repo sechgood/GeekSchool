@@ -3,8 +3,6 @@ package com.boredream.boreweibo.widget;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -71,7 +69,7 @@ public class GroupSettingListView extends LinearLayout {
 				addView(view);
 			}
 			
-			int end = i == mIndexs.length ? mInfos.length-1 : mIndexs[i];
+			int end = i == mIndexs.length ? mInfos.length : mIndexs[i];
 			
 			LinearLayout groupLl = new LinearLayout(getContext());
 			groupLl.setBackgroundColor(Color.WHITE);
@@ -128,32 +126,26 @@ public class GroupSettingListView extends LinearLayout {
 	
 	private View createLineDivider(int leftMarging) {
 		View view = new View(getContext());
-		view.setBackgroundColor(Color.rgb(223, 223, 223));
+		view.setBackgroundResource(R.color.divider_gray);
 		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, 1);
-		params.setMargins(leftMarging, 0, 0, 0);
+		params.setMargins(0, 0, 0, 0);
 		view.setLayoutParams(params);
 		return view;
 	}
 	
 	private View createItem(int img, String info) {
 		LinearLayout linearLayout = new LinearLayout(getContext());
+		linearLayout.setGravity(Gravity.CENTER_VERTICAL);
 		linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, dp2px(56));
+		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, dp2px(48));
 		linearLayout.setLayoutParams(params);
 		
 		linearLayout.setClickable(true);
-		StateListDrawable stateListDrawable = new StateListDrawable();
-		stateListDrawable.addState(
-				new int[]{android.R.attr.state_pressed}, 
-				new ColorDrawable(Color.rgb(217, 217, 217)));
-		stateListDrawable.addState(
-				new int[]{}, 
-				new ColorDrawable(Color.TRANSPARENT));
-		linearLayout.setBackground(stateListDrawable);
+		linearLayout.setBackgroundResource(R.drawable.bg_white2gray_sel);
 		
 	    ImageView iv_setting_left = new ImageView(getContext());
-		LayoutParams ivParams = new LayoutParams(dp2px(24), dp2px(24));
-		ivParams.setMargins(dp2px(16), dp2px(16), dp2px(16), dp2px(16));
+		LayoutParams ivParams = new LayoutParams(dp2px(16), dp2px(16));
+		ivParams.setMargins(dp2px(12), 0, dp2px(12), 0);
 		iv_setting_left.setLayoutParams(ivParams);
 		
 		TextView tv_setting_mid = new TextView(getContext());
@@ -165,7 +157,7 @@ public class GroupSettingListView extends LinearLayout {
 		
 		ImageView iv_setting_right = new ImageView(getContext());
 		iv_setting_right.setLayoutParams(ivParams);
-		iv_setting_right.setImageResource(R.drawable.ic_launcher);
+		iv_setting_right.setImageResource(R.drawable.rightarrow);
 		
 		linearLayout.addView(iv_setting_left);
 		linearLayout.addView(tv_setting_mid);

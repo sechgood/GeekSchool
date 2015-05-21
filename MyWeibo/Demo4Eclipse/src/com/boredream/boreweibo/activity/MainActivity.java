@@ -3,6 +3,7 @@ package com.boredream.boreweibo.activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,6 +14,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.fragment.FragmentController;
+import com.boredream.boreweibo.fragment.HomeFragment;
 
 public class MainActivity extends FragmentActivity implements
 		OnCheckedChangeListener {
@@ -42,7 +44,7 @@ public class MainActivity extends FragmentActivity implements
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(MainActivity.this, WriteStatusActivity.class);
-				startActivity(intent);
+				startActivityForResult(intent, 110);
 			}
 		});
 	}
@@ -69,6 +71,17 @@ public class MainActivity extends FragmentActivity implements
 			break;
 		default:
 			break;
+		}
+	}
+	
+	@Override
+	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
+		super.onActivityResult(arg0, arg1, arg2);
+
+		Fragment fragment = fc.getFragment(0);
+		if(fragment instanceof HomeFragment) {
+			HomeFragment homeFragment = (HomeFragment) fragment;
+			homeFragment.initData();
 		}
 	}
 }

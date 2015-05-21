@@ -3,7 +3,6 @@ package com.boredream.boreweibo.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
@@ -33,8 +32,6 @@ import com.boredream.boreweibo.entity.PicUrls;
 import com.boredream.boreweibo.entity.Status;
 import com.boredream.boreweibo.entity.User;
 import com.boredream.boreweibo.utils.DateUtils;
-import com.boredream.boreweibo.utils.DialogUtils;
-import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.boredream.boreweibo.utils.StringUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -44,13 +41,10 @@ public class StatusAdapter extends BaseAdapter {
 	private List<Status> datas;
 	private ImageLoader imageLoader;
 	
-	private Dialog progressDialog;
-
 	public StatusAdapter(Context context, List<Status> datas) {
 		this.context = context;
 		this.datas = datas;
 		imageLoader = ImageLoader.getInstance();
-		progressDialog = DialogUtils.createLoadingDialog(context);
 	}
 	
 	@Override
@@ -123,8 +117,7 @@ public class StatusAdapter extends BaseAdapter {
 		// set data
 		final Status status = getItem(position);
 		User user = status.getUser();
-		imageLoader.displayImage(user.getProfile_image_url(), holder.iv_avatar,
-				ImageOptHelper.getAvatarOptions());
+		imageLoader.displayImage(user.getProfile_image_url(), holder.iv_avatar);
 		holder.tv_subhead.setText(user.getName());
 		holder.tv_body.setText(DateUtils.getShortTime(status.getCreated_at()) + 
 				"  来自" + Html.fromHtml(status.getSource()));

@@ -1,37 +1,26 @@
 package com.boredream.boreweibo.api;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-
-import org.apache.http.protocol.HTTP;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
-import com.boredream.boreweibo.activity.WriteStatusActivity;
 import com.boredream.boreweibo.constants.AccessTokenKeeper;
 import com.boredream.boreweibo.constants.URLs;
-import com.boredream.boreweibo.utils.ImageUtils;
 import com.boredream.boreweibo.utils.Logger;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboParameters;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.AsyncWeiboRunner;
-import com.sina.weibo.sdk.net.HttpManager;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.openapi.legacy.WeiboAPI;
 
 public class BoreWeiboAPI extends WeiboAPI{
 	
+	private Context context;
 	private Handler mainLooperHandler = new Handler(Looper.getMainLooper());
 
 	private BoreWeiboAPI(Oauth2AccessToken oauth2AccessToken) {
@@ -40,13 +29,14 @@ public class BoreWeiboAPI extends WeiboAPI{
 	
 	public BoreWeiboAPI(Context context) {
 		this(AccessTokenKeeper.readAccessToken(context));
+		this.context = context;
 	}
 	
 	@Override
 	protected void request(String url, WeiboParameters params, String httpMethod, RequestListener listener) {
 		super.request(url, params, httpMethod, listener);
 	}
-
+	
 	public void requestInMainLooper(String url, WeiboParameters params, String httpMethod, 
 			final RequestListener listener) {
 		
@@ -91,6 +81,54 @@ public class BoreWeiboAPI extends WeiboAPI{
 		            	 listener.onComplete(response);
 		             }
 		         });
+			}
+		});
+	}
+	
+	public void request4BinaryInMainLooper(String url, WeiboParameters params, String httpMethod, 
+			final RequestListener listener) {
+		
+		Logger.show("API", "url = " + parseGetUrlWithParams(url, params));
+		// 主线程处理
+		AsyncWeiboRunner.request4Binary(context, url, params, httpMethod, new RequestListener() {
+			@Override
+			public void onIOException(final IOException e) {
+				mainLooperHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						listener.onIOException(e);
+					}
+				});
+			}
+			
+			@Override
+			public void onError(final WeiboException e) {
+				mainLooperHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						listener.onError(e);
+					}
+				});
+			}
+			
+			@Override
+			public void onComplete4binary(final ByteArrayOutputStream responseOS) {
+				mainLooperHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						listener.onComplete4binary(responseOS);
+					}
+				});
+			}
+			
+			@Override
+			public void onComplete(final String response) {
+				mainLooperHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						listener.onComplete(response);
+					}
+				});
 			}
 		});
 	}
@@ -145,11 +183,12 @@ public class BoreWeiboAPI extends WeiboAPI{
 	 *            要上传的图片绝对路径。
 	 * @param listener
 	 */
-	public void statusesUpload(Context context, String status, String imgFilePath, RequestListener listener) {
+	public void statusesUpload(String status, String imgFilePath, RequestListener listener) {
 		WeiboParameters params = new WeiboParameters();
-		params.add("status", "微博图片测试");
+		params.add("access_token", mAccessToken.getToken());
+		params.add("status", status);
 		params.add("pic", imgFilePath);
-		AsyncWeiboRunner.request4Binary(context, URLs.statusesUpload, params, WeiboAPI.HTTPMETHOD_POST, listener);
+		request4BinaryInMainLooper(URLs.statusesUpload, params, WeiboAPI.HTTPMETHOD_POST, listener);
 	}
 	
 	public void statusesHome_timeline(long page, RequestListener listener) {

@@ -43,6 +43,7 @@ public class EmotionGvAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ImageView iv = new ImageView(context);
 		LayoutParams params = new LayoutParams(itemWidth, itemWidth);
+		iv.setPadding(itemWidth/8, itemWidth/8, itemWidth/8, itemWidth/8);
 		iv.setLayoutParams(params);
 		
 		if(position == getCount() - 1) {

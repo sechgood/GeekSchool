@@ -33,7 +33,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:singleLine">true</item>
-        <item name="android:textColor">@color/txt_black_alpha</item>
+        <item name="android:textColor">@color/txt_black</item>
         <item name="android:textSize">@dimen/txtsize_headline</item>
     </style>
 
@@ -41,28 +41,28 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:singleLine">true</item>
-        <item name="android:textColor">@color/txt_black_alpha</item>
+        <item name="android:textColor">@color/txt_black</item>
         <item name="android:textSize">@dimen/txtsize_title</item>
     </style>
 
     <style name="TextViewSubhead">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/txt_black_alpha</item>
+        <item name="android:textColor">@color/txt_black</item>
         <item name="android:textSize">@dimen/txtsize_subhead</item>
     </style>
 
     <style name="TextViewBody">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/txt_black_alpha</item>
+        <item name="android:textColor">@color/txt_black</item>
         <item name="android:textSize">@dimen/txtsize_body</item>
     </style>
 
     <style name="TextViewCaption">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/txt_light_gray_alpha</item>
+        <item name="android:textColor">@color/txt_light_gray</item>
         <item name="android:textSize">@dimen/txtsize_caption</item>
     </style>
 
@@ -98,7 +98,7 @@
     <style name="RadioButtonStatusDetailTab">
         <item name="android:layout_width">0dp</item>
         <item name="android:textSize">@dimen/txtsize_subhead</item>
-        <item name="android:textColor">@color/txt_black_alpha</item>
+        <item name="android:textColor">@color/txt_black</item>
         <item name="android:layout_height">48dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:background">@drawable/layerlist_tab_indicator_sel</item>
@@ -114,7 +114,7 @@
         <item name="android:background">@color/primary_light</item>
         <item name="android:textSize">@dimen/txtsize_subhead</item>
         <item name="android:layout_width">0dp</item>
-        <item name="android:textColor">@color/txt_black_alpha</item>
+        <item name="android:textColor">@color/txt_black</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">1</item>
         <item name="android:button">@null</item>
@@ -127,7 +127,7 @@
         <item name="android:textColor">@drawable/txtcolor_white2black_sel</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:background">@drawable/bg_gray2white_sel</item>
+        <item name="android:background">@drawable/bg_dgray2white_sel</item>
         <item name="android:button">@null</item>
         <item name="android:gravity">center</item>
     </style>
@@ -145,6 +145,8 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:cacheColorHint">@color/transparent</item>
         <item name="android:listSelector">@color/transparent</item>
+         <item name="android:divider">@null</item>
+        <item name="android:dividerHeight">0dp</item>
         <item name="android:scrollbars">none</item>
     </style>
 

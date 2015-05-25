@@ -115,7 +115,7 @@ public class StatusDetailActivity extends BaseActivity implements
 	private void initView() {
 		new TitleBuilder(this)
 				.setTitleText("微博正文")
-				.setLeftImage(R.drawable.ic_launcher)
+				.setLeftImage(R.drawable.navigationbar_back_sel)
 				.setLeftOnClickListener(this)
 				.build();
 		
@@ -390,6 +390,9 @@ public class StatusDetailActivity extends BaseActivity implements
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.titlebar_iv_left:
+			StatusDetailActivity.this.finish();
+			break;
 		case R.id.iv_image:
 			break;
 		case R.id.ll_share_bottom:

@@ -1,37 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- common -->
     <color name="transparent">#00000000</color>
     <color name="white">#ffffff</color>
     <color name="alpha_white">#49ffffff</color>
     <color name="black">#000000</color>
     <color name="red">#ff403c</color>
 
-    <!-- lofter -->
-    <color name="bg_agray">#49dddddd</color>
-    <color name="bg_item_bar">#f3f3f3</color>
-    <color name="bg_item_bar_pressed">#e8e8e8</color>
-    <color name="dashboard_common_default">#fff3f3f3</color>
-    <color name="dashboard_common_pressed">#ffe1e1e1</color>
-
-    <!-- material design -->
-    <color name="txt_black_alpha">#de000000</color>
-    <color name="txt_gray_alpha">#8d000000</color>
-    <color name="txt_light_gray_alpha">#49000000</color>
-
-    <!-- primary color -->
     <color name="primary_dark">#5d4037</color>
     <color name="primary">#795548</color>
     <color name="primary_light">#d7ccc8</color>
     <color name="orange">#ff8200</color>
     <color name="orange_alpha">#66ff8200</color>
     <color name="orange_dark">#d46303</color>
+    
+    <color name="txt_black">#232323</color>
+    <color name="txt_gray">#565656</color>
+    <color name="txt_light_gray">#898989</color>
 
-    <!-- customer -->
     <color name="bg_gray">#f2f2f2</color>
-    <color name="bg_retweet">#f7f7f7</color>
-    <color name="bg_gray_pressed">#f0f0f0</color>
+    <color name="bg_gray_dark">#cdcdcd</color>
+    <color name="bg_agray">#49dddddd</color>
+    <color name="bg_gray_pressed">#e8e8e8</color>
     <color name="txt_at_blue">#507daf</color>
     <color name="bg_gray_bar">#f9f9f9</color>
     <color name="divider_gray">#d7d7d7</color>

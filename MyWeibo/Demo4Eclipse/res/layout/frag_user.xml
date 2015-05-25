@@ -47,7 +47,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@id/iv_avatar"
                     android:text="没错,我就是油坊桥吴彦祖"
-                    android:textColor="@color/txt_gray_alpha" />
+                    android:textColor="@color/txt_gray" />
 
                 <ImageView
                     android:id="@+id/iv_rightarrow"
@@ -86,7 +86,7 @@
                         style="@style/TextViewBody"
                         android:layout_marginTop="4dp"
                         android:text="微博"
-                        android:textColor="@color/txt_gray_alpha" />
+                        android:textColor="@color/txt_gray" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -107,7 +107,7 @@
                         style="@style/TextViewBody"
                         android:layout_marginTop="4dp"
                         android:text="关注"
-                        android:textColor="@color/txt_gray_alpha" />
+                        android:textColor="@color/txt_gray" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -128,7 +128,7 @@
                         style="@style/TextViewBody"
                         android:layout_marginTop="4dp"
                         android:text="粉丝"
-                        android:textColor="@color/txt_gray_alpha" />
+                        android:textColor="@color/txt_gray" />
                 </LinearLayout>
             </LinearLayout>
 

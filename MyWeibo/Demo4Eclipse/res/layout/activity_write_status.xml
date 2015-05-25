@@ -27,7 +27,7 @@
                 android:gravity="top"
                 android:hint="分享新鲜事..."
                 android:minLines="3"
-                android:textColorHint="@color/txt_gray_alpha" />
+                android:textColorHint="@color/txt_gray" />
 
             <com.boredream.boreweibo.widget.WrapHeightGridView
                 android:id="@+id/gv_write_status"
@@ -125,6 +125,7 @@
                 android:text="最近" />
 
             <RadioButton
+                android:checked="true"
                 android:id="@+id/rb_emotion_dashboard_default"
                 style="@style/RadioButtonEmotionDashboard"
                 android:text="默认" />

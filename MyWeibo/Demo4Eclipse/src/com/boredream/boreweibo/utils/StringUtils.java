@@ -92,7 +92,7 @@ public class StringUtils {
 					options.inJustDecodeBounds = true;
 					BitmapFactory.decodeResource(res, imgRes, options);
 					
-					int scale = (int) (options.outWidth / tv.getTextSize());
+					int scale = (int) (options.outWidth / 24);
 					options.inJustDecodeBounds = false;
 					options.inSampleSize = scale;
 					Bitmap bitmap = BitmapFactory.decodeResource(res, imgRes, options);

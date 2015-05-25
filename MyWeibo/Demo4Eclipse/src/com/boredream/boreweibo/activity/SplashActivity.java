@@ -20,6 +20,7 @@ import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.api.SimpleRequestListener;
 import com.boredream.boreweibo.constants.AccessTokenKeeper;
 import com.boredream.boreweibo.entity.User;
+import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
@@ -118,7 +119,9 @@ public class SplashActivity extends BaseActivity {
 	}
 	
 	private void loadAvatar() {
-		imageLoader.loadImage(application.currentUser.getProfile_image_url(), new ImageLoadingListener() {
+		imageLoader.loadImage(application.currentUser.getProfile_image_url(), 
+				ImageOptHelper.getAvatarOptions(),
+				new ImageLoadingListener() {
 			@Override
 			public void onLoadingStarted(String imageUri, View view) {
 				

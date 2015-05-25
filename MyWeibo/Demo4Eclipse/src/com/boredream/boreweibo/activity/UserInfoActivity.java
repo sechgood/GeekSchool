@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -32,17 +31,21 @@ import com.boredream.boreweibo.entity.response.StatusTimeLineResponse;
 import com.boredream.boreweibo.utils.DisplayUtils;
 import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.boredream.boreweibo.utils.TitleBuilder;
+import com.boredream.boreweibo.widget.Pull2RefreshListView;
+import com.boredream.boreweibo.widget.Pull2RefreshListView.OnPlvScrollListener;
 import com.boredream.boreweibo.widget.UnderlineIndicatorView;
+import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.handmark.pulltorefresh.library.PullToRefreshListView.OnPlvScrollListener;
 
 public class UserInfoActivity extends BaseActivity implements 
 	OnClickListener, OnItemClickListener, OnCheckedChangeListener {
 	
 	private View title;
+	private ImageView titlebar_iv_left;
+	private TextView titlebar_tv;
 	
 	private View user_info_head;
 	private ImageView iv_avatar;
@@ -68,7 +71,7 @@ public class UserInfoActivity extends BaseActivity implements
 	private UnderlineIndicatorView uliv_user_info;
 	
 	private ImageView iv_user_info_head;
-	private PullToRefreshListView plv_user_info;
+	private Pull2RefreshListView plv_user_info;
 	private View footView;
 	
 	private boolean isCurrentUser;
@@ -96,15 +99,16 @@ public class UserInfoActivity extends BaseActivity implements
 		initView();
 		
 		loadData();
-		
-//		loadComments(1);
 	}
 
 	private void initView() {
 		title = new TitleBuilder(this)
-				.setLeftImage(R.drawable.ic_launcher)
-				.setLeftOnClickListener(this)
-				.build();
+			.setTitleBgRes(R.drawable.userinfo_navigationbar_background)
+			.setLeftImage(R.drawable.navigationbar_back_sel)
+			.setLeftOnClickListener(this)
+			.build();
+		titlebar_iv_left = (ImageView) title.findViewById(R.id.titlebar_iv_left);
+		titlebar_tv = (TextView) title.findViewById(R.id.titlebar_tv);
 		
 		initInfoHead();
 		initTab();
@@ -150,7 +154,7 @@ public class UserInfoActivity extends BaseActivity implements
 	}
 	
 	private void initListView() {
-		plv_user_info = (PullToRefreshListView) findViewById(R.id.plv_user_info);
+		plv_user_info = (Pull2RefreshListView) findViewById(R.id.plv_user_info);
 		footView = View.inflate(this, R.layout.footview_loading, null);
 		final ListView lv = plv_user_info.getRefreshableView();
 		statusAdapter = new StatusAdapter(this, statuses);
@@ -218,11 +222,18 @@ public class UserInfoActivity extends BaseActivity implements
 						iv_user_info_head.getWidth(), 
 						user_info_head.getTop() + iv_user_info_head.getHeight());
 				
-				// 0-pullHead 1-detailHead 2-tab
-				shadow_user_info_tab.setVisibility(user_info_head.getBottom() < title.getBottom() ?
-						View.VISIBLE : View.GONE);
-				title.setBackgroundColor(user_info_head.getBottom() < title.getBottom() ?
-						Color.WHITE : Color.TRANSPARENT);
+				
+				if(user_info_head.getBottom() < title.getBottom()) {
+					shadow_user_info_tab.setVisibility(View.VISIBLE);
+					title.setBackgroundResource(R.drawable.navigationbar_background);
+					titlebar_iv_left.setImageResource(R.drawable.navigationbar_back_sel);
+					titlebar_tv.setVisibility(View.VISIBLE);
+				} else {
+					shadow_user_info_tab.setVisibility(View.GONE);
+					title.setBackgroundResource(R.drawable.userinfo_navigationbar_background);
+					titlebar_iv_left.setImageResource(R.drawable.userinfo_navigationbar_back_sel);
+					titlebar_tv.setVisibility(View.GONE);
+				}
 			}
 		});
 	}
@@ -242,10 +253,11 @@ public class UserInfoActivity extends BaseActivity implements
 		}
 		// set data
 		tv_name.setText(user.getName());
+		titlebar_tv.setText(user.getName());
 		imageLoader.displayImage(user.getProfile_image_url(), iv_avatar,
 				ImageOptHelper.getAvatarOptions());
-		tv_follows.setText("关注 " + user.getFollowers_count());
-		tv_fans.setText("粉丝 " + user.getFavourites_count());
+		tv_follows.setText("关注 " + user.getFriends_count());
+		tv_fans.setText("粉丝 " + user.getFollowers_count());
 		tv_sign.setText(user.getDescription());
 	}
 	
@@ -257,7 +269,9 @@ public class UserInfoActivity extends BaseActivity implements
 					public void onComplete(String response) {
 						super.onComplete(response);
 						
+						user = new Gson().fromJson(response, User.class);
 						
+						setUserInfo();
 					}
 			
 		});
@@ -331,8 +345,10 @@ public class UserInfoActivity extends BaseActivity implements
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.titlebar_iv_left:
+			UserInfoActivity.this.finish();
+			break;
 		case R.id.iv_avatar:
-			System.out.println(user_info_head.getHeight());
 			break;
 		case R.id.ll_share_bottom:
 			break;

@@ -26,7 +26,6 @@ import com.boredream.boreweibo.BaseActivity;
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.adapter.EmotionGvAdapter;
 import com.boredream.boreweibo.adapter.EmotionPagerAdapter;
-import com.boredream.boreweibo.adapter.StatusGridImgsAdapter;
 import com.boredream.boreweibo.adapter.WriteStatusGridImgsAdapter;
 import com.boredream.boreweibo.api.SimpleRequestListener;
 import com.boredream.boreweibo.entity.Emotion;

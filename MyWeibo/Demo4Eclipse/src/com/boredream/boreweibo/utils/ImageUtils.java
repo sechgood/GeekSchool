@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -12,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -104,14 +102,14 @@ public class ImageUtils {
 		}
 		Log.i("", "生成的照片输出路径：" + imageFilePath.toString());
 		return imageFilePath;
-	}
+	} 
 	
 	/**
 	 * 根据Uri获取图片绝对路径，解决Android4.4以上版本Uri转换
 	 * @param context
 	 * @param imageUri
 	 */
-	@TargetApi(Build.VERSION_CODES.KITKAT)
+//	@TargetApi(Build.VERSION_CODES.KITKAT)
 	public static String getImageAbsolutePath(Activity context, Uri imageUri) {
 		if (context == null || imageUri == null)
 			return null;
@@ -143,8 +141,10 @@ public class ImageUtils {
 				String[] selectionArgs = new String[] { split[1] };
 				return getDataColumn(context, contentUri, selection, selectionArgs);
 			}
-		} // MediaStore (and general)
-		else if ("content".equalsIgnoreCase(imageUri.getScheme())) {
+		} 
+		
+		// MediaStore (and general)
+		if ("content".equalsIgnoreCase(imageUri.getScheme())) {
 			// Return the remote address
 			if (isGooglePhotosUri(imageUri))
 				return imageUri.getLastPathSegment();

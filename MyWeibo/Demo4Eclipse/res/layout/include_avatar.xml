@@ -29,7 +29,7 @@
             style="@style/TextViewCaption"
             android:layout_alignParentBottom="true"
             android:text="没错,我就是油坊桥吴彦祖"
-            android:textColor="@color/txt_gray_alpha" />
+            android:textColor="@color/txt_gray" />
 
         <TextView
             android:id="@+id/tv_caption"

@@ -37,7 +37,7 @@
                 style="@style/TextViewCaption"
                 android:layout_alignParentBottom="true"
                 android:text="2013-12-21"
-                android:textColor="@color/txt_gray_alpha" />
+                android:textColor="@color/txt_gray" />
         </RelativeLayout>
     </LinearLayout>
 

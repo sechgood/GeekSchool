@@ -67,7 +67,7 @@
         <ImageView
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/userinfo_relationship_indicator_edit" />
     </LinearLayout>
 
 </LinearLayout>

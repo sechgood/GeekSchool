@@ -34,7 +34,6 @@ public class ImageBrowserActivity extends BaseActivity implements OnClickListene
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_image_brower);
-
 		initData();
 		initView();
 		setData();
@@ -72,11 +71,12 @@ public class ImageBrowserActivity extends BaseActivity implements OnClickListene
 		vp_image_brower.setAdapter(adapter);
 		
 		final int size = status.getPic_urls().size();
+		tv_image_index.setText((position % size + 1) + "/" + status.getPic_urls().size());
 		vp_image_brower.setCurrentItem(Integer.MAX_VALUE / size / 2 * size + position);
 		vp_image_brower.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override
 			public void onPageSelected(int arg0) {
-				tv_image_index.setText((arg0%size+1) + "/" + status.getPic_urls().size());
+				tv_image_index.setText((arg0 % size + 1) + "/" + status.getPic_urls().size());
 			}
 			
 			@Override

@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:background="@color/bg_gray"
     android:orientation="vertical" >
-
+    
     <FrameLayout
         android:id="@+id/fl_content"
         android:layout_width="fill_parent"

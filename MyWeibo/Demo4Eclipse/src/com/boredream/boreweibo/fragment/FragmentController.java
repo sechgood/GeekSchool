@@ -37,7 +37,6 @@ public class FragmentController {
 		fragments.add(new SearchFragment());
 		fragments.add(new UserFragment());
 		
-		
 		FragmentTransaction ft = fm.beginTransaction();
 		for (Fragment fragment : fragments) {
 			ft.add(containerId, fragment);
@@ -59,6 +58,12 @@ public class FragmentController {
 		BaseFragment fragment = fragments.get(position);
 		ft.show(fragment);
 		
+		ft.commit();
+	}
+	
+	public void replaceFragment(int position) {
+		FragmentTransaction ft = fm.beginTransaction();
+		ft.replace(containerId, fragments.get(position));
 		ft.commit();
 	}
 	

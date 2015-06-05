@@ -44,7 +44,7 @@ public class BaseFragment extends Fragment {
 
 	@Override
 	public void onAttach(Activity activity) {
-		// TODO Auto-generated method stub
+		System.out.println(getClass().getSimpleName() + " ... onAttach");
 		super.onAttach(activity);
 	}
 
@@ -56,43 +56,43 @@ public class BaseFragment extends Fragment {
 
 	@Override
 	public void onDestroy() {
-		// TODO Auto-generated method stub
+		System.out.println(getClass().getSimpleName() + " ... onDestroy");
 		super.onDestroy();
 	}
 
 	@Override
 	public void onDestroyView() {
-		// TODO Auto-generated method stub
+		System.out.println(getClass().getSimpleName() + " ... onDestroyView");
 		super.onDestroyView();
 	}
 
 	@Override
 	public void onDetach() {
-		// TODO Auto-generated method stub
+		System.out.println(getClass().getSimpleName() + " ... onDetach");
 		super.onDetach();
 	}
 
 	@Override
 	public void onPause() {
-		// TODO Auto-generated method stub
+		System.out.println(getClass().getSimpleName() + " ... onPause");
 		super.onPause();
 	}
 
 	@Override
 	public void onResume() {
-		// TODO Auto-generated method stub
+		System.out.println(getClass().getSimpleName() + " ... onResume");
 		super.onResume();
 	}
 
 	@Override
 	public void onStart() {
-		// TODO Auto-generated method stub
+		System.out.println(getClass().getSimpleName() + " ... onStart");
 		super.onStart();
 	}
 
 	@Override
 	public void onStop() {
-		// TODO Auto-generated method stub
+		System.out.println(getClass().getSimpleName() + " ... onStop");
 		super.onStop();
 	}
 	

@@ -21,48 +21,11 @@
             android:layout_marginTop="-16dp"
             android:padding="16dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:visibility="gone" >
-
-            <ImageView
-                android:id="@+id/iv_location"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="8dp"
-                android:src="@drawable/ic_launcher" />
-
-            <TextView
-                android:id="@+id/tv_location"
-                style="@style/TextViewBody"
-                android:singleLine="true"
-                android:text="XXX咖啡店"
-                android:textColor="@color/txt_gray" />
-        </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/fl_imageview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp" >
-
-            <com.boredream.boreweibo.widget.WrapHeightGridView
-                android:id="@+id/gv_images"
-                style="@style/GridViewImages"
-                android:layout_width="match_parent" />
-
-            <ImageView
-                android:id="@+id/iv_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxHeight="200dp"
-                android:maxWidth="200dp"
-                android:visibility="gone" />
-        </FrameLayout>
+        <include 
+            android:id="@+id/include_status_image"
+            layout="@layout/include_status_image"
+            android:visibility="gone"
+            />
 
         <include
             android:id="@+id/include_retweeted_status"

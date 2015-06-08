@@ -8,27 +8,12 @@
 
     <TextView
         android:id="@+id/tv_retweeted_content"
-        style="@style/TextViewBody" />
+        style="@style/TextViewBody"
+        android:textColor="@color/txt_gray" />
 
-    <FrameLayout
-        android:id="@+id/fl_retweeted_imageview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" >
-
-        <com.boredream.boreweibo.widget.WrapHeightGridView
-            android:id="@+id/gv_retweeted_images"
-            style="@style/GridViewImages"
-            android:layout_width="272dp"
-            android:focusable="false" />
-
-        <ImageView
-            android:id="@+id/iv_retweeted_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxWidth="200dp"
-            android:maxHeight="200dp"
-            android:visibility="gone" />
-    </FrameLayout>
+    <include
+        android:id="@+id/include_status_image"
+        layout="@layout/include_status_image"
+        android:visibility="gone" />
 
 </LinearLayout>

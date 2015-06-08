@@ -25,7 +25,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.sina.weibo.sdk.R;
-import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.auth.WeiboAuth;
+import com.sina.weibo.sdk.auth.WeiboAuth.AuthInfo;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.utils.LogUtil;
@@ -163,7 +164,8 @@ public class LoginButton extends Button implements OnClickListener {
         }
 	    
 		if (null == mSsoHandler && mAuthInfo != null) {
-			mSsoHandler = new SsoHandler((Activity)mContext, mAuthInfo);
+			WeiboAuth weiboAuth = new WeiboAuth(mContext, mAuthInfo);
+			mSsoHandler = new SsoHandler((Activity)mContext, weiboAuth);
 		}
 		
         if (mSsoHandler != null) {

@@ -34,6 +34,7 @@ import com.boredream.boreweibo.utils.TitleBuilder;
 import com.boredream.boreweibo.widget.Pull2RefreshListView;
 import com.boredream.boreweibo.widget.Pull2RefreshListView.OnPlvScrollListener;
 import com.boredream.boreweibo.widget.UnderlineIndicatorView;
+import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
@@ -262,15 +263,17 @@ public class UserInfoActivity extends BaseActivity implements
 	
 	private void loadUserInfo() {
 		weiboApi.usersShow("", userName,
-				new SimpleRequestListener<User>(this, User.class, progressDialog){
+				new SimpleRequestListener(this, progressDialog){
+
 					@Override
-					protected void onCompleteSuccess(User response) {
-						super.onCompleteSuccess(response);
-
-						user = response;
-
+					public void onComplete(String response) {
+						super.onComplete(response);
+						
+						user = new Gson().fromJson(response, User.class);
+						
 						setUserInfo();
 					}
+			
 		});
 	}
 	
@@ -284,17 +287,19 @@ public class UserInfoActivity extends BaseActivity implements
 				user == null ? -1 : user.getId(), 
 				userName, 
 				requestPage,
-				new SimpleRequestListener<StatusTimeLineResponse>(this, StatusTimeLineResponse.class, progressDialog) {
+				new SimpleRequestListener(this, progressDialog) {
 
 					@Override
-					protected void onCompleteSuccess(StatusTimeLineResponse response) {
-						super.onCompleteSuccess(response);
+					public void onComplete(String response) {
+						super.onComplete(response);
+						
+						showLog("status comments = " + response);
 						
 						if(requestPage == 1) {
 							statuses.clear();
 						}
-						
-						addStatus(response);
+
+						addStatus(gson.fromJson(response, StatusTimeLineResponse.class));
 					}
 					
 					@Override

@@ -96,18 +96,18 @@ public class HomeFragment extends BaseFragment {
 		
 		isLoadingMore = true;
 		weiboApi.statusesHome_timeline(curPage, 
-				new SimpleRequestListener<StatusTimeLineResponse>(activity, StatusTimeLineResponse.class, progressDialog){
+				new SimpleRequestListener(activity, progressDialog){
 
 					@Override
-					protected void onCompleteSuccess(StatusTimeLineResponse response) {
-						super.onCompleteSuccess(response);
+					public void onComplete(String response) {
+						super.onComplete(response);
 						
 						if(requestPage == 1) {
 							statuses.clear();
 						}
 						curPage = requestPage;
 						
-						addData(response);
+						addData(gson.fromJson(response, StatusTimeLineResponse.class));
 					}
 
 					@Override

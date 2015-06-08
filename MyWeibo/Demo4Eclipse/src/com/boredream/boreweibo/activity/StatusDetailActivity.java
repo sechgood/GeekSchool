@@ -328,17 +328,19 @@ public class StatusDetailActivity extends BaseActivity implements
 
 		isLoadingMore = true;
 		weiboApi.commentsShow(status.getId(), requestPage,
-				new SimpleRequestListener<CommentsResponse>(this, CommentsResponse.class, progressDialog) {
+				new SimpleRequestListener(this, progressDialog) {
 
 					@Override
-					protected void onCompleteSuccess(CommentsResponse response) {
-						super.onCompleteSuccess(response);
-						
+					public void onComplete(String response) {
+						super.onComplete(response);
+
+						showLog("status comments = " + response);
+
 						if (requestPage == 1) {
 							comments.clear();
 						}
 
-						addData(response);
+						addData(gson.fromJson(response, CommentsResponse.class));
 					}
 
 					@Override

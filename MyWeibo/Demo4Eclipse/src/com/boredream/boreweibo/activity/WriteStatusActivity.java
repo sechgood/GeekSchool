@@ -124,7 +124,7 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 		}
 
 		weiboApi.statusesUpload(et_write_status.getText().toString(), imgFilePath,
-				new SimpleRequestListener<Object>(this, Object.class, progressDialog) {
+				new SimpleRequestListener(this, progressDialog) {
 
 					@Override
 					public void onComplete4binary(ByteArrayOutputStream responseOS) {

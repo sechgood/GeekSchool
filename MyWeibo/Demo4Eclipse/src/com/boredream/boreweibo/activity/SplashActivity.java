@@ -20,8 +20,8 @@ import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.api.SimpleRequestListener;
 import com.boredream.boreweibo.constants.AccessTokenKeeper;
 import com.boredream.boreweibo.entity.User;
-import com.boredream.boreweibo.entity.response.ErrorResponse;
 import com.boredream.boreweibo.utils.ImageOptHelper;
+import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -81,22 +81,15 @@ public class SplashActivity extends BaseActivity {
 		
 		if (mAccessToken.isSessionValid()) {
 			weiboApi.usersShow(mAccessToken.getUid(), "",
-					new SimpleRequestListener<User>(this, User.class, progressDialog) {
+					new SimpleRequestListener(this, progressDialog) {
 
 						@Override
-						protected void onCompleteSuccess(User response) {
-							super.onCompleteSuccess(response);
+						public void onComplete(String response) {
+							super.onComplete(response);
 							
-							application.currentUser = response;
+							application.currentUser = new Gson().fromJson(response, User.class);
 							
 							loadAvatar();
-						}
-
-						@Override
-						protected void onCompleteFail(ErrorResponse error) {
-							super.onCompleteFail(error);
-							
-							delayHandler(HANDLER_WHAT_INTENT2LOGIN, SPLASH_DUR_TIME);
 						}
 
 						@Override

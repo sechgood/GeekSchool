@@ -1,6 +1,5 @@
 package com.boredream.boreweibo.adapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -11,31 +10,23 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.entity.Comment;
-import com.boredream.boreweibo.entity.Status;
 import com.boredream.boreweibo.entity.User;
 import com.boredream.boreweibo.utils.DateUtils;
-import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.boredream.boreweibo.utils.StringUtils;
-import com.boredream.boreweibo.widget.PinnedSectionListView.PinnedSectionListAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class TabCommentAdapter extends BaseAdapter {
+public class StatusCommentAdapter extends BaseAdapter {
 	
 	private Context context;
-	private Status status;
 	private List<Comment> comments;
 	private ImageLoader imageLoader;
 
-	public TabCommentAdapter(Context context, Status status, List<Comment> comments) {
+	public StatusCommentAdapter(Context context, List<Comment> comments) {
 		this.context = context;
-		this.status = status;
 		this.comments = comments;
 		this.imageLoader = ImageLoader.getInstance();
 	}

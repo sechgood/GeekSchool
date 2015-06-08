@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.boredream.boreweibo.R;
-import com.boredream.boreweibo.entity.Comment;
 import com.boredream.boreweibo.entity.Status;
 import com.boredream.boreweibo.entity.User;
 import com.boredream.boreweibo.utils.ImageOptHelper;

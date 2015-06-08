@@ -29,8 +29,8 @@ import android.widget.TextView;
 
 import com.boredream.boreweibo.BaseActivity;
 import com.boredream.boreweibo.R;
+import com.boredream.boreweibo.adapter.StatusCommentAdapter;
 import com.boredream.boreweibo.adapter.StatusGridImgsAdapter;
-import com.boredream.boreweibo.adapter.TabCommentAdapter;
 import com.boredream.boreweibo.api.SimpleRequestListener;
 import com.boredream.boreweibo.entity.Comment;
 import com.boredream.boreweibo.entity.PicUrls;
@@ -91,7 +91,7 @@ public class StatusDetailActivity extends BaseActivity implements
 
 	private Status status;
 	private List<Comment> comments = new ArrayList<Comment>();
-	private TabCommentAdapter adapter;
+	private StatusCommentAdapter adapter;
 	private long curPage = 1;
 	private boolean isLoadingMore;
 
@@ -176,7 +176,7 @@ public class StatusDetailActivity extends BaseActivity implements
 		lv_comment = (PullToRefreshListView) findViewById(R.id.lv_comment);
 		footView = View.inflate(this, R.layout.footview_loading, null);
 		final ListView lv = lv_comment.getRefreshableView();
-		adapter = new TabCommentAdapter(this, status, comments);
+		adapter = new StatusCommentAdapter(this, comments);
 		lv_comment.setAdapter(adapter);
 		lv.addHeaderView(status_detail_head);
 		lv.addHeaderView(status_detail_tab);

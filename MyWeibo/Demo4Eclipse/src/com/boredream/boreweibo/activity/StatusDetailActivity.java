@@ -54,7 +54,7 @@ public class StatusDetailActivity extends BaseActivity implements
 	private ImageView iv_avatar;
 	private RelativeLayout rl_content;
 	private TextView tv_subhead;
-	private TextView tv_body;
+	private TextView tv_caption;
 	private FrameLayout include_status_image;
 	private WrapHeightGridView gv_images;
 	private ImageView iv_image;
@@ -128,7 +128,7 @@ public class StatusDetailActivity extends BaseActivity implements
 		iv_avatar = (ImageView) status_detail_head.findViewById(R.id.iv_avatar);
 		rl_content = (RelativeLayout) status_detail_head.findViewById(R.id.rl_content);
 		tv_subhead = (TextView) status_detail_head.findViewById(R.id.tv_subhead);
-		tv_body = (TextView) status_detail_head.findViewById(R.id.tv_body);
+		tv_caption = (TextView) status_detail_head.findViewById(R.id.tv_caption);
 		include_status_image = (FrameLayout) status_detail_head.findViewById(R.id.include_status_image);
 		gv_images = (WrapHeightGridView) status_detail_head.findViewById(R.id.gv_images);
 		iv_image = (ImageView) status_detail_head.findViewById(R.id.iv_image);
@@ -232,7 +232,7 @@ public class StatusDetailActivity extends BaseActivity implements
 		imageLoader.displayImage(user.getProfile_image_url(), iv_avatar,
 				ImageOptHelper.getAvatarOptions());
 		tv_subhead.setText(user.getName());
-		tv_body.setText(DateUtils.getShortTime(status.getCreated_at()) +
+		tv_caption.setText(DateUtils.getShortTime(status.getCreated_at()) +
 				"  来自" + Html.fromHtml(status.getSource()));
 
 		setImages(status, include_status_image, gv_images, iv_image);

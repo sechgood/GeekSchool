@@ -76,8 +76,8 @@ public class StatusAdapter extends BaseAdapter {
 					.findViewById(R.id.rl_content);
 			holder.tv_subhead = (TextView) convertView
 					.findViewById(R.id.tv_subhead);
-			holder.tv_body = (TextView) convertView
-					.findViewById(R.id.tv_body);
+			holder.tv_caption = (TextView) convertView
+					.findViewById(R.id.tv_caption);
 
 			holder.tv_content = (TextView) convertView
 					.findViewById(R.id.tv_content);
@@ -96,7 +96,7 @@ public class StatusAdapter extends BaseAdapter {
 					.findViewById(R.id.include_status_image);
 			holder.gv_retweeted_images = (GridView) holder.include_retweeted_status_image
 					.findViewById(R.id.gv_images);
-			holder.iv_retweeted_image = (ImageView) holder.include_retweeted_status_image
+			holder.iv_retweeted_image = (ImageView) holder.include_status_image
 					.findViewById(R.id.iv_image);
 
 			holder.ll_share_bottom = (LinearLayout) convertView
@@ -127,19 +127,15 @@ public class StatusAdapter extends BaseAdapter {
 		User user = status.getUser();
 		imageLoader.displayImage(user.getProfile_image_url(), holder.iv_avatar);
 		holder.tv_subhead.setText(user.getName());
-		holder.tv_body.setText(DateUtils.getShortTime(status.getCreated_at()) +
+		holder.tv_caption.setText(DateUtils.getShortTime(status.getCreated_at()) +
 				"  来自" + Html.fromHtml(status.getSource()));
+		
+		holder.tv_content.setVisibility(View.VISIBLE);
+		SpannableString weiboContent = StringUtils.getWeiboContent(
+				context, holder.tv_content, status.getText());
+		holder.tv_content.setText(weiboContent);
 
 		setImages(status, holder.include_status_image, holder.gv_images, holder.iv_image);
-
-		if (TextUtils.isEmpty(status.getText())) {
-			holder.tv_content.setVisibility(View.GONE);
-		} else {
-			holder.tv_content.setVisibility(View.VISIBLE);
-			SpannableString weiboContent = StringUtils.getWeiboContent(
-					context, holder.tv_content, status.getText());
-			holder.tv_content.setText(weiboContent);
-		}
 
 		// retweeted
 		final Status retweetedStatus = status.getRetweeted_status();
@@ -148,9 +144,9 @@ public class StatusAdapter extends BaseAdapter {
 			String rStatusUser = retweetedStatus.getUser() == null ?
 					"" : "@" + retweetedStatus.getUser().getName() + ":";
 			String retweetContent = rStatusUser + retweetedStatus.getText();
-			SpannableString weiboContent = StringUtils.getWeiboContent(
+			SpannableString retweetWeiboContent = StringUtils.getWeiboContent(
 					context, holder.tv_retweeted_content, retweetContent);
-			holder.tv_retweeted_content.setText(weiboContent);
+			holder.tv_retweeted_content.setText(retweetWeiboContent);
 			setImages(retweetedStatus, holder.include_retweeted_status_image,
 					holder.gv_retweeted_images, holder.iv_retweeted_image);
 
@@ -285,7 +281,7 @@ public class StatusAdapter extends BaseAdapter {
 		public ImageView iv_avatar;
 		public RelativeLayout rl_content;
 		public TextView tv_subhead;
-		public TextView tv_body;
+		public TextView tv_caption;
 
 		public TextView tv_content;
 		public FrameLayout include_status_image;

@@ -16,47 +16,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <RelativeLayout
-                android:id="@+id/rl_content"
-                android:layout_width="match_parent"
-                android:layout_height="104dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/bg_white2gray_sel"
-                android:padding="16dp" >
-
-                <ImageView
-                    android:id="@+id/iv_avatar"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="16dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_launcher" />
-
-                <TextView
-                    android:id="@+id/tv_subhead"
-                    style="@style/TextViewSubhead"
-                    android:layout_marginTop="10dp"
-                    android:layout_toRightOf="@id/iv_avatar"
-                    android:text="吴彦祖" />
-
-                <TextView
-                    android:id="@+id/tv_body"
-                    style="@style/TextViewBody"
-                    android:layout_below="@id/tv_subhead"
-                    android:layout_marginTop="10dp"
-                    android:layout_toRightOf="@id/iv_avatar"
-                    android:text="没错,我就是油坊桥吴彦祖"
-                    android:textColor="@color/txt_gray" />
-
-                <ImageView
-                    android:id="@+id/iv_rightarrow"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/rightarrow" />
-            </RelativeLayout>
+            <include layout="@layout/include_avatar"/>
 
             <View
                 android:layout_width="match_parent"

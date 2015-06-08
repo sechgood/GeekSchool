@@ -39,7 +39,6 @@ public class BoreWeiboAPI extends WeiboAPI{
 	
 	public void requestInMainLooper(String url, WeiboParameters params, String httpMethod, 
 			final RequestListener listener) {
-		
 		Logger.show("API", "url = " + parseGetUrlWithParams(url, params));
 		// 主线程处理
 		request(url, params, httpMethod, new RequestListener() {

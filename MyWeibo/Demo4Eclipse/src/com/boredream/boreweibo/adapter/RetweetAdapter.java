@@ -57,8 +57,8 @@ public class RetweetAdapter extends BaseAdapter {
 					.findViewById(R.id.iv_avatar);
 			holder.tv_subhead = (TextView) convertView
 					.findViewById(R.id.tv_subhead);
-			holder.tv_body = (TextView) convertView
-					.findViewById(R.id.tv_body);
+			holder.tv_caption = (TextView) convertView
+					.findViewById(R.id.tv_caption);
 			holder.tv_like = (TextView) convertView
 					.findViewById(R.id.tv_like);
 			holder.tv_comment = (TextView) convertView
@@ -75,7 +75,7 @@ public class RetweetAdapter extends BaseAdapter {
 		imageLoader.displayImage(user.getProfile_image_url(), holder.iv_avatar, 
 				ImageOptHelper.getAvatarOptions());
 		holder.tv_subhead.setText(user.getName());
-		holder.tv_body.setText(rStatus.getCreated_at());
+		holder.tv_caption.setText(rStatus.getCreated_at());
 		holder.tv_like.setVisibility(View.INVISIBLE);
 		holder.tv_comment.setText(rStatus.getText());
 		
@@ -93,7 +93,7 @@ public class RetweetAdapter extends BaseAdapter {
 		public LinearLayout ll_comments;
 		public ImageView iv_avatar;
 		public TextView tv_subhead;
-		public TextView tv_body;
+		public TextView tv_caption;
 		public TextView tv_like;
 		public TextView tv_comment;
 	}

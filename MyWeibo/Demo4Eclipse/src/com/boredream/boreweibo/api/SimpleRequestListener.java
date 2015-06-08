@@ -5,8 +5,10 @@ import java.io.IOException;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.widget.Toast;
 
 import com.boredream.boreweibo.utils.Logger;
+import com.boredream.boreweibo.utils.ToastUtils;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 
@@ -33,11 +35,13 @@ public class SimpleRequestListener implements RequestListener {
 
 	public void onIOException(IOException e) {
 		onDone();
+		ToastUtils.showToast(context, e.getMessage(), Toast.LENGTH_SHORT);
 		Logger.show("REQUEST onIOException", e.toString());
 	}
 
 	public void onError(WeiboException e) {
 		onDone();
+		ToastUtils.showToast(context, e.getMessage(), Toast.LENGTH_SHORT);
 		Logger.show("REQUEST onError", e.toString());
 	}
 	

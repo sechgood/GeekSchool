@@ -34,7 +34,6 @@ import com.boredream.boreweibo.utils.TitleBuilder;
 import com.boredream.boreweibo.widget.Pull2RefreshListView;
 import com.boredream.boreweibo.widget.Pull2RefreshListView.OnPlvScrollListener;
 import com.boredream.boreweibo.widget.UnderlineIndicatorView;
-import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
@@ -263,17 +262,15 @@ public class UserInfoActivity extends BaseActivity implements
 	
 	private void loadUserInfo() {
 		weiboApi.usersShow("", userName,
-				new SimpleRequestListener(this, progressDialog){
-
+				new SimpleRequestListener<User>(this, User.class, progressDialog){
 					@Override
-					public void onComplete(String response) {
-						super.onComplete(response);
-						
-						user = new Gson().fromJson(response, User.class);
-						
+					protected void onCompleteSuccess(User response) {
+						super.onCompleteSuccess(response);
+
+						user = response;
+
 						setUserInfo();
 					}
-			
 		});
 	}
 	
@@ -287,24 +284,22 @@ public class UserInfoActivity extends BaseActivity implements
 				user == null ? -1 : user.getId(), 
 				userName, 
 				requestPage,
-				new SimpleRequestListener(this, progressDialog) {
+				new SimpleRequestListener<StatusTimeLineResponse>(this, StatusTimeLineResponse.class, progressDialog) {
 
 					@Override
-					public void onComplete(String response) {
-						super.onComplete(response);
-						
-						showLog("status comments = " + response);
+					protected void onCompleteSuccess(StatusTimeLineResponse response) {
+						super.onCompleteSuccess(response);
 						
 						if(requestPage == 1) {
 							statuses.clear();
 						}
-
-						addStatus(gson.fromJson(response, StatusTimeLineResponse.class));
+						
+						addStatus(response);
 					}
 					
 					@Override
-					public void onDone() {
-						super.onDone();
+					public void onAllDone() {
+						super.onAllDone();
 						
 						isLoadingMore = false;
 						plv_user_info.onRefreshComplete();

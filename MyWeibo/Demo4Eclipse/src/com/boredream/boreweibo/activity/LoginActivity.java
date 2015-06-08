@@ -1,7 +1,5 @@
 package com.boredream.boreweibo.activity;
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +14,6 @@ import com.boredream.boreweibo.api.SimpleRequestListener;
 import com.boredream.boreweibo.constants.AccessTokenKeeper;
 import com.boredream.boreweibo.constants.WeiboConstants;
 import com.boredream.boreweibo.entity.User;
-import com.google.gson.Gson;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuth;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -111,30 +108,17 @@ public class LoginActivity extends BaseActivity{
 
 	private void login() {
 		weiboApi.usersShow(mAccessToken.getUid(), "",
-				new SimpleRequestListener(this, progressDialog) {
+				new SimpleRequestListener<User>(this, User.class, progressDialog) {
 
 					@Override
-					public void onComplete(String response) {
-						super.onComplete(response);
+					protected void onCompleteSuccess(User response) {
+						super.onCompleteSuccess(response);
 						
-						application.currentUser = new Gson().fromJson(response, User.class);
 						intent2Activity(MainActivity.class);
+						application.currentUser = response;
 					}
-
-					@Override
-					public void onIOException(IOException e) {
-						super.onIOException(e);
-
-						showToast(e.getMessage());
-					}
-
-					@Override
-					public void onError(WeiboException e) {
-						super.onError(e);
-
-						showToast(e.getMessage());
-					}
-				});
+			
+		});
 	}
     
 }

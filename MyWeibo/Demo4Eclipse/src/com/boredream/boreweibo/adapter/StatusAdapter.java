@@ -129,7 +129,6 @@ public class StatusAdapter extends BaseAdapter {
 		holder.tv_caption.setText(DateUtils.getShortTime(status.getCreated_at()) +
 				"  来自" + Html.fromHtml(status.getSource()));
 		
-		holder.tv_content.setVisibility(View.VISIBLE);
 		SpannableString weiboContent = StringUtils.getWeiboContent(
 				context, holder.tv_content, status.getText());
 		holder.tv_content.setText(weiboContent);

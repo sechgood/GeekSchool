@@ -51,28 +51,28 @@ public class BaseApplication extends Application {
 	
 	// 初始化图片处理
 	private void initImageLoader(Context context) {
-		HttpParams params = new BasicHttpParams();
-		// Turn off stale checking. Our connections break all the time anyway,
-		// and it's not worth it to pay the penalty of checking every time.
-		HttpConnectionParams.setStaleCheckingEnabled(params, false);
-		// Default connection and socket timeout of 10 seconds. Tweak to taste.
-		HttpConnectionParams.setConnectionTimeout(params, 10 * 1000);
-		HttpConnectionParams.setSoTimeout(params, 10 * 1000);
-		HttpConnectionParams.setSocketBufferSize(params, 8192);
-
-		// Don't handle redirects -- return them to the caller. Our code
-		// often wants to re-POST after a redirect, which we must do ourselves.
-		HttpClientParams.setRedirecting(params, false);
-		// Set the specified user agent and register standard protocols.
-		HttpProtocolParams.setUserAgent(params, "some_randome_user_agent");
-		SchemeRegistry schemeRegistry = new SchemeRegistry();
-		schemeRegistry.register(new Scheme("http", PlainSocketFactory
-				.getSocketFactory(), 80));
-		schemeRegistry.register(new Scheme("https", SSLSocketFactory
-				.getSocketFactory(), 443));
-
-		ClientConnectionManager manager = new ThreadSafeClientConnManager(
-				params, schemeRegistry);
+//		HttpParams params = new BasicHttpParams();
+//		// Turn off stale checking. Our connections break all the time anyway,
+//		// and it's not worth it to pay the penalty of checking every time.
+//		HttpConnectionParams.setStaleCheckingEnabled(params, false);
+//		// Default connection and socket timeout of 10 seconds. Tweak to taste.
+//		HttpConnectionParams.setConnectionTimeout(params, 10 * 1000);
+//		HttpConnectionParams.setSoTimeout(params, 10 * 1000);
+//		HttpConnectionParams.setSocketBufferSize(params, 8192);
+//
+//		// Don't handle redirects -- return them to the caller. Our code
+//		// often wants to re-POST after a redirect, which we must do ourselves.
+//		HttpClientParams.setRedirecting(params, false);
+//		// Set the specified user agent and register standard protocols.
+//		HttpProtocolParams.setUserAgent(params, "some_randome_user_agent");
+//		SchemeRegistry schemeRegistry = new SchemeRegistry();
+//		schemeRegistry.register(new Scheme("http", PlainSocketFactory
+//				.getSocketFactory(), 80));
+//		schemeRegistry.register(new Scheme("https", SSLSocketFactory
+//				.getSocketFactory(), 443));
+//
+//		ClientConnectionManager manager = new ThreadSafeClientConnManager(
+//				params, schemeRegistry);
 
 		// This configuration tuning is custom. You can tune every option, you
 		// may tune some of them,
@@ -84,8 +84,8 @@ public class BaseApplication extends Application {
 				.threadPriority(Thread.NORM_PRIORITY - 2)
 				.discCacheFileNameGenerator(new Md5FileNameGenerator())
 				.tasksProcessingOrder(QueueProcessingType.LIFO)
-				.imageDownloader(new HttpClientImageDownloader(
-						context, new DefaultHttpClient(manager, params)))
+//				.imageDownloader(new HttpClientImageDownloader(
+//						context, new DefaultHttpClient(manager, params)))
 				.build();
 		// Initialize ImageLoader with configuration.
 		ImageLoader.getInstance().init(config);

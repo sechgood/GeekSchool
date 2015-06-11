@@ -14,13 +14,11 @@ import com.boredream.boreweibo.utils.Logger;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboParameters;
 import com.sina.weibo.sdk.exception.WeiboException;
-import com.sina.weibo.sdk.net.AsyncWeiboRunner;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.openapi.legacy.WeiboAPI;
 
 public class BoreWeiboAPI extends WeiboAPI{
 	
-	private Context context;
 	private Handler mainLooperHandler = new Handler(Looper.getMainLooper());
 
 	private BoreWeiboAPI(Oauth2AccessToken oauth2AccessToken) {
@@ -29,7 +27,6 @@ public class BoreWeiboAPI extends WeiboAPI{
 	
 	public BoreWeiboAPI(Context context) {
 		this(AccessTokenKeeper.readAccessToken(context));
-		this.context = context;
 	}
 	
 	@Override
@@ -80,54 +77,6 @@ public class BoreWeiboAPI extends WeiboAPI{
 		            	 listener.onComplete(response);
 		             }
 		         });
-			}
-		});
-	}
-	
-	public void request4BinaryInMainLooper(String url, WeiboParameters params, String httpMethod, 
-			final RequestListener listener) {
-		
-		Logger.show("API", "url = " + parseGetUrlWithParams(url, params));
-		// 主线程处理
-		AsyncWeiboRunner.request4Binary(context, url, params, httpMethod, new RequestListener() {
-			@Override
-			public void onIOException(final IOException e) {
-				mainLooperHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						listener.onIOException(e);
-					}
-				});
-			}
-			
-			@Override
-			public void onError(final WeiboException e) {
-				mainLooperHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						listener.onError(e);
-					}
-				});
-			}
-			
-			@Override
-			public void onComplete4binary(final ByteArrayOutputStream responseOS) {
-				mainLooperHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						listener.onComplete4binary(responseOS);
-					}
-				});
-			}
-			
-			@Override
-			public void onComplete(final String response) {
-				mainLooperHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						listener.onComplete(response);
-					}
-				});
 			}
 		});
 	}
@@ -187,7 +136,7 @@ public class BoreWeiboAPI extends WeiboAPI{
 		params.add("access_token", mAccessToken.getToken());
 		params.add("status", status);
 		params.add("pic", imgFilePath);
-		request4BinaryInMainLooper(URLs.statusesUpload, params, WeiboAPI.HTTPMETHOD_POST, listener);
+		requestInMainLooper(URLs.statusesUpload, params, WeiboAPI.HTTPMETHOD_POST, listener);
 	}
 	
 	public void statusesHome_timeline(long page, RequestListener listener) {

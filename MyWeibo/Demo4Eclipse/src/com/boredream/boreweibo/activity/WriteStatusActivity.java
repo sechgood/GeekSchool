@@ -1,6 +1,5 @@
 package com.boredream.boreweibo.activity;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -127,8 +126,8 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 				new SimpleRequestListener(this, progressDialog) {
 
 					@Override
-					public void onComplete4binary(ByteArrayOutputStream responseOS) {
-						super.onComplete4binary(responseOS);
+					public void onComplete(String response) {
+						super.onComplete(response);
 						
 						showToast("微博发送成功");
 						WriteStatusActivity.this.finish();

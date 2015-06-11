@@ -1,11 +1,12 @@
 package com.boredream.boreweibo.widget;
 
+import android.app.Activity;
 import android.content.Context;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
+
+import com.boredream.boreweibo.utils.DisplayUtils;
 
 public class WrapHeightImageView extends ImageView {
 
@@ -24,20 +25,22 @@ public class WrapHeightImageView extends ImageView {
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
+		int wMeasureSpec = widthMeasureSpec;
+		int hMeasureSpec = heightMeasureSpec;
+		
+		System.out.println("width " + MeasureSpec.toString(wMeasureSpec));
+		System.out.println("height " + MeasureSpec.toString(hMeasureSpec));
+		
 		Drawable drawable = getDrawable();
 		if(drawable != null) {
-			Rect rect = drawable.getBounds();
-			System.out.println((rect.right - rect.left) + ":" + (rect.bottom - rect.top));
+			int width = DisplayUtils.getScreenWidthPixels((Activity)getContext());
+	        int height = width * getDrawable().getIntrinsicHeight() / getDrawable().getIntrinsicWidth();
+	        hMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
 		}
 		
-		int heightSpec = heightMeasureSpec;
-//
-//		if (getLayoutParams().height == LayoutParams.WRAP_CONTENT) {
-//			heightSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
-//		} else {
-//			heightSpec = heightMeasureSpec;
-//		}
-
-		super.onMeasure(widthMeasureSpec, heightSpec);
+		System.out.println("after width " + MeasureSpec.toString(wMeasureSpec));
+		System.out.println("after height " + MeasureSpec.toString(hMeasureSpec));
+		
+		super.onMeasure(wMeasureSpec, hMeasureSpec);
 	}
 }

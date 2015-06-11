@@ -10,15 +10,15 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.entity.PicUrls;
 import com.boredream.boreweibo.utils.DisplayUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
 
 public class ImageBrowserAdapter extends PagerAdapter {
 
@@ -47,15 +47,29 @@ public class ImageBrowserAdapter extends PagerAdapter {
 
 	@Override
 	public View instantiateItem(ViewGroup container, int position) {
-		final ScrollView sv = (ScrollView) View.inflate(context, R.layout.item_image_brower, null);
-		final ImageView iv_image_brower = (ImageView) sv.findViewById(R.id.iv_image_brower); 
+		ScrollView sv = new ScrollView(context);
+		FrameLayout.LayoutParams svParams = new FrameLayout.LayoutParams(
+				FrameLayout.LayoutParams.MATCH_PARENT, 
+				FrameLayout.LayoutParams.MATCH_PARENT);
+		sv.setLayoutParams(svParams);
+		
+		LinearLayout ll = new LinearLayout(context);
+		LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.MATCH_PARENT, 
+				LinearLayout.LayoutParams.WRAP_CONTENT);
+		ll.setLayoutParams(llParams);
+		sv.addView(ll);
+		
+		final int screenHeight = DisplayUtils.getScreenHeightPixels(context);
+		final int screenWidth = DisplayUtils.getScreenWidthPixels(context);
+		
+		final ImageView iv = new ImageView(context);
+		iv.setScaleType(ScaleType.FIT_CENTER);
+		ll.addView(iv);
+		
 		PicUrls url = picUrls.get(position % picUrls.size());
 		
-//		ImageSize minImageSize = new ImageSize(
-//				DisplayUtils.getScreenWidthPixels(context), 
-//				DisplayUtils.getScreenWidthPixels(context));
 		mImageLoader.loadImage(url.getOriginal_pic(), 
-//				minImageSize,
 				new ImageLoadingListener() {
 			
 			@Override
@@ -72,16 +86,11 @@ public class ImageBrowserAdapter extends PagerAdapter {
 			
 			@Override
 			public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-//				float scale = (float) loadedImage.getHeight() / loadedImage.getWidth();
-//				int width = DisplayUtils.getScreenWidthPixels(context);
-//				ImageView iv = new ImageView(context);
-//				FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-//						width, (int) (width * scale));
-//				iv.setLayoutParams(params);
-//				iv.setImageBitmap(loadedImage);
-//				sv.addView(iv);
-				
-				iv_image_brower.setImageBitmap(loadedImage);
+				float scale = (float) loadedImage.getHeight() / loadedImage.getWidth();
+				int height = Math.max((int) (screenWidth * scale), screenHeight);
+				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(screenWidth, height);
+				iv.setLayoutParams(params);
+				iv.setImageBitmap(loadedImage);
 			}
 			
 			@Override
@@ -90,6 +99,7 @@ public class ImageBrowserAdapter extends PagerAdapter {
 				
 			}
 		});
+		container.addView(sv, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		return sv;
 	}
 

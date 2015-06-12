@@ -1,11 +1,15 @@
 package com.boredream.boreweibo.adapter;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
@@ -14,32 +18,56 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import com.boredream.boreweibo.entity.BrowserPic;
 import com.boredream.boreweibo.entity.PicUrls;
+import com.boredream.boreweibo.utils.DialogUtils;
 import com.boredream.boreweibo.utils.DisplayUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.DiscCacheUtil;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.assist.MemoryCacheUtil;
 
 public class ImageBrowserAdapter extends PagerAdapter {
 
 	private Activity context;
-	private ArrayList<PicUrls> picUrls;
+	private ArrayList<BrowserPic> pics;
 	private ImageLoader mImageLoader;
 
 	public ImageBrowserAdapter(Activity context, ArrayList<PicUrls> picUrls) {
 		this.context = context;
-		this.picUrls = picUrls;
-		mImageLoader = ImageLoader.getInstance();
+		this.mImageLoader = ImageLoader.getInstance();
+		initImgs(picUrls);
+	}
+
+	private void initImgs(ArrayList<PicUrls> picUrls) {
+		pics = new ArrayList<BrowserPic>();
+		BrowserPic browserPic;
+		for(PicUrls picUrl : picUrls) {
+			browserPic = new BrowserPic();
+			browserPic.setPic(picUrl);
+			Bitmap oBm = mImageLoader.getMemoryCache().get(picUrl.getOriginal_pic());
+			File discCache = mImageLoader.getDiscCache().get(picUrl.getOriginal_pic());
+			if(oBm != null || discCache != null) {
+				browserPic.setOriginalPic(true);
+				oBm.recycle();
+			}
+			pics.add(browserPic);
+		}
+	}
+	
+	public BrowserPic getPic(int position) {
+		return pics.get(position);
 	}
 
 	@Override
 	public int getCount() {
-		if (picUrls.size() > 1) {
+		if (pics.size() > 1) {
 			return Integer.MAX_VALUE;
 		}
-		return picUrls.size();
+		return pics.size();
 	}
-
+	
 	@Override
 	public boolean isViewFromObject(View view, Object object) {
 		return view == object;
@@ -67,25 +95,27 @@ public class ImageBrowserAdapter extends PagerAdapter {
 		iv.setScaleType(ScaleType.FIT_CENTER);
 		ll.addView(iv);
 		
-		PicUrls url = picUrls.get(position % picUrls.size());
+		final BrowserPic browserPic = pics.get(position % pics.size());
+		PicUrls picUrls = browserPic.getPic();
 		
-		mImageLoader.loadImage(url.getOriginal_pic(), 
-				new ImageLoadingListener() {
+		String url = browserPic.isOriginalPic() ? picUrls.getOriginal_pic() : picUrls.getBmiddle_pic();
+		
+		mImageLoader.loadImage(url, new ImageLoadingListener() {
 			
 			@Override
 			public void onLoadingStarted(String imageUri, View view) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+				browserPic.setBitmap(loadedImage);
+				
 				float scale = (float) loadedImage.getHeight() / loadedImage.getWidth();
 				int height = Math.max((int) (screenWidth * scale), screenHeight);
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(screenWidth, height);
@@ -95,8 +125,13 @@ public class ImageBrowserAdapter extends PagerAdapter {
 			
 			@Override
 			public void onLoadingCancelled(String imageUri, View view) {
-				// TODO Auto-generated method stub
 				
+			}
+		});
+		iv.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				context.finish();
 			}
 		});
 		container.addView(sv, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -107,4 +142,10 @@ public class ImageBrowserAdapter extends PagerAdapter {
 	public void destroyItem(ViewGroup container, int position, Object object) {
 		container.removeView((View) object);
 	}
+
+	@Override
+	public int getItemPosition(Object object) {
+		return POSITION_NONE;
+	}
+	
 }

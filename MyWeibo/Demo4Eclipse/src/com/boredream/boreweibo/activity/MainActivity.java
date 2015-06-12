@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
@@ -32,7 +31,8 @@ public class MainActivity extends FragmentActivity implements
 		
 		initView();
 		
-		initData();
+		fc = FragmentController.getInstance(this, R.id.fl_content);
+		fc.showFragment(0);
 	}
 	
 	private void initView() {
@@ -47,11 +47,6 @@ public class MainActivity extends FragmentActivity implements
 				startActivityForResult(intent, 110);
 			}
 		});
-	}
-
-	private void initData() {
-		fc = FragmentController.getInstance(this, R.id.fl_content);
-		((RadioButton)rg_tab.getChildAt(0)).setChecked(true);
 	}
 	
 	@Override

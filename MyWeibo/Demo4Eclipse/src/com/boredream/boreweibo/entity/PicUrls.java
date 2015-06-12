@@ -4,8 +4,8 @@ import android.text.TextUtils;
 
 /*sub class*/
 public class PicUrls extends BaseEntity {
-	private static final String BMIDDLE_URL = "http://ww3.sinaimg.cn/bmiddle/";
-	private static final String ORIGINAL_URL = "http://ww3.sinaimg.cn/large/";
+	private static final String BMIDDLE_URL = "http://ww3.sinaimg.cn/bmiddle";
+	private static final String ORIGINAL_URL = "http://ww3.sinaimg.cn/large";
 	
 	private String thumbnail_pic;
 	private String bmiddle_pic;

@@ -12,10 +12,10 @@ public class ImageOptHelper {
 		DisplayImageOptions imgOptions = new DisplayImageOptions.Builder()
 			.cacheOnDisc()
 			.cacheInMemory()
-			.showStubImage(R.drawable.ic_launcher)
 			.bitmapConfig(Bitmap.Config.RGB_565)
-			.showImageForEmptyUri(R.drawable.ic_launcher)
-			.showImageOnFail(R.drawable.ic_launcher)
+			.showStubImage(R.drawable.timeline_image_loading)
+			.showImageForEmptyUri(R.drawable.timeline_image_loading)
+			.showImageOnFail(R.drawable.timeline_image_failure)
 			.displayer(new RoundedBitmapDisplayer(4)).build();
 		return imgOptions;
 	}
@@ -23,12 +23,12 @@ public class ImageOptHelper {
 	
 	public static DisplayImageOptions getAvatarOptions() {
 		DisplayImageOptions	avatarOptions = new DisplayImageOptions.Builder()
-			.bitmapConfig(Bitmap.Config.RGB_565)
 			.cacheOnDisc()
 			.cacheInMemory()
-			.showStubImage(R.drawable.ic_launcher)
-			.showImageForEmptyUri(R.drawable.ic_launcher)
-			.showImageOnFail(R.drawable.ic_launcher)
+			.bitmapConfig(Bitmap.Config.RGB_565)
+			.showStubImage(R.drawable.avatar_default)
+			.showImageForEmptyUri(R.drawable.avatar_default)
+			.showImageOnFail(R.drawable.avatar_default)
 			.displayer(new RoundedBitmapDisplayer(999))
 			.build();
 		return avatarOptions;
@@ -37,12 +37,12 @@ public class ImageOptHelper {
 	
 	public static DisplayImageOptions getCornerOptions(int cornerRadiusPixels) {
 		DisplayImageOptions options = new DisplayImageOptions.Builder()
-			.bitmapConfig(Bitmap.Config.RGB_565)
 			.cacheOnDisc()
 			.cacheInMemory()
-			.showStubImage(R.drawable.ic_launcher)
-			.showImageForEmptyUri(R.drawable.ic_launcher)
-			.showImageOnFail(R.drawable.ic_launcher)
+			.bitmapConfig(Bitmap.Config.RGB_565)
+			.showStubImage(R.drawable.timeline_image_loading)
+			.showImageForEmptyUri(R.drawable.timeline_image_loading)
+			.showImageOnFail(R.drawable.timeline_image_loading)
 			.displayer(new RoundedBitmapDisplayer(cornerRadiusPixels)).build();
 		return options;
 	}

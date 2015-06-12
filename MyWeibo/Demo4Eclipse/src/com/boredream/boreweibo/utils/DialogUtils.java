@@ -2,6 +2,8 @@ package com.boredream.boreweibo.utils;
 
 import java.util.List;
 
+import com.boredream.boreweibo.R;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -18,7 +20,7 @@ import android.text.TextUtils;
 public class DialogUtils {
 
 	public static Dialog createLoadingDialog(Context context) {
-		ProgressDialog progressDialog = new ProgressDialog(context);
+		ProgressDialog progressDialog = new ProgressDialog(context, R.style.DialogCommon);
 		return progressDialog;
 	}
 

@@ -95,7 +95,7 @@ public class StatusAdapter extends BaseAdapter {
 					.findViewById(R.id.include_status_image);
 			holder.gv_retweeted_images = (GridView) holder.include_retweeted_status_image
 					.findViewById(R.id.gv_images);
-			holder.iv_retweeted_image = (ImageView) holder.include_status_image
+			holder.iv_retweeted_image = (ImageView) holder.include_retweeted_status_image
 					.findViewById(R.id.iv_image);
 
 			holder.ll_share_bottom = (LinearLayout) convertView

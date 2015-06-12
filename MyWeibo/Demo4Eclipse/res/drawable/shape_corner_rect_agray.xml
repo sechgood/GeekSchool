@@ -8,6 +8,6 @@
         android:width="1px"
         android:color="@color/alpha_white" />
 
-    <solid android:color="@color/bg_agray" />
+    <solid android:color="@color/alpha_black" />
 
 </shape>

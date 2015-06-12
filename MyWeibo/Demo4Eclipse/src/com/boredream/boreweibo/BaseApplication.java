@@ -21,7 +21,9 @@ import android.app.Application;
 import android.content.Context;
 
 import com.boredream.boreweibo.entity.User;
+import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
@@ -84,6 +86,7 @@ public class BaseApplication extends Application {
 				.threadPriority(Thread.NORM_PRIORITY - 2)
 				.discCacheFileNameGenerator(new Md5FileNameGenerator())
 				.tasksProcessingOrder(QueueProcessingType.LIFO)
+				.defaultDisplayImageOptions(ImageOptHelper.getImgOptions())
 //				.imageDownloader(new HttpClientImageDownloader(
 //						context, new DefaultHttpClient(manager, params)))
 				.build();

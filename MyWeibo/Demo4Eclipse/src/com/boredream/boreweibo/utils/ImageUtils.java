@@ -1,20 +1,28 @@
 package com.boredream.boreweibo.utils;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
 
 
 public class ImageUtils {
@@ -109,11 +117,12 @@ public class ImageUtils {
 	 * @param context
 	 * @param imageUri
 	 */
-//	@TargetApi(Build.VERSION_CODES.KITKAT)
+	@TargetApi(Build.VERSION_CODES.KITKAT)
 	public static String getImageAbsolutePath(Activity context, Uri imageUri) {
 		if (context == null || imageUri == null)
 			return null;
-		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, imageUri)) {
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT 
+				&& DocumentsContract.isDocumentUri(context, imageUri)) {
 			if (isExternalStorageDocument(imageUri)) {
 				String docId = DocumentsContract.getDocumentId(imageUri);
 				String[] split = docId.split(":");
@@ -206,4 +215,25 @@ public class ImageUtils {
 		return "com.google.android.apps.photos.content".equals(uri.getAuthority());
 	}
 	
+	public static void saveFile(Context context, Bitmap bm, String fileName) throws IOException {
+		String storageState = Environment.getExternalStorageState();
+		if(!storageState.equals(Environment.MEDIA_MOUNTED)) {
+			ToastUtils.showToast(context, "未检测到SD卡", Toast.LENGTH_SHORT);
+			return;
+		}
+		
+		File storageDirectory = Environment.getExternalStorageDirectory();
+		File path = new File(storageDirectory, "/boreweibo/weiboimg");
+		if (!path.exists()) {
+			path.mkdirs();
+		}
+		File myCaptureFile = new File(path, fileName);
+		if (!myCaptureFile.exists()) {
+			myCaptureFile.createNewFile();
+		}
+		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(myCaptureFile));
+		bm.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+		bos.flush();
+		bos.close();
+	}
 }

@@ -12,15 +12,15 @@ import com.boredream.boreweibo.BaseActivity;
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.constants.AccessTokenKeeper;
 import com.boredream.boreweibo.constants.WeiboConstants;
-import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.sina.weibo.sdk.auth.WeiboAuth;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
 
 public class LoginActivity extends BaseActivity {
 
-    private AuthInfo mAuthInfo;
+    private WeiboAuth mAuthInfo;
     
     /** 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能  */
     private Oauth2AccessToken mAccessToken;
@@ -34,7 +34,7 @@ public class LoginActivity extends BaseActivity {
 		setContentView(R.layout.activity_login);
         
 		// 快速授权时，请不要传入 SCOPE，否则可能会授权不成功
-        mAuthInfo = new AuthInfo(this, WeiboConstants.APP_KEY, WeiboConstants.REDIRECT_URL, WeiboConstants.SCOPE);
+        mAuthInfo = new WeiboAuth(this, WeiboConstants.APP_KEY, WeiboConstants.REDIRECT_URL, WeiboConstants.SCOPE);
         mSsoHandler = new SsoHandler(LoginActivity.this, mAuthInfo);
         
 		findViewById(R.id.btn_login).setOnClickListener(new OnClickListener() {

@@ -38,11 +38,11 @@ public class StringUtils {
 		SpannableString spannableString = new SpannableString(source);
 		Resources res = context.getResources();
 		
-		String regexLink = "(@([\u4e00-\u9fa5\\w])+)|(#([\u4e00-\u9fa5\\w])+#)";
+		String regexLink = "(@[\u4e00-\u9fa5\\w]+)|(#[\u4e00-\u9fa5\\w]+#)";
 		Pattern patternLink = Pattern.compile(regexLink);
 		Matcher matcherLink = patternLink.matcher(spannableString);
 		
-		String regexEmoji = "\\[([\u4e00-\u9fa5a-zA-Z0-9])+\\]";
+		String regexEmoji = "\\[([\u4e00-\u9fa5\\w])+\\]";
 		Pattern patternEmoji = Pattern.compile(regexEmoji);
 		Matcher matcherEmoji = patternEmoji.matcher(spannableString);
 		

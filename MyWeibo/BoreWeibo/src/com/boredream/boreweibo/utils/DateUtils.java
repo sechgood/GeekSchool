@@ -1,12 +1,16 @@
 package com.boredream.boreweibo.utils;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import android.text.format.DateFormat;
 
 public class DateUtils {
+	
+//	"created_at": "Wed Jun 17 14:26:24 +0800 2015"
 
 	public static final long ONE_MINUTE_MILLIONS = 60 * 1000;
 	public static final long ONE_HOUR_MILLIONS = 60 * ONE_MINUTE_MILLIONS;
@@ -16,8 +20,9 @@ public class DateUtils {
 		String str = "";
 
 		try {
-			@SuppressWarnings("deprecation")
-			Date date = new Date(dateStr);
+//			Date date = new Date(dateStr);
+			SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.US);
+			Date date = sdf.parse(dateStr);
 			Date curDate = new Date();
 
 			long durTime = curDate.getTime() - date.getTime();
@@ -55,17 +60,13 @@ public class DateUtils {
 	 * @param targetTime
 	 *            需要计算的时间
 	 * @param compareTime
-	 *            被对比的时间 (如果为空 默认当前时间 ,表示和当前时间相比)
+	 *            被对比的时间
 	 * @return 0 :同一天 < 0:targetTime是compareTime的前多少天,比如-1就是前一天 >
 	 *         0:targetTime是compareTime的后多少天,比如-1就是前一天
 	 * @throws ParseException
 	 *             转换异常
 	 */
 	public static int calculateDayStatus(Date targetTime, Date compareTime) throws ParseException {
-		if (compareTime == null) {
-			compareTime = new Date();
-		}
-
 		Calendar targetCalendar = Calendar.getInstance();
 		targetCalendar.setTime(targetTime);
 		targetCalendar.set(Calendar.HOUR_OF_DAY, 0);

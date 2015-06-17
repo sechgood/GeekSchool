@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextPaint;
@@ -70,16 +69,12 @@ public class StringUtils {
 			if (emojiStr != null) {
 				int start = matcher.start(3); // 匹配字符串的开始位置
 				
-				Integer imgRes = EmotionUtils.getImgByName(emojiStr);
-				if (imgRes != null) {
-					Options options = new Options();
-					options.inJustDecodeBounds = true;
-					BitmapFactory.decodeResource(res, imgRes, options);
-
-					int scale = (int) (options.outWidth / res.getDimension(R.dimen.txtsize_subhead));
-					options.inJustDecodeBounds = false;
-					options.inSampleSize = scale;
-					Bitmap bitmap = BitmapFactory.decodeResource(res, imgRes, options);
+				int imgRes = EmotionUtils.getImgByName(emojiStr);
+				Bitmap bitmap = BitmapFactory.decodeResource(res, imgRes);
+				
+				if(bitmap != null) {
+					int size = (int) res.getDimension(R.dimen.txtsize_subhead);
+					bitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
 
 					ImageSpan span = new ImageSpan(context, bitmap);
 					spannableString.setSpan(span, start, start + emojiStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

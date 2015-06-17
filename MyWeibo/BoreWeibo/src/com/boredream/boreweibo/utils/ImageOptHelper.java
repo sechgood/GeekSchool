@@ -20,7 +20,6 @@ public class ImageOptHelper {
 		return imgOptions;
 	}
 	
-	
 	public static DisplayImageOptions getAvatarOptions() {
 		DisplayImageOptions	avatarOptions = new DisplayImageOptions.Builder()
 			.cacheOnDisc()
@@ -34,7 +33,6 @@ public class ImageOptHelper {
 		return avatarOptions;
 	}
 	
-	
 	public static DisplayImageOptions getCornerOptions(int cornerRadiusPixels) {
 		DisplayImageOptions options = new DisplayImageOptions.Builder()
 			.cacheOnDisc()
@@ -46,5 +44,4 @@ public class ImageOptHelper {
 			.displayer(new RoundedBitmapDisplayer(cornerRadiusPixels)).build();
 		return options;
 	}
-	
 }

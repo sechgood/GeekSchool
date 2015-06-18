@@ -11,7 +11,7 @@
 
     <TextView
         style="@style/TextViewSubhead"
-        android:layout_height="40dp"
+        android:layout_height="56dp"
         android:gravity="center_vertical"
         android:layout_marginLeft="8dp"
         android:text="加载更多..."

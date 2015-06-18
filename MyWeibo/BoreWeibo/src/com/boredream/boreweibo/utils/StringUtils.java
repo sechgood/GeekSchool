@@ -24,7 +24,10 @@ public class StringUtils {
 		SpannableString spannableString = new SpannableString(source);
 		Resources res = context.getResources();
 
-		String regex = "(@[\u4e00-\u9fa5\\w]+)|(#[\u4e00-\u9fa5\\w]+#)|(\\[[\u4e00-\u9fa5\\w]+\\])";
+		String regexAt = "@[\u4e00-\u9fa5\\w]+";
+		String regexTopic = "#[\u4e00-\u9fa5\\w]+#";
+		String regexEmoji = "\\[[\u4e00-\u9fa5\\w]+\\]";
+		String regex = "("+regexAt+")|("+regexTopic+")|("+regexEmoji+")";
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(spannableString);
 
@@ -73,7 +76,7 @@ public class StringUtils {
 				Bitmap bitmap = BitmapFactory.decodeResource(res, imgRes);
 				
 				if(bitmap != null) {
-					int size = (int) res.getDimension(R.dimen.txtsize_subhead);
+					int size = (int) tv.getTextSize();
 					bitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
 
 					ImageSpan span = new ImageSpan(context, bitmap);

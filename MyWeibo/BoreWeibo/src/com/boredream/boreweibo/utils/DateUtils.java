@@ -47,38 +47,23 @@ public class DateUtils {
 		return str;
 	}
 
-	public static boolean isSameYear(Date date1, Date date2) {
-		Calendar calendar1 = Calendar.getInstance();
-		calendar1.setTime(date1);
-		Calendar calendar2 = Calendar.getInstance();
-		calendar2.setTime(date2);
-
-		return calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR);
-	}
-
-	/**
-	 * @param targetTime
-	 *            需要计算的时间
-	 * @param compareTime
-	 *            被对比的时间
-	 * @return 0 :同一天 < 0:targetTime是compareTime的前多少天,比如-1就是前一天 >
-	 *         0:targetTime是compareTime的后多少天,比如-1就是前一天
-	 * @throws ParseException
-	 *             转换异常
-	 */
-	public static int calculateDayStatus(Date targetTime, Date compareTime) throws ParseException {
+	public static boolean isSameYear(Date targetTime, Date compareTime) {
 		Calendar targetCalendar = Calendar.getInstance();
 		targetCalendar.setTime(targetTime);
-		targetCalendar.set(Calendar.HOUR_OF_DAY, 0);
-		targetCalendar.set(Calendar.MINUTE, 0);
-		targetCalendar.set(Calendar.SECOND, 0);
-
+		
 		Calendar compareCalendar = Calendar.getInstance();
 		compareCalendar.setTime(compareTime);
-		compareCalendar.set(Calendar.HOUR_OF_DAY, 0);
-		compareCalendar.set(Calendar.MINUTE, 0);
-		compareCalendar.set(Calendar.SECOND, 0);
 
-		return (int) ((targetCalendar.getTimeInMillis() - compareCalendar.getTimeInMillis()) / ONE_DAY_MILLIONS);
+		return targetCalendar.get(Calendar.YEAR) == compareCalendar.get(Calendar.YEAR);
+	}
+
+	public static int calculateDayStatus(Date targetTime, Date compareTime) {
+		Calendar targetCalendar = Calendar.getInstance();
+		int tarDayOfYear = targetCalendar.get(Calendar.DAY_OF_YEAR);
+
+		Calendar compareCalendar = Calendar.getInstance();
+		int comDayOfYear = compareCalendar.get(Calendar.DAY_OF_YEAR);
+
+		return tarDayOfYear - comDayOfYear;
 	}
 }

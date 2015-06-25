@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
@@ -14,13 +16,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.boredream.boreweibo.R;
+import com.boredream.boreweibo.activity.StatusDetailActivity;
+import com.boredream.boreweibo.activity.WriteCommentActivity;
 import com.boredream.boreweibo.entity.PicUrls;
 import com.boredream.boreweibo.entity.Status;
 import com.boredream.boreweibo.entity.User;
 import com.boredream.boreweibo.utils.DateUtils;
 import com.boredream.boreweibo.utils.StringUtils;
+import com.boredream.boreweibo.utils.ToastUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 
@@ -122,7 +128,7 @@ public class StatusAdapter extends BaseAdapter {
 		
 		setImages(status, holder.include_status_image, holder.gv_images, holder.iv_image);
 		
-		Status retweeted_status = status.getRetweeted_status();
+		final Status retweeted_status = status.getRetweeted_status();
 		if(retweeted_status != null) {
 			User retUser = retweeted_status.getUser();
 			
@@ -145,6 +151,54 @@ public class StatusAdapter extends BaseAdapter {
 		
 		holder.tv_like_bottom.setText(status.getAttitudes_count() == 0 ?
 				"赞" : status.getAttitudes_count() + "");
+		
+		holder.ll_card_content.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, StatusDetailActivity.class);
+				intent.putExtra("status", status);
+				context.startActivity(intent);
+			}
+		});
+		
+		holder.include_retweeted_status.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, StatusDetailActivity.class);
+				intent.putExtra("status", retweeted_status);
+				context.startActivity(intent);
+			}
+		});
+		
+		holder.ll_share_bottom.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ToastUtils.showToast(context, "转个发~", Toast.LENGTH_SHORT);
+			}
+		});
+		
+		holder.ll_comment_bottom.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(status.getComments_count() > 0) {
+					Intent intent = new Intent(context, StatusDetailActivity.class);
+					intent.putExtra("status", status);
+					intent.putExtra("scroll2Comment", true);
+					context.startActivity(intent);
+				} else {
+					Intent intent = new Intent(context, WriteCommentActivity.class);
+					intent.putExtra("status", status);
+					context.startActivity(intent);
+				}
+			}
+		});
+		
+		holder.ll_like_bottom.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ToastUtils.showToast(context, "点个赞~", Toast.LENGTH_SHORT);
+			}
+		});
 		
 		return convertView;
 	}

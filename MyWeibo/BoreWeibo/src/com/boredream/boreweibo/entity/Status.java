@@ -2,7 +2,7 @@ package com.boredream.boreweibo.entity;
 
 import java.util.ArrayList;
 
-public class Status {
+public class Status extends BaseEntity {
 	private String created_at;
 	private long id;
 	private String mid;

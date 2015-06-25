@@ -3,7 +3,7 @@ package com.boredream.boreweibo.entity;
 import android.text.TextUtils;
 
 /*sub class*/
-public class PicUrls {
+public class PicUrls extends BaseEntity {
 	private static final String BMIDDLE_URL = "http://ww3.sinaimg.cn/bmiddle";
 	private static final String ORIGINAL_URL = "http://ww3.sinaimg.cn/large";
 	

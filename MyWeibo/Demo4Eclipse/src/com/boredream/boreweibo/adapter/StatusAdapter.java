@@ -213,6 +213,27 @@ public class StatusAdapter extends BaseAdapter {
 				holder.cb_like_bottom.setAnimation(scaleAnimation1);
 			}
 		});
+		
+		holder.ll_share_bottom.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+		
+		holder.ll_comment_bottom.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+		
+		holder.ll_like_bottom.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
 
 		holder.ll_card_content.setOnClickListener(new OnClickListener() {
 			@Override

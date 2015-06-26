@@ -124,7 +124,8 @@ public class StatusAdapter extends BaseAdapter {
 		holder.tv_subhead.setText(user.getName());
 		holder.tv_caption.setText(DateUtils.getShortTime(status.getCreated_at())
 				+ " 来自 " + Html.fromHtml(status.getSource()));
-		holder.tv_content.setText(StringUtils.getWeiboContent(context, holder.tv_content, status.getText()));
+		holder.tv_content.setText(StringUtils.getWeiboContent(
+				context, holder.tv_content, status.getText()));
 		
 		setImages(status, holder.include_status_image, holder.gv_images, holder.iv_image);
 		
@@ -133,8 +134,10 @@ public class StatusAdapter extends BaseAdapter {
 			User retUser = retweeted_status.getUser();
 			
 			holder.include_retweeted_status.setVisibility(View.VISIBLE);
-			holder.tv_retweeted_content.setText("@" + retUser.getName() + ":" 
-					+ retweeted_status.getText());
+			String retweetedContent = "@" + retUser.getName() + ":" 
+					+ retweeted_status.getText();
+			holder.tv_retweeted_content.setText(StringUtils.getWeiboContent(
+					context, holder.tv_retweeted_content, retweetedContent));
 			
 			setImages(retweeted_status, 
 					holder.include_retweeted_status_image, 

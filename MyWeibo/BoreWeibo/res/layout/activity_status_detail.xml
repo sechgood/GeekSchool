@@ -14,7 +14,7 @@
         android:layout_weight="1" >
 
         <com.boredream.boreweibo.widget.Pull2RefreshListView
-            android:id="@+id/lv_comment"
+            android:id="@+id/plv_status_detail"
             style="@style/ListViewLineDivider" >
         </com.boredream.boreweibo.widget.Pull2RefreshListView>
 

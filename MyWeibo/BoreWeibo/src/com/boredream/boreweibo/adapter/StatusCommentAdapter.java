@@ -11,12 +11,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.entity.Comment;
 import com.boredream.boreweibo.entity.User;
 import com.boredream.boreweibo.utils.DateUtils;
 import com.boredream.boreweibo.utils.StringUtils;
+import com.boredream.boreweibo.utils.ToastUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class StatusCommentAdapter extends BaseAdapter {
@@ -67,7 +69,6 @@ public class StatusCommentAdapter extends BaseAdapter {
 			holder = (ViewHolderList) convertView.getTag();
 		}
 
-		// set data
 		Comment comment = getItem(position);
 		User user = comment.getUser();
 		
@@ -81,7 +82,7 @@ public class StatusCommentAdapter extends BaseAdapter {
 		holder.ll_comments.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+				ToastUtils.showToast(context, "回复评论", Toast.LENGTH_SHORT);
 			}
 		});
 		

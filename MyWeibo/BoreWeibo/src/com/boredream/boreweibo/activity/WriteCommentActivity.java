@@ -16,13 +16,15 @@ import com.boredream.boreweibo.utils.TitleBuilder;
 
 public class WriteCommentActivity extends BaseActivity implements OnClickListener {
 
+	// 评论输入框
 	private EditText et_write_status;
+	// 底部按钮
 	private ImageView iv_image;
 	private ImageView iv_at;
 	private ImageView iv_topic;
 	private ImageView iv_emoji;
 	private ImageView iv_add;
-	
+	// 待评论的微博
 	private Status status;
 
 	@Override
@@ -31,6 +33,7 @@ public class WriteCommentActivity extends BaseActivity implements OnClickListene
 
 		setContentView(R.layout.activity_write_status);
 
+		// 获取Intent传入的微博
 		status = (Status) getIntent().getSerializableExtra("status");
 		
 		initView();
@@ -44,6 +47,7 @@ public class WriteCommentActivity extends BaseActivity implements OnClickListene
 				.setLeftOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
+						// 取消发送评论,关闭本页面
 						WriteCommentActivity.this.finish();
 					}
 				})
@@ -85,6 +89,7 @@ public class WriteCommentActivity extends BaseActivity implements OnClickListene
 
 						showToast("微博发送成功");
 						
+						// 微博发送成功后,设置Result结果数据,然后关闭本页面
 						Intent data = new Intent();
 						data.putExtra("sendCommentSuccess", true);
 						setResult(RESULT_OK, data);

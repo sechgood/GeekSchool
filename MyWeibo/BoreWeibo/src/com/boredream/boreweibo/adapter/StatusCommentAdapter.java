@@ -58,10 +58,10 @@ public class StatusCommentAdapter extends BaseAdapter {
 					.findViewById(R.id.ll_comments);
 			holder.iv_avatar = (ImageView) convertView
 					.findViewById(R.id.iv_avatar);
-			holder.tv_name = (TextView) convertView
-					.findViewById(R.id.tv_name);
-			holder.tv_time = (TextView) convertView
-					.findViewById(R.id.tv_time);
+			holder.tv_subhead = (TextView) convertView
+					.findViewById(R.id.tv_subhead);
+			holder.tv_caption = (TextView) convertView
+					.findViewById(R.id.tv_caption);
 			holder.tv_comment = (TextView) convertView
 					.findViewById(R.id.tv_comment);
 			convertView.setTag(holder);
@@ -73,8 +73,8 @@ public class StatusCommentAdapter extends BaseAdapter {
 		User user = comment.getUser();
 		
 		imageLoader.displayImage(user.getProfile_image_url(), holder.iv_avatar);
-		holder.tv_name.setText(user.getName());
-		holder.tv_time.setText(DateUtils.getShortTime(comment.getCreated_at()));
+		holder.tv_subhead.setText(user.getName());
+		holder.tv_caption.setText(DateUtils.getShortTime(comment.getCreated_at()));
 		SpannableString weiboContent = StringUtils.getWeiboContent(
 				context, holder.tv_comment, comment.getText());
 		holder.tv_comment.setText(weiboContent);
@@ -92,8 +92,8 @@ public class StatusCommentAdapter extends BaseAdapter {
 	public static class ViewHolderList {
 		public LinearLayout ll_comments;
 		public ImageView iv_avatar;
-		public TextView tv_name;
-		public TextView tv_time;
+		public TextView tv_subhead;
+		public TextView tv_caption;
 		public TextView tv_comment;
 	}
 

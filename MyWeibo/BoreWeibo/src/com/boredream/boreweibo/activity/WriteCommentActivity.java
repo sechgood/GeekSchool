@@ -1,5 +1,8 @@
 package com.boredream.boreweibo.activity;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -71,6 +74,12 @@ public class WriteCommentActivity extends BaseActivity implements OnClickListene
 		iv_topic.setOnClickListener(this);
 		iv_emoji.setOnClickListener(this);
 		iv_add.setOnClickListener(this);
+		
+		StringBuilder sbComment = new StringBuilder();
+		for(int i=0; i<13; i++) {
+			sbComment.append("一二三四五六七八九十");
+		}
+		et_write_status.setText(sbComment.toString());
 	}
 
 	private void sendComment() {
@@ -80,23 +89,29 @@ public class WriteCommentActivity extends BaseActivity implements OnClickListene
 			return;
 		}
 		
-		weiboApi.commentsCreate(status.getId(), comment,
-				new SimpleRequestListener(this, null) {
-
-					@Override
-					public void onComplete(String response) {
-						super.onComplete(response);
-
-						showToast("微博发送成功");
-						
-						// 微博发送成功后,设置Result结果数据,然后关闭本页面
-						Intent data = new Intent();
-						data.putExtra("sendCommentSuccess", true);
-						setResult(RESULT_OK, data);
-						
-						WriteCommentActivity.this.finish();
-					}
-				});
+		try {
+			comment = URLEncoder.encode(comment, "UTF-8");
+		
+			weiboApi.commentsCreate(status.getId(), comment,
+					new SimpleRequestListener(this, null) {
+	
+						@Override
+						public void onComplete(String response) {
+							super.onComplete(response);
+	
+							showToast("微博发送成功");
+							
+							// 微博发送成功后,设置Result结果数据,然后关闭本页面
+							Intent data = new Intent();
+							data.putExtra("sendCommentSuccess", true);
+							setResult(RESULT_OK, data);
+							
+							WriteCommentActivity.this.finish();
+						}
+					});
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

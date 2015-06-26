@@ -49,7 +49,7 @@ public class StatusDetailActivity extends BaseActivity implements
 	// 跳转到写评论页面code
 	private static final int REQUEST_CODE_WRITE_COMMENT = 2333;
 
-	// listView headerView - 微博信息 
+	// listView headerView - 微博信息
 	private View status_detail_info;
 	private ImageView iv_avatar;
 	private TextView tv_subhead;

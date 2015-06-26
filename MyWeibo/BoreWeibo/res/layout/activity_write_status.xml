@@ -22,11 +22,11 @@
                 android:id="@+id/et_write_status"
                 style="@style/TextViewSubhead"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:background="@color/transparent"
                 android:gravity="top"
-                android:hint="分享新鲜事..."
                 android:minLines="3"
+                android:maxLength="140"
+                android:hint="写评论..."
                 android:textColorHint="@color/txt_gray" />
 
             <com.boredream.boreweibo.widget.WrapHeightGridView

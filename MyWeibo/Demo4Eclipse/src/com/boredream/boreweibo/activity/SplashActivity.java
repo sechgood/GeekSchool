@@ -23,7 +23,7 @@ import com.boredream.boreweibo.entity.User;
 import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 

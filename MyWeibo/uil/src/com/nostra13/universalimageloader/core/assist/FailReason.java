@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2011-2013 Sergey Tarasevich
+ * Copyright 2011-2014 Sergey Tarasevich
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package com.nostra13.universalimageloader.core.assist;
 
 /**
  * Presents the reason why image loading and displaying was failed
- * 
+ *
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
@@ -32,16 +32,12 @@ public class FailReason {
 		this.cause = cause;
 	}
 
-	/**
-	 * @return {@linkplain FailType Fail type}
-	 */
+	/** @return {@linkplain FailType Fail type} */
 	public FailType getType() {
 		return type;
 	}
 
-	/**
-	 * @return Thrown exception/error, can be <b>null</b>
-	 */
+	/** @return Thrown exception/error, can be <b>null</b> */
 	public Throwable getCause() {
 		return cause;
 	}
@@ -58,7 +54,7 @@ public class FailReason {
 		DECODING_ERROR,
 		/**
 		 * {@linkplain com.nostra13.universalimageloader.core.ImageLoader#denyNetworkDownloads(boolean) Network
-		 * downloads are denied} and requested image wasn't cached in disc cache before.
+		 * downloads are denied} and requested image wasn't cached in disk cache before.
 		 */
 		NETWORK_DENIED,
 		/** Not enough memory to create needed Bitmap for image */

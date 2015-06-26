@@ -31,7 +31,7 @@ import com.boredream.boreweibo.utils.DisplayUtils;
 import com.boredream.boreweibo.utils.ImageUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 public class ImageBrowserActivity extends BaseActivity implements OnClickListener {
 	private ViewPager vp_image_brower;

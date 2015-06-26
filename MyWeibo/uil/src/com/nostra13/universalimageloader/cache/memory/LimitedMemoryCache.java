@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2011-2013 Sergey Tarasevich
+ * Copyright 2011-2014 Sergey Tarasevich
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,14 @@
  *******************************************************************************/
 package com.nostra13.universalimageloader.cache.memory;
 
+import android.graphics.Bitmap;
+
+import com.nostra13.universalimageloader.utils.L;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import com.nostra13.universalimageloader.utils.L;
 
 /**
  * Limited cache. Provides object storing. Size of all stored bitmaps will not to exceed size limit (
@@ -28,12 +30,12 @@ import com.nostra13.universalimageloader.utils.L;
  * <br />
  * <b>NOTE:</b> This cache uses strong and weak references for stored Bitmaps. Strong references - for limited count of
  * Bitmaps (depends on cache size), weak references - for all other cached Bitmaps.
- * 
+ *
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
- * @since 1.0.0
  * @see BaseMemoryCache
+ * @since 1.0.0
  */
-public abstract class LimitedMemoryCache<K, V> extends BaseMemoryCache<K, V> {
+public abstract class LimitedMemoryCache extends BaseMemoryCache {
 
 	private static final int MAX_NORMAL_CACHE_SIZE_IN_MB = 16;
 	private static final int MAX_NORMAL_CACHE_SIZE = MAX_NORMAL_CACHE_SIZE_IN_MB * 1024 * 1024;
@@ -47,11 +49,9 @@ public abstract class LimitedMemoryCache<K, V> extends BaseMemoryCache<K, V> {
 	 * limit then first object is deleted (but it continue exist at {@link #softMap} and can be collected by GC at any
 	 * time)
 	 */
-	private final List<V> hardCache = Collections.synchronizedList(new LinkedList<V>());
+	private final List<Bitmap> hardCache = Collections.synchronizedList(new LinkedList<Bitmap>());
 
-	/**
-	 * @param sizeLimit Maximum size for cache (in bytes)
-	 */
+	/** @param sizeLimit Maximum size for cache (in bytes) */
 	public LimitedMemoryCache(int sizeLimit) {
 		this.sizeLimit = sizeLimit;
 		cacheSize = new AtomicInteger();
@@ -61,7 +61,7 @@ public abstract class LimitedMemoryCache<K, V> extends BaseMemoryCache<K, V> {
 	}
 
 	@Override
-	public boolean put(K key, V value) {
+	public boolean put(String key, Bitmap value) {
 		boolean putSuccessfully = false;
 		// Try to add value to hard cache
 		int valueSize = getSize(value);
@@ -69,7 +69,7 @@ public abstract class LimitedMemoryCache<K, V> extends BaseMemoryCache<K, V> {
 		int curCacheSize = cacheSize.get();
 		if (valueSize < sizeLimit) {
 			while (curCacheSize + valueSize > sizeLimit) {
-				V removedValue = removeNext();
+				Bitmap removedValue = removeNext();
 				if (hardCache.remove(removedValue)) {
 					curCacheSize = cacheSize.addAndGet(-getSize(removedValue));
 				}
@@ -85,14 +85,14 @@ public abstract class LimitedMemoryCache<K, V> extends BaseMemoryCache<K, V> {
 	}
 
 	@Override
-	public void remove(K key) {
-		V value = super.get(key);
+	public Bitmap remove(String key) {
+		Bitmap value = super.get(key);
 		if (value != null) {
 			if (hardCache.remove(value)) {
 				cacheSize.addAndGet(-getSize(value));
 			}
 		}
-		super.remove(key);
+		return super.remove(key);
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public abstract class LimitedMemoryCache<K, V> extends BaseMemoryCache<K, V> {
 		return sizeLimit;
 	}
 
-	protected abstract int getSize(V value);
+	protected abstract int getSize(Bitmap value);
 
-	protected abstract V removeNext();
+	protected abstract Bitmap removeNext();
 }

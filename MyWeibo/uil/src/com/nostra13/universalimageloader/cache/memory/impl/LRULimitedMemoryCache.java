@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2011-2013 Sergey Tarasevich
+ * Copyright 2011-2014 Sergey Tarasevich
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,9 @@
  *******************************************************************************/
 package com.nostra13.universalimageloader.cache.memory.impl;
 
+import android.graphics.Bitmap;
+import com.nostra13.universalimageloader.cache.memory.LimitedMemoryCache;
+
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.util.Collections;
@@ -23,21 +26,17 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import android.graphics.Bitmap;
-
-import com.nostra13.universalimageloader.cache.memory.LimitedMemoryCache;
-
 /**
  * Limited {@link Bitmap bitmap} cache. Provides {@link Bitmap bitmaps} storing. Size of all stored bitmaps will not to
  * exceed size limit. When cache reaches limit size then the least recently used bitmap is deleted from cache.<br />
  * <br />
  * <b>NOTE:</b> This cache uses strong and weak references for stored Bitmaps. Strong references - for limited count of
  * Bitmaps (depends on cache size), weak references - for all other cached Bitmaps.
- * 
+ *
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.3.0
  */
-public class LRULimitedMemoryCache extends LimitedMemoryCache<String, Bitmap> {
+public class LRULimitedMemoryCache extends LimitedMemoryCache {
 
 	private static final int INITIAL_CAPACITY = 10;
 	private static final float LOAD_FACTOR = 1.1f;
@@ -45,9 +44,7 @@ public class LRULimitedMemoryCache extends LimitedMemoryCache<String, Bitmap> {
 	/** Cache providing Least-Recently-Used logic */
 	private final Map<String, Bitmap> lruCache = Collections.synchronizedMap(new LinkedHashMap<String, Bitmap>(INITIAL_CAPACITY, LOAD_FACTOR, true));
 
-	/**
-	 * @param maxSize Maximum sum of the sizes of the Bitmaps in this cache
-	 */
+	/** @param maxSize Maximum sum of the sizes of the Bitmaps in this cache */
 	public LRULimitedMemoryCache(int maxSize) {
 		super(maxSize);
 	}
@@ -69,9 +66,9 @@ public class LRULimitedMemoryCache extends LimitedMemoryCache<String, Bitmap> {
 	}
 
 	@Override
-	public void remove(String key) {
+	public Bitmap remove(String key) {
 		lruCache.remove(key);
-		super.remove(key);
+		return super.remove(key);
 	}
 
 	@Override

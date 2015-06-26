@@ -20,6 +20,8 @@ import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.LoadedFrom;
+import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 
 /**
  * Fake displayer which doesn't display Bitmap in ImageView. Should be used in {@linkplain DisplayImageOptions display

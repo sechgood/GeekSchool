@@ -2,10 +2,8 @@ package com.boredream.boreweibo.adapter;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
@@ -20,13 +18,10 @@ import android.widget.ScrollView;
 
 import com.boredream.boreweibo.entity.BrowserPic;
 import com.boredream.boreweibo.entity.PicUrls;
-import com.boredream.boreweibo.utils.DialogUtils;
 import com.boredream.boreweibo.utils.DisplayUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.DiscCacheUtil;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.assist.MemoryCacheUtil;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 public class ImageBrowserAdapter extends PagerAdapter {
 

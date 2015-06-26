@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2011-2013 Sergey Tarasevich
+ * Copyright 2011-2014 Sergey Tarasevich
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,30 +15,31 @@
  *******************************************************************************/
 package com.nostra13.universalimageloader.core;
 
-import static com.nostra13.universalimageloader.core.ImageLoader.LOG_POSTPROCESS_IMAGE;
-
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.widget.ImageView;
-
+import com.nostra13.universalimageloader.core.assist.LoadedFrom;
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.nostra13.universalimageloader.utils.L;
 
 /**
  * Presents process'n'display image task. Processes image {@linkplain Bitmap} and display it in {@link ImageView} using
  * {@link DisplayBitmapTask}.
- * 
+ *
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.8.0
  */
-class ProcessAndDisplayImageTask implements Runnable {
+final class ProcessAndDisplayImageTask implements Runnable {
+
+	private static final String LOG_POSTPROCESS_IMAGE = "PostProcess image before displaying [%s]";
 
 	private final ImageLoaderEngine engine;
 	private final Bitmap bitmap;
 	private final ImageLoadingInfo imageLoadingInfo;
 	private final Handler handler;
 
-	public ProcessAndDisplayImageTask(ImageLoaderEngine engine, Bitmap bitmap, ImageLoadingInfo imageLoadingInfo, Handler handler) {
+	public ProcessAndDisplayImageTask(ImageLoaderEngine engine, Bitmap bitmap, ImageLoadingInfo imageLoadingInfo,
+			Handler handler) {
 		this.engine = engine;
 		this.bitmap = bitmap;
 		this.imageLoadingInfo = imageLoadingInfo;
@@ -47,12 +48,12 @@ class ProcessAndDisplayImageTask implements Runnable {
 
 	@Override
 	public void run() {
-		if (engine.configuration.loggingEnabled) L.i(LOG_POSTPROCESS_IMAGE, imageLoadingInfo.memoryCacheKey);
+		L.d(LOG_POSTPROCESS_IMAGE, imageLoadingInfo.memoryCacheKey);
+
 		BitmapProcessor processor = imageLoadingInfo.options.getPostProcessor();
-		final Bitmap processedBitmap = processor.process(bitmap);
-		if (processedBitmap != bitmap) {
-			bitmap.recycle();
-		}
-		handler.post(new DisplayBitmapTask(processedBitmap, imageLoadingInfo, engine));
+		Bitmap processedBitmap = processor.process(bitmap);
+		DisplayBitmapTask displayBitmapTask = new DisplayBitmapTask(processedBitmap, imageLoadingInfo, engine,
+				LoadedFrom.MEMORY_CACHE);
+		LoadAndDisplayImageTask.runTask(displayBitmapTask, imageLoadingInfo.options.isSyncLoading(), handler, engine);
 	}
 }

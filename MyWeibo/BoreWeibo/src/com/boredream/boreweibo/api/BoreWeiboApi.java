@@ -133,9 +133,9 @@ public class BoreWeiboApi extends WeiboAPI {
 	 * @param status
 	 *            要发布的微博文本内容。
 	 * @param imgFilePath
-	 *            要上传的图片绝对路径(可以为空)。
+	 *            要上传的图片文件路径(为空则代表发布无图微博)。
 	 * @param retweetedStatsId
-	 *            要转发的微博ID。
+	 *            要转发的微博ID(<=0时为原创微博)。
 	 * @param listener
 	 */
 	public void statusesSend(String status, String imgFilePath, long retweetedStatsId, RequestListener listener) {

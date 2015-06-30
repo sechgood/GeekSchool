@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,7 +38,7 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 
 	// 输入框
 	private EditText et_write_status;
-	// 添加九宫格图片
+	// 添加的九宫格图片
 	private WrapHeightGridView gv_write_status;
 	// 转发微博内容
 	private View include_retweeted_status_card;
@@ -85,7 +86,7 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 				.build();
 		// 输入框
 		et_write_status = (EditText) findViewById(R.id.et_write_status);
-		// 添加九宫格图片
+		// 添加的九宫格图片
 		gv_write_status = (WrapHeightGridView) findViewById(R.id.gv_write_status);
 		// 转发微博内容
 		include_retweeted_status_card = findViewById(R.id.include_retweeted_status_card);
@@ -120,6 +121,12 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 	 * 发送微博
 	 */
 	private void sendStatus() {
+		String comment = et_write_status.getText().toString();
+		if(TextUtils.isEmpty(comment)) {
+			showToast("微博内容不能为空");
+			return;
+		}
+		
 		String imgFilePath = null;
 		if (imgUris.size() > 0) {
 			// 微博API中只支持上传一张图片
@@ -145,6 +152,9 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 				});
 	}
 
+	/**
+	 * 初始化引用微博内容
+	 */
 	private void initRetweetedStatus() {
 		// 转发微博特殊处理
 		if(retweeted_status != null) {
@@ -154,22 +164,27 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 				String content = "//@" + retweeted_status.getUser().getName() 
 						+ ":" + retweeted_status.getText();
 				et_write_status.setText(StringUtils.getWeiboContent(this, et_write_status, content));
-				
+				// 如果引用的为转发微博,则使用它转发的内容
 				cardStatus = rrStatus;
 			} else {
+				// 如果引用的为原创微博,则使用它自己的内容
 				cardStatus = retweeted_status;
 			}
 			
+			// 设置转发内容信息
 			imageLoader.displayImage(cardStatus.getThumbnail_pic(), iv_rstatus_img);
 			tv_rstatus_username.setText("@" + cardStatus.getUser().getName());
 			tv_rstatus_content.setText(cardStatus.getText());
 			
+			// 转发微博时,不能添加图片
 			iv_image.setVisibility(View.GONE);
 			include_retweeted_status_card.setVisibility(View.VISIBLE);
 		}
 	}
 
-	// 初始化表情面板内容
+	/**
+	 *  初始化表情面板内容
+	 */
 	private void initEmotion() {
 		// 获取屏幕宽度
 		int gvWidth = DisplayUtils.getScreenWidthPixels(this);
@@ -278,26 +293,33 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 		Object itemAdapter = parent.getAdapter();
 
 		if (itemAdapter instanceof WriteStatusGridImgsAdapter) {
-			if (position < statusImgsAdapter.getCount() - 1) {
-
-			} else {
+			// 点击的是添加的图片
+			if (position == statusImgsAdapter.getCount() - 1) {
+				// 如果点击了最后一个加号图标,则显示选择图片对话框
 				ImageUtils.showImagePickDialog(this);
 			}
 		} else if (itemAdapter instanceof EmotionGvAdapter) {
+			// 点击的是表情
 			EmotionGvAdapter emotionGvAdapter = (EmotionGvAdapter) itemAdapter;
 
 			if (position == emotionGvAdapter.getCount() - 1) {
+				// 如果点击了最后一个回退按钮,则调用删除键事件
 				et_write_status.dispatchKeyEvent(new KeyEvent(
 						KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
 			} else {
+				// 如果点击了表情,则添加到输入框中
 				String emotionName = emotionGvAdapter.getItem(position);
 
+				// 获取当前光标位置,在指定位置上添加表情图片文本
 				int curPosition = et_write_status.getSelectionStart();
 				StringBuilder sb = new StringBuilder(et_write_status.getText().toString());
 				sb.insert(curPosition, emotionName);
 
+				// 特殊文字处理,将表情等转换一下
 				et_write_status.setText(StringUtils.getWeiboContent(
 						this, et_write_status, sb.toString()));
+				
+				// 将光标设置到新增完表情的右侧
 				et_write_status.setSelection(curPosition + emotionName.length());
 			}
 
@@ -309,18 +331,23 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (resultCode == RESULT_CANCELED) {
-			return;
-		}
-
 		switch (requestCode) {
 		case ImageUtils.GET_IMAGE_BY_CAMERA:
-			imgUris.add(ImageUtils.imageUriFromCamera);
-			updateImgs();
+			if(resultCode == RESULT_CANCELED) {
+				// 如果拍照取消,将之前新增的图片地址删除
+				ImageUtils.deleteImageUri(this, ImageUtils.imageUriFromCamera);
+			} else {
+				// 拍照后将图片添加到页面上
+				imgUris.add(ImageUtils.imageUriFromCamera);
+				updateImgs();
+			}
 			break;
 		case ImageUtils.GET_IMAGE_FROM_PHONE:
-			imgUris.add(data.getData());
-			updateImgs();
+			if(resultCode != RESULT_CANCELED) {
+				// 本地相册选择完后将图片添加到页面上
+				imgUris.add(data.getData());
+				updateImgs();
+			}
 			break;
 
 		default:

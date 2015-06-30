@@ -18,8 +18,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.boredream.boreweibo.BaseActivity;
@@ -54,11 +52,6 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 
 	private LinearLayout ll_emotion_dashboard;
 	private ViewPager vp_emotion_dashboard;
-	private RadioGroup rg_emotion_dashboard;
-	private RadioButton rb_emotion_dashboard_recently;
-	private RadioButton rb_emotion_dashboard_default;
-	private RadioButton rb_emotion_dashboard_emoji;
-	private RadioButton rb_emotion_dashboard_langxiaohua;
 
 	private WriteStatusGridImgsAdapter statusImgsAdapter;
 	private ArrayList<Uri> imgUris = new ArrayList<Uri>();
@@ -114,11 +107,6 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 
 		ll_emotion_dashboard = (LinearLayout) findViewById(R.id.ll_emotion_dashboard);
 		vp_emotion_dashboard = (ViewPager) findViewById(R.id.vp_emotion_dashboard);
-		rg_emotion_dashboard = (RadioGroup) findViewById(R.id.rg_emotion_dashboard);
-		rb_emotion_dashboard_recently = (RadioButton) findViewById(R.id.rb_emotion_dashboard_recently);
-		rb_emotion_dashboard_default = (RadioButton) findViewById(R.id.rb_emotion_dashboard_default);
-		rb_emotion_dashboard_emoji = (RadioButton) findViewById(R.id.rb_emotion_dashboard_emoji);
-		rb_emotion_dashboard_langxiaohua = (RadioButton) findViewById(R.id.rb_emotion_dashboard_langxiaohua);
 
 		statusImgsAdapter = new WriteStatusGridImgsAdapter(this, imgUris, gv_write_status);
 		gv_write_status.setAdapter(statusImgsAdapter);

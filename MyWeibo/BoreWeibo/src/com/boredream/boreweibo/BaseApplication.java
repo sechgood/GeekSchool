@@ -27,7 +27,7 @@ public class BaseApplication extends Application {
 		// method.
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
 				.threadPriority(Thread.NORM_PRIORITY - 2)
-				.discCacheFileNameGenerator(new Md5FileNameGenerator())
+				.diskCacheFileNameGenerator(new Md5FileNameGenerator())
 				.tasksProcessingOrder(QueueProcessingType.LIFO)
 				.defaultDisplayImageOptions(ImageOptHelper.getImgOptions())
 				.build();

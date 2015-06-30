@@ -45,6 +45,7 @@ public class EmotionGvAdapter extends BaseAdapter {
 		LayoutParams params = new LayoutParams(itemWidth, itemWidth);
 		iv.setPadding(itemWidth/8, itemWidth/8, itemWidth/8, itemWidth/8);
 		iv.setLayoutParams(params);
+		iv.setBackgroundResource(R.drawable.bg_tran2lgray_sel);
 		
 		if(position == getCount() - 1) {
 			iv.setImageResource(R.drawable.emotion_delete_icon);
@@ -52,7 +53,6 @@ public class EmotionGvAdapter extends BaseAdapter {
 			String emotionName = emotionNames.get(position);
 			iv.setImageResource(EmotionUtils.getImgByName(emotionName));
 		}
-		
 		
 		return iv;
 	}

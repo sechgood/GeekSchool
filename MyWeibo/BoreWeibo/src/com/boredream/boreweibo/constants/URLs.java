@@ -11,5 +11,11 @@ public interface URLs {
 	String commentsShow = BASE_URL + "comments/show.json";
 	// 对一条微博进行评论
 	String commentsCreate = BASE_URL + "comments/create.json";
+	// 转发一条微博
+	String statusesRepost = BASE_URL + "statuses/repost.json";
+	// 发布一条微博(带图片)
+	String statusesUpload = BASE_URL + "statuses/upload.json";
+	// 发布一条微博(不带图片)
+	String statusesUpdate = BASE_URL + "statuses/update.json";
 	
 }

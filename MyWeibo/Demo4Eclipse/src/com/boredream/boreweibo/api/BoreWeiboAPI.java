@@ -133,7 +133,6 @@ public class BoreWeiboAPI extends WeiboAPI{
 	 */
 	public void statusesUpload(String status, String imgFilePath, RequestListener listener) {
 		WeiboParameters params = new WeiboParameters();
-		params.add("access_token", mAccessToken.getToken());
 		params.add("status", status);
 		params.add("pic", imgFilePath);
 		requestInMainLooper(URLs.statusesUpload, params, WeiboAPI.HTTPMETHOD_POST, listener);

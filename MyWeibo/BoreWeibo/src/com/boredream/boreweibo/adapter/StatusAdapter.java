@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.activity.StatusDetailActivity;
 import com.boredream.boreweibo.activity.WriteCommentActivity;
+import com.boredream.boreweibo.activity.WriteStatusActivity;
 import com.boredream.boreweibo.entity.PicUrls;
 import com.boredream.boreweibo.entity.Status;
 import com.boredream.boreweibo.entity.User;
@@ -176,7 +177,9 @@ public class StatusAdapter extends BaseAdapter {
 		holder.ll_share_bottom.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ToastUtils.showToast(context, "转个发~", Toast.LENGTH_SHORT);
+				Intent intent = new Intent(context, WriteStatusActivity.class);
+				intent.putExtra("status", status);
+				context.startActivity(intent);
 			}
 		});
 		

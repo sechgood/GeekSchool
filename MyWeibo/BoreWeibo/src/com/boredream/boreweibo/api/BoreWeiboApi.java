@@ -6,6 +6,7 @@ import java.io.IOException;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 
 import com.boredream.boreweibo.constants.AccessTokenKeeper;
 import com.boredream.boreweibo.constants.URLs;
@@ -125,5 +126,35 @@ public class BoreWeiboApi extends WeiboAPI {
 		requestInMainLooper(URLs.commentsCreate, params , WeiboAPI.HTTPMETHOD_POST, listener);
 	}
 	
-	
+	/**
+	 * 发布或转发一条微博
+	 * 
+	 * @param context
+	 * @param status
+	 *            要发布的微博文本内容。
+	 * @param imgFilePath
+	 *            要上传的图片绝对路径(可以为空)。
+	 * @param retweetedStatsId
+	 *            要转发的微博ID。
+	 * @param listener
+	 */
+	public void statusesSend(String status, String imgFilePath, long retweetedStatsId, RequestListener listener) {
+		String url;
+		WeiboParameters params = new WeiboParameters();
+		params.add("status", status);
+		if(retweetedStatsId > 0) {
+			// 如果是转发微博,设置被转发者的id
+			params.add("id", retweetedStatsId);
+			url = URLs.statusesRepost;
+		} else if(!TextUtils.isEmpty(imgFilePath)) {
+			// 如果有图片,则调用upload接口且设置图片路径
+			params.add("pic", imgFilePath);
+			url = URLs.statusesUpload;
+		} else {
+			// 如果无图片,则调用update接口
+			url = URLs.statusesUpdate;
+		}
+		requestInMainLooper(url, params, WeiboAPI.HTTPMETHOD_POST, listener);
+	}
+
 }

@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.activity.ImageBrowserActivity;
 import com.boredream.boreweibo.activity.StatusDetailActivity;
+import com.boredream.boreweibo.activity.WriteStatusActivity;
 import com.boredream.boreweibo.entity.PicUrls;
 import com.boredream.boreweibo.entity.Status;
 import com.boredream.boreweibo.entity.User;
@@ -217,7 +218,9 @@ public class StatusAdapter extends BaseAdapter {
 		holder.ll_share_bottom.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+				Intent intent = new Intent(context, WriteStatusActivity.class);
+				intent.putExtra("status", status);
+				context.startActivity(intent);
 			}
 		});
 		

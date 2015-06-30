@@ -1,11 +1,8 @@
 package com.boredream.boreweibo.widget;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.ListView;
 
-import com.boredream.boreweibo.utils.DisplayUtils;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class Pull2RefreshListView extends PullToRefreshListView {
@@ -29,15 +26,5 @@ public class Pull2RefreshListView extends PullToRefreshListView {
 		super(context);
 		// TODO Auto-generated constructor stub
 	}
-
-	@Override
-	protected ListView createListView(Context context, AttributeSet attrs) {
-		System.out.println("createListView createListView createListView");
-		ListView listView = super.createListView(context, attrs);
-//		listView.setMinimumHeight(DisplayUtils.getScreenHeightPixels((Activity)context));
-		return listView;
-	}
-
-	
 	
 }

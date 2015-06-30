@@ -40,6 +40,11 @@
                 android:scrollbars="none"
                 android:verticalSpacing="8dp" >
             </com.boredream.boreweibo.widget.WrapHeightGridView>
+            
+            <include
+                android:id="@+id/include_retweeted_status_card"
+                layout="@layout/include_retweeted_status_card"
+                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 
@@ -94,7 +99,7 @@
             android:id="@+id/iv_add"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="16dp"
+            android:layout_margin="13dp"
             android:layout_weight="1"
             android:clickable="true"
             android:src="@drawable/btn_insert_more" />

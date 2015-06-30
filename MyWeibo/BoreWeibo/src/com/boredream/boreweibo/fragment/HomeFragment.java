@@ -68,7 +68,7 @@ public class HomeFragment extends BaseFragment {
 		footView = View.inflate(activity, R.layout.footview_loading, null);
 	}
 
-	private void loadData(final int page) {
+	public void loadData(final int page) {
 		BoreWeiboApi api = new BoreWeiboApi(activity);
 
 		api.statusesHome_timeline(page,

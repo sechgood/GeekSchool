@@ -10,10 +10,10 @@ public class ImageOptHelper {
 	
 	public static DisplayImageOptions getImgOptions() {
 		DisplayImageOptions imgOptions = new DisplayImageOptions.Builder()
-			.cacheOnDisc()
-			.cacheInMemory()
+			.cacheOnDisk(true)
+			.cacheInMemory(true)
 			.bitmapConfig(Bitmap.Config.RGB_565)
-			.showStubImage(R.drawable.timeline_image_loading)
+			.showImageOnLoading(R.drawable.timeline_image_loading)
 			.showImageForEmptyUri(R.drawable.timeline_image_loading)
 			.showImageOnFail(R.drawable.timeline_image_failure)
 			.build();
@@ -22,10 +22,10 @@ public class ImageOptHelper {
 	
 	public static DisplayImageOptions getAvatarOptions() {
 		DisplayImageOptions	avatarOptions = new DisplayImageOptions.Builder()
-			.cacheOnDisc()
-			.cacheInMemory()
+			.cacheOnDisk(true)
+			.cacheInMemory(true)
 			.bitmapConfig(Bitmap.Config.RGB_565)
-			.showStubImage(R.drawable.avatar_default)
+			.showImageOnLoading(R.drawable.avatar_default)
 			.showImageForEmptyUri(R.drawable.avatar_default)
 			.showImageOnFail(R.drawable.avatar_default)
 			.displayer(new RoundedBitmapDisplayer(999))
@@ -35,10 +35,10 @@ public class ImageOptHelper {
 	
 	public static DisplayImageOptions getCornerOptions(int cornerRadiusPixels) {
 		DisplayImageOptions options = new DisplayImageOptions.Builder()
-			.cacheOnDisc()
-			.cacheInMemory()
+			.cacheOnDisk(true)
+			.cacheInMemory(true)
 			.bitmapConfig(Bitmap.Config.RGB_565)
-			.showStubImage(R.drawable.timeline_image_loading)
+			.showImageOnLoading(R.drawable.timeline_image_loading)
 			.showImageForEmptyUri(R.drawable.timeline_image_loading)
 			.showImageOnFail(R.drawable.timeline_image_loading)
 			.displayer(new RoundedBitmapDisplayer(cornerRadiusPixels)).build();

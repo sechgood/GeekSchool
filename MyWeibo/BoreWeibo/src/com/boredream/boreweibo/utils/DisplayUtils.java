@@ -6,7 +6,7 @@ import android.util.DisplayMetrics;
 
 public class DisplayUtils {
 	/**
-	 * 将px值转换为dp或dp值
+	 * 将px值转换为dp值
 	 */
 	public static int px2dp(Context context, float pxValue) {
 		final float scale = context.getResources().getDisplayMetrics().density;
@@ -14,7 +14,7 @@ public class DisplayUtils {
 	}
 
 	/**
-	 * 将dp或dp值转换为px值
+	 * 将dp值转换为px值
 	 */
 	public static int dp2px(Context context, float dpValue) {
 		final float scale = context.getResources().getDisplayMetrics().density;
@@ -38,29 +38,17 @@ public class DisplayUtils {
 	}
 
 	/**
-	 * 将sp值转换为dp值
+	 * 获取屏幕宽度
 	 */
-	public static int sp2dp(Context context, float spValue) {
-		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-		float scale = metrics.scaledDensity / metrics.density;
-		return (int) (spValue / scale + 0.5f);
+	public static int getScreenWidthPixels(Activity context) {
+		DisplayMetrics metric = new DisplayMetrics();
+		context.getWindowManager().getDefaultDisplay().getMetrics(metric);
+		return metric.widthPixels;
 	}
 
 	/**
-	 * 将dp值转换为sp值
+	 * 获取屏幕高度
 	 */
-	public static int dp2sp(Context context, float dpValue) {
-		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-		float scale = metrics.scaledDensity / metrics.density;
-		return (int) (dpValue * scale + 0.5f);
-	}
-	
-	public static int getScreenWidthPixels(Activity context) {
-		 DisplayMetrics metric = new DisplayMetrics();
-		 context.getWindowManager().getDefaultDisplay().getMetrics(metric);
-		return metric.widthPixels;
-	}
-	
 	public static int getScreenHeightPixels(Activity context) {
 		DisplayMetrics metric = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(metric);

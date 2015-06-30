@@ -332,7 +332,7 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 		super.onActivityResult(requestCode, resultCode, data);
 
 		switch (requestCode) {
-		case ImageUtils.GET_IMAGE_BY_CAMERA:
+		case ImageUtils.REQUEST_CODE_FROM_CAMERA:
 			if(resultCode == RESULT_CANCELED) {
 				// 如果拍照取消,将之前新增的图片地址删除
 				ImageUtils.deleteImageUri(this, ImageUtils.imageUriFromCamera);
@@ -342,8 +342,9 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 				updateImgs();
 			}
 			break;
-		case ImageUtils.GET_IMAGE_FROM_PHONE:
+		case ImageUtils.REQUEST_CODE_FROM_ALBUM:
 			if(resultCode != RESULT_CANCELED) {
+				System.out.println("data.getData() " + data.getData());
 				// 本地相册选择完后将图片添加到页面上
 				imgUris.add(data.getData());
 				updateImgs();

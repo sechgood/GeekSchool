@@ -15,11 +15,14 @@ import android.text.TextUtils;
 
 
 public class ImageUtils {
-	public static final int GET_IMAGE_BY_CAMERA = 5001;
-	public static final int GET_IMAGE_FROM_PHONE = 5002;
-	public static final int CROP_IMAGE = 5003;
+	
+	public static final int REQUEST_CODE_FROM_CAMERA = 5001;
+	public static final int REQUEST_CODE_FROM_ALBUM = 5002;
+	
+	/**
+	 * 存放拍照图片的uri地址
+	 */
 	public static Uri imageUriFromCamera;
-	public static Uri cropImageUri;
 
 	/**
 	 * 选择取照片的方法,结果在activity的onActivityResult()方法中,
@@ -50,29 +53,35 @@ public class ImageUtils {
 		}).show();
 	}
 	
+	/**
+	 * 打开相机拍照获取图片
+	 */
 	public static void openCameraImage(final Activity activity) {
 		ImageUtils.imageUriFromCamera = ImageUtils.createImageUri(activity);
 		
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		// MediaStore.EXTRA_OUTPUT参数不设置时,系统会自动生成一个uri,但是只会返回一个缩略图
-		// 返回图片在onActivityResult中通过以下代码获取
+		// 缩略图在onActivityResult中可以通过以下代码获取
 		// Bitmap bitmap = (Bitmap) data.getExtras().get("data"); 
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, ImageUtils.imageUriFromCamera);
-		activity.startActivityForResult(intent, ImageUtils.GET_IMAGE_BY_CAMERA);
+		activity.startActivityForResult(intent, ImageUtils.REQUEST_CODE_FROM_CAMERA);
 	}
 	
+	/**
+	 * 打开本地相册选取图片
+	 */
 	public static void openLocalImage(final Activity activity) {
 		Intent intent = new Intent();
 		intent.setType("image/*");
 		intent.setAction(Intent.ACTION_GET_CONTENT);
-		activity.startActivityForResult(intent, ImageUtils.GET_IMAGE_FROM_PHONE);
+		activity.startActivityForResult(intent, ImageUtils.REQUEST_CODE_FROM_ALBUM);
 	}
 	
 	/**
 	 * 创建一条图片uri,用于保存拍照后的照片
 	 */
 	private static Uri createImageUri(Context context) {
-		String name = "boreWeiboImg" + System.currentTimeMillis();
+		String name = "boreWbImg" + System.currentTimeMillis();
 		ContentValues values = new ContentValues();
 		values.put(Images.Media.TITLE, name);
 		values.put(Images.Media.DISPLAY_NAME, name + ".jpeg");
@@ -89,6 +98,9 @@ public class ImageUtils {
 		context.getContentResolver().delete(uri, null, null);
 	}
 
+	/**
+	 * 获取图片文件路径
+	 */
 	public static String getImageAbsolutePath(Context context, Uri uri) {
 		String filePath = null;
 		Cursor cursor = MediaStore.Images.Media.query(context.getContentResolver(), uri, 

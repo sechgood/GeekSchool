@@ -3,6 +3,7 @@ package com.boredream.boreweibo.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -54,6 +55,8 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 	// 表情选择面板
 	private LinearLayout ll_emotion_dashboard;
 	private ViewPager vp_emotion_dashboard;
+	// 进度框
+	private ProgressDialog progressDialog;
 
 	private WriteStatusGridImgsAdapter statusImgsAdapter;
 	private ArrayList<Uri> imgUris = new ArrayList<Uri>();
@@ -102,6 +105,9 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 		// 表情选择面板
 		ll_emotion_dashboard = (LinearLayout) findViewById(R.id.ll_emotion_dashboard);
 		vp_emotion_dashboard = (ViewPager) findViewById(R.id.vp_emotion_dashboard);
+		// 进度框
+		progressDialog = new ProgressDialog(this);
+		progressDialog.setMessage("微博发布中...");
 
 		statusImgsAdapter = new WriteStatusGridImgsAdapter(this, imgUris, gv_write_status);
 		gv_write_status.setAdapter(statusImgsAdapter);
@@ -137,8 +143,9 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 		// 转发微博的id
 		long retweetedStatsId = cardStatus == null ? -1 : cardStatus.getId();
 		// 上传微博api接口
+		progressDialog.show();
 		weiboApi.statusesSend(et_write_status.getText().toString(), imgFilePath, retweetedStatsId,
-				new SimpleRequestListener(this, null) {
+				new SimpleRequestListener(this, progressDialog) {
 
 					@Override
 					public void onComplete(String response) {
@@ -167,12 +174,20 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 				// 如果引用的为转发微博,则使用它转发的内容
 				cardStatus = rrStatus;
 			} else {
+				et_write_status.setText("转发微博");
 				// 如果引用的为原创微博,则使用它自己的内容
 				cardStatus = retweeted_status;
 			}
 			
-			// 设置转发内容信息
-			imageLoader.displayImage(cardStatus.getThumbnail_pic(), iv_rstatus_img);
+			// 设置转发图片内容
+			String imgUrl = cardStatus.getThumbnail_pic();
+			if(TextUtils.isEmpty(imgUrl)) {
+				iv_rstatus_img.setVisibility(View.GONE);
+			} else {
+				iv_rstatus_img.setVisibility(View.VISIBLE);
+				imageLoader.displayImage(cardStatus.getThumbnail_pic(), iv_rstatus_img);
+			}
+			// 设置转发文字内容
 			tv_rstatus_username.setText("@" + cardStatus.getUser().getName());
 			tv_rstatus_content.setText(cardStatus.getText());
 			
@@ -344,7 +359,6 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 			break;
 		case ImageUtils.REQUEST_CODE_FROM_ALBUM:
 			if(resultCode != RESULT_CANCELED) {
-				System.out.println("data.getData() " + data.getData());
 				// 本地相册选择完后将图片添加到页面上
 				imgUris.add(data.getData());
 				updateImgs();

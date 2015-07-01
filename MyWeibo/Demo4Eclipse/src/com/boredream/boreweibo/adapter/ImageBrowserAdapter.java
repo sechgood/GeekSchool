@@ -42,7 +42,7 @@ public class ImageBrowserAdapter extends PagerAdapter {
 			browserPic = new BrowserPic();
 			browserPic.setPic(picUrl);
 			Bitmap oBm = mImageLoader.getMemoryCache().get(picUrl.getOriginal_pic());
-			File discCache = mImageLoader.getDiscCache().get(picUrl.getOriginal_pic());
+			File discCache = mImageLoader.getDiskCache().get(picUrl.getOriginal_pic());
 			if(oBm != null || discCache != null) {
 				browserPic.setOriginalPic(true);
 				oBm.recycle();

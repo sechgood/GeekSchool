@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
+import android.graphics.Color;
 import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
@@ -20,7 +21,6 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -58,7 +58,10 @@ public class StringUtils {
 				
 				if(clickable) {
 					// @和#可点击
-					TouchableSpan clickableSpan = new TouchableSpan(context) {
+					TouchableSpan clickableSpan = new TouchableSpan(
+							context.getResources().getColor(R.color.txt_at_blue), 
+							context.getResources().getColor(R.color.txt_at_blue),
+							context.getResources().getColor(R.color.bg_at_blue)) {
 						@Override
 						public void onClick(View widget) {
 							if(key.startsWith("@")) {
@@ -92,7 +95,7 @@ public class StringUtils {
 					options.inJustDecodeBounds = true;
 					BitmapFactory.decodeResource(res, imgRes, options);
 					
-					int scale = (int) (options.outWidth / 24);
+					int scale = (int) (options.outWidth / 32);
 					options.inJustDecodeBounds = false;
 					options.inSampleSize = scale;
 					Bitmap bitmap = BitmapFactory.decodeResource(res, imgRes, options);
@@ -108,145 +111,84 @@ public class StringUtils {
 	}
 	
 	private abstract static class TouchableSpan extends ClickableSpan {
+		private boolean mIsPressed;
+		private int mPressedBackgroundColor;
+		private int mNormalTextColor;
+		private int mPressedTextColor;
 
-		private Context context;
-		
-		public TouchableSpan(Context context) {
-			this.context = context;
+		public TouchableSpan(int normalTextColor, int pressedTextColor,
+				int pressedBackgroundColor) {
+			mNormalTextColor = normalTextColor;
+			mPressedTextColor = pressedTextColor;
+			mPressedBackgroundColor = pressedBackgroundColor;
 		}
 
-	    /**
-	     * Makes the text underlined and in the link color.
-	     */
-	    @Override
-	    public void updateDrawState(TextPaint ds) {
-	    	ds.setColor(context.getResources().getColor(R.color.txt_at_blue));
-	        ds.setUnderlineText(false);
-	    }
-//		private boolean mIsPressed;
-//		private int mPressedBackgroundColor;
-//		private int mNormalTextColor;
-//		private int mPressedTextColor;
-//
-//		public TouchableSpan(int normalTextColor, int pressedTextColor,
-//				int pressedBackgroundColor) {
-//			mNormalTextColor = normalTextColor;
-//			mPressedTextColor = pressedTextColor;
-//			mPressedBackgroundColor = pressedBackgroundColor;
-//		}
-//
-//		public void setPressed(boolean isSelected) {
-//			mIsPressed = isSelected;
-//		}
-//
-//		@Override
-//		public void updateDrawState(TextPaint ds) {
-//			super.updateDrawState(ds);
-//			ds.setColor(mIsPressed ? mPressedTextColor : mNormalTextColor);
-//			ds.bgColor = mIsPressed ? mPressedBackgroundColor : Color.TRANSPARENT;
-//			ds.setUnderlineText(false);
-//		}
-	}
-	
-	public static class LinkTouchMovementMethod extends LinkMovementMethod {
+		public void setPressed(boolean isSelected) {
+			mIsPressed = isSelected;
+		}
 
 		@Override
-		public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
-			int action = event.getAction();
-
-			if (action == MotionEvent.ACTION_UP ||
-					action == MotionEvent.ACTION_DOWN) {
-				int x = (int) event.getX();
-				int y = (int) event.getY();
-
-				x -= widget.getTotalPaddingLeft();
-				y -= widget.getTotalPaddingTop();
-
-				x += widget.getScrollX();
-				y += widget.getScrollY();
-
-				Layout layout = widget.getLayout();
-				int line = layout.getLineForVertical(y);
-				int off = layout.getOffsetForHorizontal(line, x);
-
-				ClickableSpan[] link = buffer.getSpans(off, off, ClickableSpan.class);
-
-				if (link.length != 0) {
-					if (action == MotionEvent.ACTION_UP) {
-						link[0].onClick(widget);
-						Selection.removeSelection(buffer);
-					} else if (action == MotionEvent.ACTION_DOWN) {
-						Selection.setSelection(buffer,
-								buffer.getSpanStart(link[0]),
-								buffer.getSpanEnd(link[0]));
-					}
-
-					return true;
-				} else {
-					ViewGroup parent = (ViewGroup) widget.getParent();
-					parent.onTouchEvent(event);
-					return true;
-				}
-			}
-
-			return super.onTouchEvent(widget, buffer, event);
+		public void updateDrawState(TextPaint ds) {
+			super.updateDrawState(ds);
+			ds.setColor(mIsPressed ? mPressedTextColor : mNormalTextColor);
+			ds.bgColor = mIsPressed ? mPressedBackgroundColor : Color.TRANSPARENT;
+			ds.setUnderlineText(false);
 		}
-
 	}
 	
-//	public static class LinkTouchMovementMethod extends LinkMovementMethod {
-//	    private TouchableSpan mPressedSpan;
-//
-//	    @Override
-//	    public boolean onTouchEvent(TextView textView, Spannable spannable, MotionEvent event) {
-//	        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//	            mPressedSpan = getPressedSpan(textView, spannable, event);
-//	            if (mPressedSpan != null) {
-//	                mPressedSpan.setPressed(true);
-//	                Selection.setSelection(spannable, spannable.getSpanStart(mPressedSpan),
-//	                        spannable.getSpanEnd(mPressedSpan));
-//	            }
-//	        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-//	            TouchableSpan touchedSpan = getPressedSpan(textView, spannable, event);
-//	            if (mPressedSpan != null && touchedSpan != mPressedSpan) {
-//	                mPressedSpan.setPressed(false);
-//	                mPressedSpan = null;
-//	                Selection.removeSelection(spannable);
-//	            }
-//	        } else {
-//	            if (mPressedSpan != null) {
-//	                mPressedSpan.setPressed(false);
-//	                super.onTouchEvent(textView, spannable, event);
-//	            }
-//	            mPressedSpan = null;
-//	            Selection.removeSelection(spannable);
-//	        }
-//	        return true;
-//	    }
-//
-//	    private TouchableSpan getPressedSpan(TextView textView, Spannable spannable, MotionEvent event) {
-//
-//	        int x = (int) event.getX();
-//	        int y = (int) event.getY();
-//
-//	        x -= textView.getTotalPaddingLeft();
-//	        y -= textView.getTotalPaddingTop();
-//
-//	        x += textView.getScrollX();
-//	        y += textView.getScrollY();
-//
-//	        Layout layout = textView.getLayout();
-//	        int line = layout.getLineForVertical(y);
-//	        int off = layout.getOffsetForHorizontal(line, x);
-//
-//	        TouchableSpan[] link = spannable.getSpans(off, off, TouchableSpan.class);
-//	        TouchableSpan touchedSpan = null;
-//	        if (link.length > 0) {
-//	            touchedSpan = link[0];
-//	        }
-//	        return touchedSpan;
-//	    }
-//
-//	}
+	static class LinkTouchMovementMethod extends LinkMovementMethod {
+	    private TouchableSpan mPressedSpan;
+
+	    @Override
+	    public boolean onTouchEvent(TextView textView, Spannable spannable, MotionEvent event) {
+	        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+	            mPressedSpan = getPressedSpan(textView, spannable, event);
+	            if (mPressedSpan != null) {
+	                mPressedSpan.setPressed(true);
+	                Selection.setSelection(spannable, spannable.getSpanStart(mPressedSpan),
+	                        spannable.getSpanEnd(mPressedSpan));
+	            }
+	        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+	            TouchableSpan touchedSpan = getPressedSpan(textView, spannable, event);
+	            if (mPressedSpan != null && touchedSpan != mPressedSpan) {
+	                mPressedSpan.setPressed(false);
+	                mPressedSpan = null;
+	                Selection.removeSelection(spannable);
+	            }
+	        } else {
+	            if (mPressedSpan != null) {
+	                mPressedSpan.setPressed(false);
+	                super.onTouchEvent(textView, spannable, event);
+	            }
+	            mPressedSpan = null;
+	            Selection.removeSelection(spannable);
+	        }
+	        return true;
+	    }
+
+	    private TouchableSpan getPressedSpan(TextView textView, Spannable spannable, MotionEvent event) {
+
+	        int x = (int) event.getX();
+	        int y = (int) event.getY();
+
+	        x -= textView.getTotalPaddingLeft();
+	        y -= textView.getTotalPaddingTop();
+
+	        x += textView.getScrollX();
+	        y += textView.getScrollY();
+
+	        Layout layout = textView.getLayout();
+	        int line = layout.getLineForVertical(y);
+	        int off = layout.getOffsetForHorizontal(line, x);
+
+	        TouchableSpan[] link = spannable.getSpans(off, off, TouchableSpan.class);
+	        TouchableSpan touchedSpan = null;
+	        if (link.length > 0) {
+	            touchedSpan = link[0];
+	        }
+	        return touchedSpan;
+	    }
+
+	}
 
 }

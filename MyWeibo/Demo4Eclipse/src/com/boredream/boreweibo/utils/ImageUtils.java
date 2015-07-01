@@ -110,7 +110,14 @@ public class ImageUtils {
 		}
 		Log.i("", "生成的照片输出路径：" + imageFilePath.toString());
 		return imageFilePath;
-	} 
+	}
+	
+	/**
+	 * 删除一条图片
+	 */
+	public static void deleteImageUri(Context context, Uri uri) {
+		context.getContentResolver().delete(uri, null, null);
+	}
 	
 	/**
 	 * 根据Uri获取图片绝对路径，解决Android4.4以上版本Uri转换

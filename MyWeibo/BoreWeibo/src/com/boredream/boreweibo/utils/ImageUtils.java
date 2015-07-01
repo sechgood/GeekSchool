@@ -43,10 +43,10 @@ public class ImageUtils {
 				dialog.dismiss();
 				switch (which) {
 				case 0:
-					ImageUtils.openCameraImage(activity);
+					ImageUtils.pickImageFromCamera(activity);
 					break;
 				case 1:
-					ImageUtils.openLocalImage(activity);
+					ImageUtils.pickImageFromAlbum(activity);
 					break;
 				}
 			}
@@ -56,7 +56,7 @@ public class ImageUtils {
 	/**
 	 * 打开相机拍照获取图片
 	 */
-	public static void openCameraImage(final Activity activity) {
+	public static void pickImageFromCamera(final Activity activity) {
 		ImageUtils.imageUriFromCamera = ImageUtils.createImageUri(activity);
 		
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -70,7 +70,7 @@ public class ImageUtils {
 	/**
 	 * 打开本地相册选取图片
 	 */
-	public static void openLocalImage(final Activity activity) {
+	public static void pickImageFromAlbum(final Activity activity) {
 		Intent intent = new Intent();
 		intent.setType("image/*");
 		intent.setAction(Intent.ACTION_GET_CONTENT);

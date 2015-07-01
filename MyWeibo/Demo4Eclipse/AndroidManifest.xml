@@ -32,6 +32,7 @@
         <activity android:name=".activity.MainActivity" android:launchMode="singleTask"></activity>
         <activity android:name=".activity.ImageBrowserActivity"></activity>
         <activity android:name=".activity.StatusDetailActivity"></activity>
+        <activity android:name=".activity.WriteCommentActivity"></activity>
         <activity android:name=".activity.WriteStatusActivity"></activity>
         <activity android:name=".activity.UserInfoActivity"></activity>
     </application>

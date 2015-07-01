@@ -38,7 +38,7 @@ public class ImageBrowserActivity extends BaseActivity implements OnClickListene
 	private TextView tv_image_index;
 	private Button btn_save;
 	private Button btn_original_image;
-	private TextView tv_like;
+//	private TextView tv_like;
 
 	private Status status;
 	private ImageBrowserAdapter adapter;
@@ -75,7 +75,7 @@ public class ImageBrowserActivity extends BaseActivity implements OnClickListene
 		tv_image_index = (TextView) findViewById(R.id.tv_image_index);
 		btn_save = (Button) findViewById(R.id.btn_save);
 		btn_original_image = (Button) findViewById(R.id.btn_original_image);
-		tv_like = (TextView) findViewById(R.id.tv_like);
+//		tv_like = (TextView) findViewById(R.id.tv_like);
 
 		btn_save.setOnClickListener(this);
 		btn_original_image.setOnClickListener(this);
@@ -159,7 +159,7 @@ public class ImageBrowserActivity extends BaseActivity implements OnClickListene
 				browserPic = new BrowserPic();
 				browserPic.setPic(picUrl);
 				Bitmap oBm = mImageLoader.getMemoryCache().get(picUrl.getOriginal_pic());
-				File discCache = mImageLoader.getDiscCache().get(picUrl.getOriginal_pic());
+				File discCache = mImageLoader.getDiskCache().get(picUrl.getOriginal_pic());
 				browserPic.setOriginalPic(oBm != null || 
 						(discCache != null && discCache.exists() && discCache.length() > 0));
 				if(oBm != null) {

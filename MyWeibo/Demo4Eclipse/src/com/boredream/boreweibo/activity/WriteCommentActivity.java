@@ -83,23 +83,29 @@ public class WriteCommentActivity extends BaseActivity implements OnClickListene
 			return;
 		}
 		
-		weiboApi.commentsCreate(status.getId(), comment,
-				new SimpleRequestListener(this, null) {
-
-					@Override
-					public void onComplete(String response) {
-						super.onComplete(response);
-
-						showToast("微博发送成功");
-						
-						// 微博发送成功后,设置Result结果数据,然后关闭本页面
-						Intent data = new Intent();
-						data.putExtra("sendCommentSuccess", true);
-						setResult(RESULT_OK, data);
-						
-						WriteCommentActivity.this.finish();
-					}
-				});
+		try {
+			comment = URLEncoder.encode(comment, "UTF-8");
+		
+			weiboApi.commentsCreate(status.getId(), comment,
+					new SimpleRequestListener(this, null) {
+	
+						@Override
+						public void onComplete(String response) {
+							super.onComplete(response);
+	
+							showToast("微博发送成功");
+							
+							// 微博发送成功后,设置Result结果数据,然后关闭本页面
+							Intent data = new Intent();
+							data.putExtra("sendCommentSuccess", true);
+							setResult(RESULT_OK, data);
+							
+							WriteCommentActivity.this.finish();
+						}
+					});
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

@@ -413,6 +413,9 @@ public class StatusDetailActivity extends BaseActivity implements
 		case R.id.iv_image:
 			break;
 		case R.id.ll_share_bottom:
+			Intent intentWriteStatus = new Intent(this, WriteStatusActivity.class);
+			intentWriteStatus.putExtra("status", status);
+			startActivity(intentWriteStatus);
 			break;
 		case R.id.ll_comment_bottom:
 			// 跳转至写评论页面

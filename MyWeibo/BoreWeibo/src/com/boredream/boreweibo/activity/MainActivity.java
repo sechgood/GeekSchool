@@ -3,7 +3,6 @@ package com.boredream.boreweibo.activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,12 +12,9 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.fragment.FragmentController;
-import com.boredream.boreweibo.fragment.HomeFragment;
 
 public class MainActivity extends FragmentActivity implements
 		OnCheckedChangeListener, OnClickListener {
-	
-	private static final int REQUEST_CODE_WRITE_STATUS = 110;
 	
 	private RadioGroup rg_tab;
 	private ImageView iv_add;
@@ -70,29 +66,7 @@ public class MainActivity extends FragmentActivity implements
 		switch (v.getId()) {
 		case R.id.iv_add:
 			Intent intent = new Intent(MainActivity.this, WriteStatusActivity.class);
-			startActivityForResult(intent, REQUEST_CODE_WRITE_STATUS);
-			break;
-
-		default:
-			break;
-		}
-	}
-	
-	@Override
-	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-		super.onActivityResult(arg0, arg1, arg2);
-
-		if(arg0 == RESULT_CANCELED) {
-			return;
-		}
-		
-		switch (arg1) {
-		case REQUEST_CODE_WRITE_STATUS:
-			Fragment fragment = controller.getFragment(0);
-			if(fragment instanceof HomeFragment) {
-				HomeFragment homeFragment = (HomeFragment) fragment;
-				homeFragment.loadData(1);
-			}
+			startActivity(intent);
 			break;
 
 		default:

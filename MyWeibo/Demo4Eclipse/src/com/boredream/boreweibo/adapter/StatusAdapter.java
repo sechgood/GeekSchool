@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.activity.ImageBrowserActivity;
 import com.boredream.boreweibo.activity.StatusDetailActivity;
+import com.boredream.boreweibo.activity.WriteCommentActivity;
 import com.boredream.boreweibo.activity.WriteStatusActivity;
 import com.boredream.boreweibo.entity.PicUrls;
 import com.boredream.boreweibo.entity.Status;
@@ -168,7 +169,9 @@ public class StatusAdapter extends BaseAdapter {
 		holder.ll_share_bottom.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
+				Intent intent = new Intent(context, WriteStatusActivity.class);
+				intent.putExtra("status", status);
+				context.startActivity(intent);
 			}
 		});
 
@@ -177,7 +180,16 @@ public class StatusAdapter extends BaseAdapter {
 		holder.ll_comment_bottom.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
+				if(status.getComments_count() > 0) {
+					Intent intent = new Intent(context, StatusDetailActivity.class);
+					intent.putExtra("status", status);
+					intent.putExtra("scroll2Comment", true);
+					context.startActivity(intent);
+				} else {
+					Intent intent = new Intent(context, WriteCommentActivity.class);
+					intent.putExtra("status", status);
+					context.startActivity(intent);
+				}
 			}
 		});
 
@@ -212,29 +224,6 @@ public class StatusAdapter extends BaseAdapter {
 					}
 				});
 				holder.cb_like_bottom.setAnimation(scaleAnimation1);
-			}
-		});
-		
-		holder.ll_share_bottom.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(context, WriteStatusActivity.class);
-				intent.putExtra("status", status);
-				context.startActivity(intent);
-			}
-		});
-		
-		holder.ll_comment_bottom.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				
-			}
-		});
-		
-		holder.ll_like_bottom.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				
 			}
 		});
 

@@ -14,7 +14,6 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -52,7 +51,6 @@ public class UserInfoActivity extends BaseActivity implements
 	private TextView tv_name;
 	private TextView tv_follows;
 	private TextView tv_fans;
-	private LinearLayout ll_edit_sign;
 	private TextView tv_sign;
 	
 	private View shadow_user_info_tab;
@@ -123,7 +121,6 @@ public class UserInfoActivity extends BaseActivity implements
 		tv_name = (TextView) user_info_head.findViewById(R.id.tv_name);
 		tv_follows = (TextView) user_info_head.findViewById(R.id.tv_follows);
 		tv_fans = (TextView) user_info_head.findViewById(R.id.tv_fans);
-		ll_edit_sign = (LinearLayout) user_info_head.findViewById(R.id.ll_edit_sign);
 		tv_sign = (TextView) user_info_head.findViewById(R.id.tv_sign);
 		
 		iv_avatar.setOnClickListener(this);
@@ -376,32 +373,64 @@ public class UserInfoActivity extends BaseActivity implements
 		
 		switch (checkedId) {
 		case R.id.rb_info:
-			rb_info.setChecked(true);
-			uliv_user_info.setCurrentItem(0);
-			
-			shadow_rb_info.setChecked(true);
-			shadow_uliv_user_info.setCurrentItem(0);
+			if(shadow_user_info_tab.getVisibility() == View.VISIBLE) {
+				rb_info.setChecked(true);
+				uliv_user_info.setCurrentItemWithoutAnim(0);
+				
+				shadow_rb_info.setChecked(true);
+				shadow_uliv_user_info.setCurrentItem(0);
+			} else {
+				rb_info.setChecked(true);
+				uliv_user_info.setCurrentItem(0);
+				
+				shadow_rb_info.setChecked(true);
+				shadow_uliv_user_info.setCurrentItemWithoutAnim(0);
+			}
 			break;
 		case R.id.rb_status:
-			rb_status.setChecked(true);
-			uliv_user_info.setCurrentItem(1);
-			
-			shadow_rb_status.setChecked(true);
-			shadow_uliv_user_info.setCurrentItem(1);
+			if(shadow_user_info_tab.getVisibility() == View.VISIBLE) {
+				rb_status.setChecked(true);
+				uliv_user_info.setCurrentItemWithoutAnim(1);
+				
+				shadow_rb_status.setChecked(true);
+				shadow_uliv_user_info.setCurrentItem(1);
+			} else {
+				rb_status.setChecked(true);
+				uliv_user_info.setCurrentItem(1);
+				
+				shadow_rb_status.setChecked(true);
+				shadow_uliv_user_info.setCurrentItemWithoutAnim(1);
+			}
 			break;
 		case R.id.rb_photos:
-			rb_photos.setChecked(true);
-			uliv_user_info.setCurrentItem(2);
-			
-			shadow_rb_photos.setChecked(true);
-			shadow_uliv_user_info.setCurrentItem(2);
+			if(shadow_user_info_tab.getVisibility() == View.VISIBLE) {
+				rb_photos.setChecked(true);
+				uliv_user_info.setCurrentItemWithoutAnim(2);
+				
+				shadow_rb_photos.setChecked(true);
+				shadow_uliv_user_info.setCurrentItem(2);
+			} else {
+				rb_photos.setChecked(true);
+				uliv_user_info.setCurrentItem(2);
+				
+				shadow_rb_photos.setChecked(true);
+				shadow_uliv_user_info.setCurrentItemWithoutAnim(2);
+			}
 			break;
 		case R.id.rb_manager:
-			rb_manager.setChecked(true);
-			uliv_user_info.setCurrentItem(3);
-			
-			shadow_rb_manager.setChecked(true);
-			shadow_uliv_user_info.setCurrentItem(3);
+			if(shadow_user_info_tab.getVisibility() == View.VISIBLE) {
+				rb_manager.setChecked(true);
+				uliv_user_info.setCurrentItemWithoutAnim(3);
+				
+				shadow_rb_manager.setChecked(true);
+				shadow_uliv_user_info.setCurrentItem(3);
+			} else {
+				rb_manager.setChecked(true);
+				uliv_user_info.setCurrentItem(3);
+				
+				shadow_rb_manager.setChecked(true);
+				shadow_uliv_user_info.setCurrentItemWithoutAnim(3);
+			}
 			break;
 
 		default:

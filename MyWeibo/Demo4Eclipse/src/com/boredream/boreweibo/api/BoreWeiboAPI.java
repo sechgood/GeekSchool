@@ -200,6 +200,53 @@ public class BoreWeiboAPI extends WeiboAPI{
 		params.add("page", page);
 		requestInMainLooper(URLs.commentsShow, params , WeiboAPI.HTTPMETHOD_GET, listener);
 	}
+	
+	/**
+	 * 对一条微博进行评论
+	 * 
+	 * @param id
+	 *            需要评论的微博ID。
+	 * @param comment
+	 *            评论内容，必须做URLencode，内容不超过140个汉字。
+	 * @param listener
+	 */
+	public void commentsCreate(long id, String comment, RequestListener listener) {
+		WeiboParameters params = new WeiboParameters();
+		params.add("id", id);
+		params.add("comment", comment);
+		requestInMainLooper(URLs.commentsCreate, params , WeiboAPI.HTTPMETHOD_POST, listener);
+	}
+	
+	/**
+	 * 发布或转发一条微博
+	 * 
+	 * @param context
+	 * @param status
+	 *            要发布的微博文本内容。
+	 * @param imgFilePath
+	 *            要上传的图片文件路径(为空则代表发布无图微博)。
+	 * @param retweetedStatsId
+	 *            要转发的微博ID(<=0时为原创微博)。
+	 * @param listener
+	 */
+	public void statusesSend(String status, String imgFilePath, long retweetedStatsId, RequestListener listener) {
+		String url;
+		WeiboParameters params = new WeiboParameters();
+		params.add("status", status);
+		if(retweetedStatsId > 0) {
+			// 如果是转发微博,设置被转发者的id
+			params.add("id", retweetedStatsId);
+			url = URLs.statusesRepost;
+		} else if(!TextUtils.isEmpty(imgFilePath)) {
+			// 如果有图片,则调用upload接口且设置图片路径
+			params.add("pic", imgFilePath);
+			url = URLs.statusesUpload;
+		} else {
+			// 如果无图片,则调用update接口
+			url = URLs.statusesUpdate;
+		}
+		requestInMainLooper(url, params, WeiboAPI.HTTPMETHOD_POST, listener);
+	}
 
 	/**
 	 * 获取指定微博的转发微博列表

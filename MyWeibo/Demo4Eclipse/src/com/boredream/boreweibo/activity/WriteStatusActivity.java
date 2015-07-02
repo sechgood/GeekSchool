@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 
 import com.boredream.boreweibo.BaseActivity;
 import com.boredream.boreweibo.R;
+import com.boredream.boreweibo.activity.imgfilter.ImageFilterActivity;
 import com.boredream.boreweibo.adapter.EmotionGvAdapter;
 import com.boredream.boreweibo.adapter.EmotionPagerAdapter;
 import com.boredream.boreweibo.adapter.WriteStatusGridImgsAdapter;
@@ -338,9 +340,24 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 				// 将光标设置到新增完表情的右侧
 				et_write_status.setSelection(curPosition + emotionName.length());
 			}
-
 		}
-
+	}
+	
+	private void showIfNeedEditDialog(final Uri imageUri) {
+		DialogUtils.showListDialog(this, "是否需要编辑图片?", new String[]{"编辑图片", "使用原图"}, 
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						if(which == 0) {
+							Intent intent = new Intent(WriteStatusActivity.this, ImageFilterActivity.class);
+							intent.putExtra("path", ImageUtils.getImageAbsolutePath(WriteStatusActivity.this, imageUri));
+							startActivityForResult(intent, 1234);
+						} else {
+							imgUris.add(imageUri);
+							updateImgs();
+						}
+					}
+				});
 	}
 
 	@Override
@@ -373,7 +390,6 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 				updateImgs();
 			}
 			break;
-
 		default:
 			break;
 		}

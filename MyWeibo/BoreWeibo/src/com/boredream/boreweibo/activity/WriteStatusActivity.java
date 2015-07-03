@@ -359,6 +359,7 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 			break;
 		case ImageUtils.REQUEST_CODE_FROM_ALBUM:
 			if(resultCode != RESULT_CANCELED) {
+				System.out.println(data.getData());
 				// 本地相册选择完后将图片添加到页面上
 				imgUris.add(data.getData());
 				updateImgs();

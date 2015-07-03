@@ -2,7 +2,6 @@ package com.boredream.boreweibo.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,7 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
-import android.text.TextUtils;
 
 
 public class ImageUtils {
@@ -34,29 +32,31 @@ public class ImageUtils {
 	public static void showImagePickDialog(final Activity activity) {
 		String title = "选择获取图片的方式";
 		String[] items = new String[] { "拍照", "从手机中选择" };
-		AlertDialog.Builder builder = new Builder(activity);
-		if (!TextUtils.isEmpty(title)) {
-			builder.setTitle(title);
-		}
-		builder.setItems(items, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-				switch (which) {
-				case 0:
-					ImageUtils.pickImageFromCamera(activity);
-					break;
-				case 1:
-					ImageUtils.pickImageFromAlbum(activity);
-					break;
+		new AlertDialog.Builder(activity)
+			.setTitle(title)
+			.setItems(items, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+					switch (which) {
+					case 0:
+						// 点击第一个 Item
+						ImageUtils.pickImageFromCamera(activity);
+						break;
+					case 1:
+						// 点击第二个 Item
+						ImageUtils.pickImageFromAlbum(activity);
+						break;
+					}
 				}
-			}
-		}).show();
+			})
+			.show();
 	}
 	
 	/**
 	 * 打开相机拍照获取图片
 	 */
 	public static void pickImageFromCamera(final Activity activity) {
+		// 创建 Uri用于保存拍照图片
 		ImageUtils.imageUriFromCamera = ImageUtils.createImageUri(activity);
 		
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -78,6 +78,16 @@ public class ImageUtils {
 	}
 	
 	/**
+	 * 打开本地相册选取图片2
+	 */
+	public static void pickImageFromAlbum2(final Activity activity) {
+		Intent intent = new Intent();
+		intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		intent.setAction(Intent.ACTION_PICK);
+		activity.startActivityForResult(intent, ImageUtils.REQUEST_CODE_FROM_ALBUM);
+	}
+	
+	/**
 	 * 创建一条图片uri,用于保存拍照后的照片
 	 */
 	private static Uri createImageUri(Context context) {
@@ -86,7 +96,7 @@ public class ImageUtils {
 		values.put(Images.Media.TITLE, name);
 		values.put(Images.Media.DISPLAY_NAME, name + ".jpeg");
 		values.put(Images.Media.MIME_TYPE, "image/jpeg");
-
+		System.out.println(Images.Media.EXTERNAL_CONTENT_URI);
 		Uri uri = context.getContentResolver().insert(Images.Media.EXTERNAL_CONTENT_URI, values);
 		return uri;
 	}

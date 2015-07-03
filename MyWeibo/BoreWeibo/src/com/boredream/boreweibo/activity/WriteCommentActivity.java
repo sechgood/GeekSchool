@@ -1,8 +1,5 @@
 package com.boredream.boreweibo.activity;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,7 +15,6 @@ import com.boredream.boreweibo.entity.Status;
 import com.boredream.boreweibo.utils.TitleBuilder;
 
 public class WriteCommentActivity extends BaseActivity implements OnClickListener {
-
 	// 评论输入框
 	private EditText et_write_status;
 	// 底部按钮

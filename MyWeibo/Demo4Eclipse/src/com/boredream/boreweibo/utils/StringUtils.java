@@ -51,7 +51,7 @@ public class StringUtils {
 			matcherLink.reset();
 		}
 		
-		while (true) { // 如果可以匹配到
+		for(;;) { // 如果可以匹配到
 			if(matcherLink.find()) {
 				final String key = matcherLink.group(); // 获取匹配到的具体字符
 				int start = matcherLink.start(); // 匹配字符串的开始位置

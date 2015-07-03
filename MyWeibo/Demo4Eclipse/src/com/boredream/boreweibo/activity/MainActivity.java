@@ -77,4 +77,5 @@ public class MainActivity extends FragmentActivity implements
 //			homeFragment.initData();
 //		}
 //	}
+	
 }

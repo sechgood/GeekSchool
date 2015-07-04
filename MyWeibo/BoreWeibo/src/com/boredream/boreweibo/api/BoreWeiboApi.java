@@ -116,7 +116,7 @@ public class BoreWeiboApi extends WeiboAPI {
 	 * @param id
 	 *            需要评论的微博ID。
 	 * @param comment
-	 *            评论内容，必须做URLencode，内容不超过140个汉字。
+	 *            评论内容
 	 * @param listener
 	 */
 	public void commentsCreate(long id, String comment, RequestListener listener) {

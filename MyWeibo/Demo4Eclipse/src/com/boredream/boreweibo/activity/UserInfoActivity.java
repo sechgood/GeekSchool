@@ -367,75 +367,92 @@ public class UserInfoActivity extends BaseActivity implements
 		intent.putExtra("position", position);
 		startActivity(intent);
 	}
-
+	
+	private void syncRadioButton(RadioGroup group, int checkedId) {
+		int index = group.indexOfChild(group.findViewById(checkedId));
+		
+		if(shadow_user_info_tab.getVisibility() == View.VISIBLE) {
+			shadow_uliv_user_info.setCurrentItem(index);
+			
+			((RadioButton) rg_user_info.findViewById(checkedId)).setChecked(true);
+			uliv_user_info.setCurrentItemWithoutAnim(index);
+		} else {
+			uliv_user_info.setCurrentItem(index);
+			
+			((RadioButton) shadow_rg_user_info.findViewById(checkedId)).setChecked(true);
+			shadow_uliv_user_info.setCurrentItemWithoutAnim(index);
+		}
+	}
+	
 	@Override
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		syncRadioButton(group, checkedId);
 		
-		switch (checkedId) {
-		case R.id.rb_info:
-			if(shadow_user_info_tab.getVisibility() == View.VISIBLE) {
-				rb_info.setChecked(true);
-				uliv_user_info.setCurrentItemWithoutAnim(0);
-				
-				shadow_rb_info.setChecked(true);
-				shadow_uliv_user_info.setCurrentItem(0);
-			} else {
-				rb_info.setChecked(true);
-				uliv_user_info.setCurrentItem(0);
-				
-				shadow_rb_info.setChecked(true);
-				shadow_uliv_user_info.setCurrentItemWithoutAnim(0);
-			}
-			break;
-		case R.id.rb_status:
-			if(shadow_user_info_tab.getVisibility() == View.VISIBLE) {
-				rb_status.setChecked(true);
-				uliv_user_info.setCurrentItemWithoutAnim(1);
-				
-				shadow_rb_status.setChecked(true);
-				shadow_uliv_user_info.setCurrentItem(1);
-			} else {
-				rb_status.setChecked(true);
-				uliv_user_info.setCurrentItem(1);
-				
-				shadow_rb_status.setChecked(true);
-				shadow_uliv_user_info.setCurrentItemWithoutAnim(1);
-			}
-			break;
-		case R.id.rb_photos:
-			if(shadow_user_info_tab.getVisibility() == View.VISIBLE) {
-				rb_photos.setChecked(true);
-				uliv_user_info.setCurrentItemWithoutAnim(2);
-				
-				shadow_rb_photos.setChecked(true);
-				shadow_uliv_user_info.setCurrentItem(2);
-			} else {
-				rb_photos.setChecked(true);
-				uliv_user_info.setCurrentItem(2);
-				
-				shadow_rb_photos.setChecked(true);
-				shadow_uliv_user_info.setCurrentItemWithoutAnim(2);
-			}
-			break;
-		case R.id.rb_manager:
-			if(shadow_user_info_tab.getVisibility() == View.VISIBLE) {
-				rb_manager.setChecked(true);
-				uliv_user_info.setCurrentItemWithoutAnim(3);
-				
-				shadow_rb_manager.setChecked(true);
-				shadow_uliv_user_info.setCurrentItem(3);
-			} else {
-				rb_manager.setChecked(true);
-				uliv_user_info.setCurrentItem(3);
-				
-				shadow_rb_manager.setChecked(true);
-				shadow_uliv_user_info.setCurrentItemWithoutAnim(3);
-			}
-			break;
-
-		default:
-			break;
-		}
+//		switch (checkedId) {
+//		case R.id.rb_info:
+//			if(shadow_user_info_tab.getVisibility() == View.VISIBLE) {
+//				rb_info.setChecked(true);
+//				uliv_user_info.setCurrentItemWithoutAnim(0);
+//				
+//				shadow_rb_info.setChecked(true);
+//				shadow_uliv_user_info.setCurrentItem(0);
+//			} else {
+//				rb_info.setChecked(true);
+//				uliv_user_info.setCurrentItem(0);
+//				
+//				shadow_rb_info.setChecked(true);
+//				shadow_uliv_user_info.setCurrentItemWithoutAnim(0);
+//			}
+//			break;
+//		case R.id.rb_status:
+//			if(shadow_user_info_tab.getVisibility() == View.VISIBLE) {
+//				rb_status.setChecked(true);
+//				uliv_user_info.setCurrentItemWithoutAnim(1);
+//				
+//				shadow_rb_status.setChecked(true);
+//				shadow_uliv_user_info.setCurrentItem(1);
+//			} else {
+//				rb_status.setChecked(true);
+//				uliv_user_info.setCurrentItem(1);
+//				
+//				shadow_rb_status.setChecked(true);
+//				shadow_uliv_user_info.setCurrentItemWithoutAnim(1);
+//			}
+//			break;
+//		case R.id.rb_photos:
+//			if(shadow_user_info_tab.getVisibility() == View.VISIBLE) {
+//				rb_photos.setChecked(true);
+//				uliv_user_info.setCurrentItemWithoutAnim(2);
+//				
+//				shadow_rb_photos.setChecked(true);
+//				shadow_uliv_user_info.setCurrentItem(2);
+//			} else {
+//				rb_photos.setChecked(true);
+//				uliv_user_info.setCurrentItem(2);
+//				
+//				shadow_rb_photos.setChecked(true);
+//				shadow_uliv_user_info.setCurrentItemWithoutAnim(2);
+//			}
+//			break;
+//		case R.id.rb_manager:
+//			if(shadow_user_info_tab.getVisibility() == View.VISIBLE) {
+//				rb_manager.setChecked(true);
+//				uliv_user_info.setCurrentItemWithoutAnim(3);
+//				
+//				shadow_rb_manager.setChecked(true);
+//				shadow_uliv_user_info.setCurrentItem(3);
+//			} else {
+//				rb_manager.setChecked(true);
+//				uliv_user_info.setCurrentItem(3);
+//				
+//				shadow_rb_manager.setChecked(true);
+//				shadow_uliv_user_info.setCurrentItemWithoutAnim(3);
+//			}
+//			break;
+//
+//		default:
+//			break;
+//		}
 	}
 
 }

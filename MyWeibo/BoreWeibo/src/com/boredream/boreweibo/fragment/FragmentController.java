@@ -22,6 +22,10 @@ public class FragmentController {
 		}
 		return controller;
 	}
+	
+	public static void onDestroy() {
+		controller = null;
+	}
 
 	private FragmentController(FragmentActivity activity, int containerId) {
 		this.containerId = containerId;

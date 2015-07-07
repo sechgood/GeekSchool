@@ -60,6 +60,12 @@ public class MainActivity extends FragmentActivity implements
 			break;
 		}
 	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		FragmentController.onDestroy();
+	}
 
 	@Override
 	public void onClick(View v) {

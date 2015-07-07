@@ -246,8 +246,7 @@ public class StatusDetailActivity extends BaseActivity implements
 	private void setData() {
 		// listView headerView - 微博信息
 		User user = status.getUser();
-		imageLoader.displayImage(user.getProfile_image_url(), iv_avatar,
-				ImageOptHelper.getAvatarOptions());
+		imageLoader.displayImage(user.getProfile_image_url(), iv_avatar);
 		tv_subhead.setText(user.getName());
 		tv_caption.setText(DateUtils.getShortTime(status.getCreated_at()) +
 				"  来自" + Html.fromHtml(status.getSource()));

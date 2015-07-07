@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -34,10 +35,13 @@ import com.boredream.boreweibo.widget.Pull2RefreshListView;
 import com.boredream.boreweibo.widget.Pull2RefreshListView.OnPlvScrollListener;
 import com.boredream.boreweibo.widget.UnderlineIndicatorView;
 import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.nostra13.universalimageloader.core.imageaware.ImageAware;
+import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 
 public class UserInfoActivity extends BaseActivity implements 
 	OnClickListener, OnItemClickListener, OnCheckedChangeListener {
@@ -152,6 +156,7 @@ public class UserInfoActivity extends BaseActivity implements
 	
 	private void initListView() {
 		plv_user_info = (Pull2RefreshListView) findViewById(R.id.plv_user_info);
+		initLoadingLayout(plv_user_info.getLoadingLayoutProxy());
 		footView = View.inflate(this, R.layout.footview_loading, null);
 		final ListView lv = plv_user_info.getRefreshableView();
 		statusAdapter = new StatusAdapter(this, statuses);
@@ -235,6 +240,13 @@ public class UserInfoActivity extends BaseActivity implements
 		});
 	}
 
+	private void initLoadingLayout(ILoadingLayout loadingLayout) {
+		loadingLayout.setLoadingDrawable(new ColorDrawable(R.color.transparent));
+		loadingLayout.setPullLabel("");
+		loadingLayout.setReleaseLabel("");
+		loadingLayout.setRefreshingLabel("");
+	}
+
 	private void loadData() {
 		if(isCurrentUser) {
 			setUserInfo();
@@ -251,7 +263,7 @@ public class UserInfoActivity extends BaseActivity implements
 		// set data
 		tv_name.setText(user.getName());
 		titlebar_tv.setText(user.getName());
-		imageLoader.displayImage(user.getProfile_image_url(), iv_avatar,
+		imageLoader.displayImage(user.getAvatar_large(), new ImageViewAware(iv_avatar),
 				ImageOptHelper.getAvatarOptions());
 		tv_follows.setText("关注 " + user.getFriends_count());
 		tv_fans.setText("粉丝 " + user.getFollowers_count());

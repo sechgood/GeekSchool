@@ -71,8 +71,7 @@ public class RetweetAdapter extends BaseAdapter {
 		Status rStatus = getItem(position);
 		User user = rStatus.getUser();
 		
-		imageLoader.displayImage(user.getProfile_image_url(), holder.iv_avatar, 
-				ImageOptHelper.getAvatarOptions());
+		imageLoader.displayImage(user.getProfile_image_url(), holder.iv_avatar);
 		holder.tv_subhead.setText(user.getName());
 		holder.tv_caption.setText(rStatus.getCreated_at());
 		holder.tv_like.setVisibility(View.INVISIBLE);

@@ -28,6 +28,7 @@ public class ImageOptHelper {
 			.showImageOnLoading(R.drawable.avatar_default)
 			.showImageForEmptyUri(R.drawable.avatar_default)
 			.showImageOnFail(R.drawable.avatar_default)
+			.displayer(new RoundedBitmapDisplayer(999))
 			.build();
 		return avatarOptions;
 	}

@@ -23,6 +23,7 @@ import com.boredream.boreweibo.entity.User;
 import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
@@ -36,6 +37,7 @@ public class SplashActivity extends BaseActivity {
 	
 	private ImageView iv_slogan;
 	private ImageView iv_portrait;
+	private ImageViewAware iva_portrait;
 	private TextView tv_welcome;
 
 	private long startTimeMillis;
@@ -115,11 +117,13 @@ public class SplashActivity extends BaseActivity {
 	private void initView() {
 		iv_slogan = (ImageView) findViewById(R.id.iv_slogan);
 		iv_portrait = (ImageView) findViewById(R.id.iv_portrait);
+		iva_portrait = new ImageViewAware(iv_portrait);
 		tv_welcome = (TextView) findViewById(R.id.tv_welcome);
 	}
 	
 	private void loadAvatar() {
-		imageLoader.loadImage(application.currentUser.getProfile_image_url(), 
+		imageLoader.displayImage(application.currentUser.getProfile_image_url(), 
+				iva_portrait,
 				ImageOptHelper.getAvatarOptions(),
 				new ImageLoadingListener() {
 			@Override
@@ -134,7 +138,6 @@ public class SplashActivity extends BaseActivity {
 			
 			@Override
 			public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-				iv_portrait.setImageBitmap(loadedImage);
 				delayHandler(HANDLER_WHAT_SHOW_IMAGE, SPLASH_DUR_TIME / 2);
 			}
 			

@@ -1,11 +1,9 @@
 package com.boredream.boreweibo.widget;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.handmark.pulltorefresh.library.internal.LoadingLayout;
 
 public class Pull2RefreshListView extends PullToRefreshListView {
 
@@ -50,11 +48,5 @@ public class Pull2RefreshListView extends PullToRefreshListView {
 
 	public static interface OnPlvScrollListener {
 		void onScrollChanged(int l, int t, int oldl, int oldt);
-	}
-	
-	
-	@Override
-	protected LoadingLayout createLoadingLayout(Context context, com.handmark.pulltorefresh.library.PullToRefreshBase.Mode mode, TypedArray attrs) {
-		return new BoreLoadingLayout(context, mode, getPullToRefreshScrollDirection(), attrs);
 	}
 }

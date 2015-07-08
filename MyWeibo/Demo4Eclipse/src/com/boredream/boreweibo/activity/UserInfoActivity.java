@@ -266,7 +266,7 @@ public class UserInfoActivity extends BaseActivity implements
 				ImageOptHelper.getAvatarOptions());
 		tv_follows.setText("关注 " + user.getFriends_count());
 		tv_fans.setText("粉丝 " + user.getFollowers_count());
-		tv_sign.setText(user.getDescription());
+		tv_sign.setText("简介:" + user.getDescription());
 	}
 	
 	private void loadUserInfo() {

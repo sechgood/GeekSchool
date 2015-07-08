@@ -61,7 +61,6 @@
         <TextView
             android:id="@+id/tv_sign"
             style="@style/TextViewBody"
-            android:layout_marginRight="16dp"
             android:textColor="@color/white" />
 
         <ImageView

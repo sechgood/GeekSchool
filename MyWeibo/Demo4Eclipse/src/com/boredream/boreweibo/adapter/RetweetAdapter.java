@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.entity.Status;
 import com.boredream.boreweibo.entity.User;
-import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class RetweetAdapter extends BaseAdapter {

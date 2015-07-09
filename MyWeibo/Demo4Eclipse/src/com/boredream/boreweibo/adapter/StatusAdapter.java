@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.activity.ImageBrowserActivity;
 import com.boredream.boreweibo.activity.StatusDetailActivity;
+import com.boredream.boreweibo.activity.UserInfoActivity;
 import com.boredream.boreweibo.activity.WriteCommentActivity;
 import com.boredream.boreweibo.activity.WriteStatusActivity;
 import com.boredream.boreweibo.entity.PicUrls;
@@ -125,9 +126,25 @@ public class StatusAdapter extends BaseAdapter {
 
 		// set data
 		final Status status = getItem(position);
-		User user = status.getUser();
+		final User user = status.getUser();
 		imageLoader.displayImage(user.getProfile_image_url(), holder.iv_avatar);
+		holder.iv_avatar.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, UserInfoActivity.class);
+				intent.putExtra("userName", user.getName());
+				context.startActivity(intent);
+			}
+		});
 		holder.tv_subhead.setText(user.getName());
+		holder.tv_subhead.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, UserInfoActivity.class);
+				intent.putExtra("userName", user.getName());
+				context.startActivity(intent);
+			}
+		});
 		holder.tv_caption.setText(DateUtils.getShortTime(status.getCreated_at()) +
 				"  来自" + Html.fromHtml(status.getSource()));
 		

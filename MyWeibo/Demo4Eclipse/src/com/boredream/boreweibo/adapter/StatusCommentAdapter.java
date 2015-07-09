@@ -3,6 +3,7 @@ package com.boredream.boreweibo.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.SpannableString;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.boredream.boreweibo.R;
+import com.boredream.boreweibo.activity.UserInfoActivity;
 import com.boredream.boreweibo.entity.Comment;
 import com.boredream.boreweibo.entity.User;
 import com.boredream.boreweibo.utils.DateUtils;
@@ -69,10 +71,26 @@ public class StatusCommentAdapter extends BaseAdapter {
 
 		// set data
 		Comment comment = getItem(position);
-		User user = comment.getUser();
+		final User user = comment.getUser();
 		
 		imageLoader.displayImage(user.getProfile_image_url(), holder.iv_avatar);
+		holder.iv_avatar.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, UserInfoActivity.class);
+				intent.putExtra("userName", user.getName());
+				context.startActivity(intent);
+			}
+		});
 		holder.tv_name.setText(user.getName());
+		holder.tv_name.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, UserInfoActivity.class);
+				intent.putExtra("userName", user.getName());
+				context.startActivity(intent);
+			}
+		});
 		holder.tv_time.setText(DateUtils.getDateTime(comment.getCreated_at()));
 		SpannableString weiboContent = StringUtils.getWeiboContent(
 				context, holder.tv_comment, comment.getText());

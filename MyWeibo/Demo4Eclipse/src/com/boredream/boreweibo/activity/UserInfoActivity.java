@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -28,7 +29,6 @@ import com.boredream.boreweibo.api.SimpleRequestListener;
 import com.boredream.boreweibo.entity.Status;
 import com.boredream.boreweibo.entity.User;
 import com.boredream.boreweibo.entity.response.StatusTimeLineResponse;
-import com.boredream.boreweibo.utils.DisplayUtils;
 import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.boredream.boreweibo.utils.TitleBuilder;
 import com.boredream.boreweibo.widget.Pull2RefreshListView;
@@ -45,6 +45,7 @@ import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 public class UserInfoActivity extends BaseActivity implements 
 	OnClickListener, OnItemClickListener, OnCheckedChangeListener {
 	
+	// 
 	private View title;
 	private ImageView titlebar_iv_left;
 	private TextView titlebar_tv;
@@ -58,17 +59,9 @@ public class UserInfoActivity extends BaseActivity implements
 	
 	private View shadow_user_info_tab;
 	private RadioGroup shadow_rg_user_info;
-	private RadioButton shadow_rb_info;
-	private RadioButton shadow_rb_status;
-	private RadioButton shadow_rb_photos;
-	private RadioButton shadow_rb_manager;
 	private UnderlineIndicatorView shadow_uliv_user_info;
 	private View user_info_tab;
 	private RadioGroup rg_user_info;
-	private RadioButton rb_info;
-	private RadioButton rb_status;
-	private RadioButton rb_photos;
-	private RadioButton rb_manager;
 	private UnderlineIndicatorView uliv_user_info;
 	
 	private ImageView iv_user_info_head;
@@ -84,6 +77,9 @@ public class UserInfoActivity extends BaseActivity implements
 	private long curPage = 1;
 	private boolean isLoadingMore;
 	private int curScrollY;
+	
+	private int minImageHeight = -1;
+	private int maxImageHeight = -1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -132,10 +128,6 @@ public class UserInfoActivity extends BaseActivity implements
 	private void initTab() {
 		shadow_user_info_tab = findViewById(R.id.user_info_tab);
 		shadow_rg_user_info = (RadioGroup) findViewById(R.id.rg_user_info);
-		shadow_rb_info = (RadioButton) findViewById(R.id.rb_info);
-		shadow_rb_status = (RadioButton) findViewById(R.id.rb_status);
-		shadow_rb_photos = (RadioButton) findViewById(R.id.rb_photos);
-		shadow_rb_manager = (RadioButton) findViewById(R.id.rb_manager);
 		shadow_uliv_user_info = (UnderlineIndicatorView) findViewById(R.id.uliv_user_info);
 		
 		shadow_rg_user_info.setOnCheckedChangeListener(this);
@@ -143,10 +135,6 @@ public class UserInfoActivity extends BaseActivity implements
 		
 		user_info_tab = View.inflate(this, R.layout.user_info_tab, null);
 		rg_user_info = (RadioGroup) user_info_tab.findViewById(R.id.rg_user_info);
-		rb_info = (RadioButton) user_info_tab.findViewById(R.id.rb_info);
-		rb_status = (RadioButton) user_info_tab.findViewById(R.id.rb_status);
-		rb_photos = (RadioButton) user_info_tab.findViewById(R.id.rb_photos);
-		rb_manager = (RadioButton) user_info_tab.findViewById(R.id.rb_manager);
 		uliv_user_info = (UnderlineIndicatorView) user_info_tab.findViewById(R.id.uliv_user_info);
 		
 		rg_user_info.setOnCheckedChangeListener(this);
@@ -183,8 +171,18 @@ public class UserInfoActivity extends BaseActivity implements
 			@Override
 			public void onScrollChanged(int l, int t, int oldl, int oldt) {
 				int scrollY = curScrollY = t;
-				int minImageHeight = DisplayUtils.dp2px(UserInfoActivity.this, 244);
-				int maxImageHeight = DisplayUtils.dp2px(UserInfoActivity.this, 360);
+				
+				if(minImageHeight == -1) {
+					minImageHeight = iv_user_info_head.getHeight();
+				}
+				
+				if(maxImageHeight == -1) {
+					Rect rect = iv_user_info_head.getDrawable().getBounds();
+					maxImageHeight = rect.bottom - rect.top;
+				}
+//				minImageHeight = DisplayUtils.dp2px(UserInfoActivity.this, 244);
+//				maxImageHeight = DisplayUtils.dp2px(UserInfoActivity.this, 360);
+				
 				int scaleImageDistance = maxImageHeight - minImageHeight;
 				
 				if(-scrollY < scaleImageDistance) {
@@ -222,7 +220,6 @@ public class UserInfoActivity extends BaseActivity implements
 						user_info_head.getTop(), 
 						iv_user_info_head.getWidth(), 
 						user_info_head.getTop() + iv_user_info_head.getHeight());
-				
 				
 				if(user_info_head.getBottom() < title.getBottom()) {
 					shadow_user_info_tab.setVisibility(View.VISIBLE);

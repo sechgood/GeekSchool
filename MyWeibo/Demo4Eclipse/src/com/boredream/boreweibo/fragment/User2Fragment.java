@@ -18,10 +18,14 @@ import com.boredream.boreweibo.BaseFragment;
 import com.boredream.boreweibo.R;
 import com.boredream.boreweibo.activity.UserInfoActivity;
 import com.boredream.boreweibo.adapter.UserItemAdapter;
+import com.boredream.boreweibo.api.SimpleRequestListener;
+import com.boredream.boreweibo.constants.AccessTokenKeeper;
 import com.boredream.boreweibo.entity.User;
 import com.boredream.boreweibo.entity.UserItem;
 import com.boredream.boreweibo.utils.TitleBuilder;
 import com.boredream.boreweibo.widget.WrapHeightListView;
+import com.google.gson.Gson;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 public class User2Fragment extends BaseFragment {
 
@@ -42,18 +46,49 @@ public class User2Fragment extends BaseFragment {
 
 	private UserItemAdapter adapter;
 	private List<UserItem> userItems;
+	
+	private Oauth2AccessToken mAccessToken;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		view = View.inflate(getActivity(), R.layout.frag_user2, null);
-
+		mAccessToken = AccessTokenKeeper.readAccessToken(activity);
+		
 		initView();
 		
-		setUserInfo();
 		setItem();
 
 		return view;
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		// show/hide方法不会走生命周期
+		System.out.println(getClass().getSimpleName() + " ... onStart()");
+	}
+	
+	@Override
+	public void onHiddenChanged(boolean hidden) {
+		super.onHiddenChanged(hidden);
+		// 用onHiddenChanged方法中的hidden参数fragment的显示/隐藏情况
+		System.out.println(getClass().getSimpleName() + " ... onHiddenChanged() " + hidden);
+		if(!hidden) {
+			weiboApi.usersShow(mAccessToken.getUid(), "",
+					new SimpleRequestListener(activity, null) {
+
+						@Override
+						public void onComplete(String response) {
+							super.onComplete(response);
+							
+							BaseApplication application = (BaseApplication) activity.getApplication();
+							application.currentUser = new Gson().fromJson(response, User.class);
+							
+							setUserInfo();
+						}
+					});
+		}
 	}
 
 	private void initView() {

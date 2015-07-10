@@ -59,6 +59,7 @@ public class UnderlineIndicatorView extends LinearLayout {
 		translateAnimation.setAnimationListener(new AnimationListener() {
 			@Override
 			public void onAnimationStart(Animation animation) {
+				
 			}
 
 			@Override

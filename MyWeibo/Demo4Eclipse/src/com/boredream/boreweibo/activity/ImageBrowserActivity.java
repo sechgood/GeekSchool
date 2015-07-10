@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -29,6 +30,7 @@ import com.boredream.boreweibo.entity.PicUrls;
 import com.boredream.boreweibo.entity.Status;
 import com.boredream.boreweibo.utils.DisplayUtils;
 import com.boredream.boreweibo.utils.ImageUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -122,6 +124,10 @@ public class ImageBrowserActivity extends BaseActivity implements OnClickListene
 			String fileName = "img-" + (pic.isOriginalPic() ? 
 					"ori-" + oriUrl.substring(oriUrl.lastIndexOf("/") + 1)
 					: "mid-" + midUrl.substring(midUrl.lastIndexOf("/") + 1));
+			
+//			String insertImage = MediaStore.Images.Media.insertImage(
+//				getContentResolver(), bitmap, fileName, "BoreWeiboImg");
+			
 			if(bitmap != null) {
 				try {
 					ImageUtils.saveFile(this, bitmap, fileName);
@@ -158,13 +164,17 @@ public class ImageBrowserActivity extends BaseActivity implements OnClickListene
 			for(PicUrls picUrl : picUrls) {
 				browserPic = new BrowserPic();
 				browserPic.setPic(picUrl);
+				
 				Bitmap oBm = mImageLoader.getMemoryCache().get(picUrl.getOriginal_pic());
 				File discCache = mImageLoader.getDiskCache().get(picUrl.getOriginal_pic());
 				browserPic.setOriginalPic(oBm != null || 
 						(discCache != null && discCache.exists() && discCache.length() > 0));
-				if(oBm != null) {
+				
+				if(oBm != null && !oBm.isRecycled()) {
 					oBm.recycle();
 				}
+				discCache = null;
+				
 				pics.add(browserPic);
 			}
 			

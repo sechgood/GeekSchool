@@ -34,7 +34,6 @@ import com.boredream.boreweibo.entity.Status;
 import com.boredream.boreweibo.entity.User;
 import com.boredream.boreweibo.entity.response.CommentsResponse;
 import com.boredream.boreweibo.utils.DateUtils;
-import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.boredream.boreweibo.utils.StringUtils;
 import com.boredream.boreweibo.utils.TitleBuilder;
 import com.boredream.boreweibo.widget.WrapHeightGridView;

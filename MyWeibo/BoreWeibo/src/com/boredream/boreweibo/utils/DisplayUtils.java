@@ -22,22 +22,6 @@ public class DisplayUtils {
 	}
 
 	/**
-	 * 将px值转换为sp值
-	 */
-	public static int px2sp(Context context, float pxValue) {
-		final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
-		return (int) (pxValue / fontScale + 0.5f);
-	}
-
-	/**
-	 * 将sp值转换为px值
-	 */
-	public static int sp2px(Context context, float spValue) {
-		final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
-		return (int) (spValue * fontScale + 0.5f);
-	}
-
-	/**
 	 * 获取屏幕宽度
 	 */
 	public static int getScreenWidthPixels(Activity context) {

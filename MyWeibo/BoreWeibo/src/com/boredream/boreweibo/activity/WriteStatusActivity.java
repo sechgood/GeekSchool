@@ -8,11 +8,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.textservice.TextInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
@@ -62,9 +64,7 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 	private ArrayList<Uri> imgUris = new ArrayList<Uri>();
 	private EmotionPagerAdapter emotionPagerGvAdapter;
 	
-	// 引用的微博
 	private Status retweeted_status;
-	// 显示在页面中,实际需要转发内容的微博
 	private Status cardStatus;
 
 	@Override
@@ -127,73 +127,68 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 	 * 发送微博
 	 */
 	private void sendStatus() {
-		String comment = et_write_status.getText().toString();
-		if(TextUtils.isEmpty(comment)) {
+		String statusContent = et_write_status.getText().toString();
+		if(TextUtils.isEmpty(statusContent)) {
 			showToast("微博内容不能为空");
 			return;
 		}
 		
 		String imgFilePath = null;
-		if (imgUris.size() > 0) {
-			// 微博API中只支持上传一张图片
+		if(imgUris.size() > 0) {
 			Uri uri = imgUris.get(0);
-			imgFilePath = ImageUtils.getImageAbsolutePath(this, uri);
+			imgFilePath = ImageUtils.getImageAbsolutePath19(this, uri);
 		}
-
-		// 转发微博的id
-		long retweetedStatsId = cardStatus == null ? -1 : cardStatus.getId();
-		// 上传微博api接口
-		progressDialog.show();
-		weiboApi.statusesSend(et_write_status.getText().toString(), imgFilePath, retweetedStatsId,
-				new SimpleRequestListener(this, progressDialog) {
+		
+		long retweetedStatusId = cardStatus == null ? -1 : cardStatus.getId();
+		
+		weiboApi.statusesSend(statusContent, imgFilePath, retweetedStatusId, 
+				new SimpleRequestListener(this, null){
 
 					@Override
 					public void onComplete(String response) {
 						super.onComplete(response);
-
-						setResult(RESULT_OK);
 						
 						showToast("微博发送成功");
 						WriteStatusActivity.this.finish();
 					}
-				});
+			
+		});
+		
 	}
 
 	/**
 	 * 初始化引用微博内容
 	 */
 	private void initRetweetedStatus() {
-		// 转发微博特殊处理
 		if(retweeted_status != null) {
-			// 转发的微博是否包含转发内容
 			Status rrStatus = retweeted_status.getRetweeted_status();
 			if(rrStatus != null) {
-				String content = "//@" + retweeted_status.getUser().getName() 
+				String content = "//@" + retweeted_status.getUser().getName()
 						+ ":" + retweeted_status.getText();
-				et_write_status.setText(StringUtils.getWeiboContent(this, et_write_status, content));
-				// 如果引用的为转发微博,则使用它转发的内容
+				et_write_status.setText(
+						StringUtils.getWeiboContent(this, et_write_status, content));
 				cardStatus = rrStatus;
 			} else {
 				et_write_status.setText("转发微博");
-				// 如果引用的为原创微博,则使用它自己的内容
 				cardStatus = retweeted_status;
 			}
 			
-			// 设置转发图片内容
 			String imgUrl = cardStatus.getThumbnail_pic();
 			if(TextUtils.isEmpty(imgUrl)) {
 				iv_rstatus_img.setVisibility(View.GONE);
 			} else {
 				iv_rstatus_img.setVisibility(View.VISIBLE);
-				imageLoader.displayImage(cardStatus.getThumbnail_pic(), iv_rstatus_img);
+				imageLoader.displayImage(imgUrl, iv_rstatus_img);
 			}
-			// 设置转发文字内容
+			
 			tv_rstatus_username.setText("@" + cardStatus.getUser().getName());
 			tv_rstatus_content.setText(cardStatus.getText());
 			
-			// 转发微博时,不能添加图片
 			iv_image.setVisibility(View.GONE);
+			
 			include_retweeted_status_card.setVisibility(View.VISIBLE);
+		} else {
+			include_retweeted_status_card.setVisibility(View.GONE);
 		}
 	}
 
@@ -201,46 +196,40 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 	 *  初始化表情面板内容
 	 */
 	private void initEmotion() {
-		// 获取屏幕宽度
-		int gvWidth = DisplayUtils.getScreenWidthPixels(this);
-		// 表情边距
+		int screenWidth = DisplayUtils.getScreenWidthPixels(this);
 		int spacing = DisplayUtils.dp2px(this, 8);
-		// GridView中item的宽度
-		int itemWidth = (gvWidth - spacing * 8) / 7;
+		
+		int itemWidth = (screenWidth - spacing * 8) / 7;
 		int gvHeight = itemWidth * 3 + spacing * 4;
-
+		
 		List<GridView> gvs = new ArrayList<GridView>();
 		List<String> emotionNames = new ArrayList<String>();
-		// 遍历所有的表情名字
-		for (String emojiName : EmotionUtils.emojiMap.keySet()) {
+		for(String emojiName : EmotionUtils.emojiMap.keySet()) {
 			emotionNames.add(emojiName);
-			// 每20个表情作为一组,同时添加到ViewPager对应的view集合中
-			if (emotionNames.size() == 20) {
-				GridView gv = createEmotionGridView(emotionNames, gvWidth, spacing, itemWidth, gvHeight);
+			
+			if(emotionNames.size() == 20) {
+				GridView gv = createEmotionGridView(emotionNames, screenWidth, spacing, itemWidth, gvHeight);
 				gvs.add(gv);
-				// 添加完一组表情,重新创建一个表情名字集合
+				
 				emotionNames = new ArrayList<String>();
 			}
 		}
-
-		// 检查最后是否有不足20个表情的剩余情况
-		if (emotionNames.size() > 0) {
-			GridView gv = createEmotionGridView(emotionNames, gvWidth, spacing, itemWidth, gvHeight);
+		
+		if(emotionNames.size() > 0) {
+			GridView gv = createEmotionGridView(emotionNames, screenWidth, spacing, itemWidth, gvHeight);
 			gvs.add(gv);
 		}
-
-		// 将多个GridView添加显示到ViewPager中
+		
 		emotionPagerGvAdapter = new EmotionPagerAdapter(gvs);
-		vp_emotion_dashboard.setAdapter(emotionPagerGvAdapter);
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(gvWidth, gvHeight);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(screenWidth, gvHeight);
 		vp_emotion_dashboard.setLayoutParams(params);
+		vp_emotion_dashboard.setAdapter(emotionPagerGvAdapter);
 	}
 
 	/**
 	 * 创建显示表情的GridView
 	 */
 	private GridView createEmotionGridView(List<String> emotionNames, int gvWidth, int padding, int itemWidth, int gvHeight) {
-		// 创建GridView
 		GridView gv = new GridView(this);
 		gv.setBackgroundResource(R.color.bg_gray);
 		gv.setSelector(R.color.transparent);
@@ -248,12 +237,14 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 		gv.setPadding(padding, padding, padding, padding);
 		gv.setHorizontalSpacing(padding);
 		gv.setVerticalSpacing(padding);
+		
 		LayoutParams params = new LayoutParams(gvWidth, gvHeight);
 		gv.setLayoutParams(params);
-		// 给GridView设置表情图片
+		
 		EmotionGvAdapter adapter = new EmotionGvAdapter(this, emotionNames, itemWidth);
 		gv.setAdapter(adapter);
 		gv.setOnItemClickListener(this);
+		
 		return gv;
 	}
 
@@ -262,11 +253,9 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 	 */
 	private void updateImgs() {
 		if(imgUris.size() > 0) {
-			// 如果有图片则显示GridView,同时更新内容
 			gv_write_status.setVisibility(View.VISIBLE);
 			statusImgsAdapter.notifyDataSetChanged();
 		} else {
-			// 无图则不显示GridView
 			gv_write_status.setVisibility(View.GONE);
 		}
 	}
@@ -289,13 +278,11 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 			break;
 		case R.id.iv_emoji:
 			if(ll_emotion_dashboard.getVisibility() == View.VISIBLE) {
-				// 显示表情面板时点击,将按钮图片设为笑脸按钮,同时隐藏面板
-				iv_emoji.setImageResource(R.drawable.btn_insert_emotion);
 				ll_emotion_dashboard.setVisibility(View.GONE);
+				iv_emoji.setImageResource(R.drawable.btn_insert_emotion);
 			} else {
-				// 未显示表情面板时点击,将按钮图片设为键盘,同时显示面板
-				iv_emoji.setImageResource(R.drawable.btn_insert_keyboard);
 				ll_emotion_dashboard.setVisibility(View.VISIBLE);
+				iv_emoji.setImageResource(R.drawable.btn_insert_keyboard);
 			}
 			break;
 		case R.id.iv_add:
@@ -306,62 +293,54 @@ public class WriteStatusActivity extends BaseActivity implements OnClickListener
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Object itemAdapter = parent.getAdapter();
-
-		if (itemAdapter instanceof WriteStatusGridImgsAdapter) {
-			// 点击的是添加的图片
-			if (position == statusImgsAdapter.getCount() - 1) {
-				// 如果点击了最后一个加号图标,则显示选择图片对话框
+		if(itemAdapter instanceof WriteStatusGridImgsAdapter) {
+			if(position == statusImgsAdapter.getCount() - 1) {
 				ImageUtils.showImagePickDialog(this);
 			}
-		} else if (itemAdapter instanceof EmotionGvAdapter) {
-			// 点击的是表情
-			EmotionGvAdapter emotionGvAdapter = (EmotionGvAdapter) itemAdapter;
-
-			if (position == emotionGvAdapter.getCount() - 1) {
-				// 如果点击了最后一个回退按钮,则调用删除键事件
-				et_write_status.dispatchKeyEvent(new KeyEvent(
-						KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
+		} else if(itemAdapter instanceof EmotionGvAdapter) {
+			EmotionGvAdapter emotionAdapter = (EmotionGvAdapter) itemAdapter;
+			
+			if(position == emotionAdapter.getCount() - 1) {
+				et_write_status.dispatchKeyEvent(
+						new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
 			} else {
-				// 如果点击了表情,则添加到输入框中
-				String emotionName = emotionGvAdapter.getItem(position);
-
-				// 获取当前光标位置,在指定位置上添加表情图片文本
+				String emotionName = emotionAdapter.getItem(position);
+				
 				int curPosition = et_write_status.getSelectionStart();
 				StringBuilder sb = new StringBuilder(et_write_status.getText().toString());
 				sb.insert(curPosition, emotionName);
-
-				// 特殊文字处理,将表情等转换一下
-				et_write_status.setText(StringUtils.getWeiboContent(
-						this, et_write_status, sb.toString()));
 				
-				// 将光标设置到新增完表情的右侧
+				SpannableString weiboContent = StringUtils.getWeiboContent(
+						this, et_write_status, sb.toString());
+				et_write_status.setText(weiboContent);
+				
 				et_write_status.setSelection(curPosition + emotionName.length());
 			}
-
+			
 		}
-
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-
+		
 		switch (requestCode) {
+		case ImageUtils.REQUEST_CODE_FROM_ALBUM:
+			if(resultCode == RESULT_CANCELED) {
+				return;
+			}
+			Uri imageUri = data.getData();
+			
+			imgUris.add(imageUri);
+			updateImgs();
+			break;
 		case ImageUtils.REQUEST_CODE_FROM_CAMERA:
 			if(resultCode == RESULT_CANCELED) {
-				// 如果拍照取消,将之前新增的图片地址删除
 				ImageUtils.deleteImageUri(this, ImageUtils.imageUriFromCamera);
 			} else {
-				// 拍照后将图片添加到页面上
-				imgUris.add(ImageUtils.imageUriFromCamera);
-				updateImgs();
-			}
-			break;
-		case ImageUtils.REQUEST_CODE_FROM_ALBUM:
-			if(resultCode != RESULT_CANCELED) {
-				System.out.println(data.getData());
-				// 本地相册选择完后将图片添加到页面上
-				imgUris.add(data.getData());
+				Uri imageUriCamera = ImageUtils.imageUriFromCamera;
+				
+				imgUris.add(imageUriCamera);
 				updateImgs();
 			}
 			break;

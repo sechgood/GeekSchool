@@ -138,20 +138,18 @@ public class BoreWeiboApi extends WeiboAPI {
 	 *            要转发的微博ID(<=0时为原创微博)。
 	 * @param listener
 	 */
-	public void statusesSend(String status, String imgFilePath, long retweetedStatsId, RequestListener listener) {
+	public void statusesSend(String status, String imgFilePath, long retweetedStatusId, RequestListener listener) {
 		String url;
+		
 		WeiboParameters params = new WeiboParameters();
 		params.add("status", status);
-		if(retweetedStatsId > 0) {
-			// 如果是转发微博,设置被转发者的id
-			params.add("id", retweetedStatsId);
+		if(retweetedStatusId > 0) {
 			url = URLs.statusesRepost;
+			params.add("id", retweetedStatusId);
 		} else if(!TextUtils.isEmpty(imgFilePath)) {
-			// 如果有图片,则调用upload接口且设置图片路径
 			params.add("pic", imgFilePath);
 			url = URLs.statusesUpload;
 		} else {
-			// 如果无图片,则调用update接口
 			url = URLs.statusesUpdate;
 		}
 		requestInMainLooper(url, params, WeiboAPI.HTTPMETHOD_POST, listener);

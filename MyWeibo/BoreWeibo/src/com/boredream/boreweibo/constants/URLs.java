@@ -4,7 +4,10 @@ public interface URLs {
 
 	// host
 	String BASE_URL = "https://api.weibo.com/2/";
-	
+	// 获取用户信息
+	String usersShow = BASE_URL + "users/show.json";
+	// 获取某个用户最新发表的微博列表
+	String statusesUser_timeline = BASE_URL + "statuses/user_timeline.json";
 	// 首页微博列表
 	String statusesHome_timeline = BASE_URL + "statuses/home_timeline.json";
 	// 微博评论列表

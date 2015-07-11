@@ -80,6 +80,47 @@ public class BoreWeiboApi extends WeiboAPI {
 		// TODO Auto-generated method stub
 		super.request(url, params, httpMethod, listener);
 	}
+	
+	/**
+	 *获取用户信息(uid和screen_name二选一)
+	 * 
+	 * @param uid
+	 *            根据用户ID获取用户信息
+	 * @param screen_name
+	 *            需要查询的用户昵称。
+	 * @param listener
+	 */
+	public void usersShow(String uid, String screen_name, RequestListener listener) {
+		WeiboParameters params = new WeiboParameters();
+		if(!TextUtils.isEmpty(uid)) {
+			params.add("uid", uid);
+		} else if(!TextUtils.isEmpty(screen_name)) {
+			params.add("screen_name", screen_name);
+		}
+		requestInMainLooper(URLs.usersShow, params , WeiboAPI.HTTPMETHOD_GET, listener);
+	}
+	
+	/**
+	 * 获取某个用户最新发表的微博列表(uid和screen_name二选一)
+	 * 
+	 * @param uid
+	 *            需要查询的用户ID。
+	 * @param screen_name
+	 *            需要查询的用户昵称。
+	 * @param page
+	 *            返回结果的页码。(单页返回的记录条数，默认为20。)
+	 * @param listener
+	 */
+	public void statusesUser_timeline(long uid, String screen_name, long page, RequestListener listener) {
+		WeiboParameters params = new WeiboParameters();
+		if(uid > 0) {
+			params.add("uid", uid);
+		} else if(!TextUtils.isEmpty(screen_name)) {
+			params.add("screen_name", screen_name);
+		}
+		params.add("page", page);
+		requestInMainLooper(URLs.statusesUser_timeline, params , WeiboAPI.HTTPMETHOD_GET, listener);
+	}
 
 	/**
 	 * 获取当前登录用户及其所关注用户的最新微博

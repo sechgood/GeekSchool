@@ -3,6 +3,7 @@ package com.boredream.boreweibo;
 import android.app.Application;
 import android.content.Context;
 
+import com.boredream.boreweibo.entity.User;
 import com.boredream.boreweibo.utils.ImageOptHelper;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -10,6 +11,8 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 public class BaseApplication extends Application {
+	
+	public User currentUser;
 	
 	@Override
 	public void onCreate() {

@@ -12,12 +12,16 @@ public class Pull2RefreshListView extends PullToRefreshListView {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Pull2RefreshListView(Context context, com.handmark.pulltorefresh.library.PullToRefreshBase.Mode mode, com.handmark.pulltorefresh.library.PullToRefreshBase.AnimationStyle style) {
+	public Pull2RefreshListView(
+			Context context,
+			com.handmark.pulltorefresh.library.PullToRefreshBase.Mode mode,
+			com.handmark.pulltorefresh.library.PullToRefreshBase.AnimationStyle style) {
 		super(context, mode, style);
 		// TODO Auto-generated constructor stub
 	}
 
-	public Pull2RefreshListView(Context context, com.handmark.pulltorefresh.library.PullToRefreshBase.Mode mode) {
+	public Pull2RefreshListView(Context context,
+			com.handmark.pulltorefresh.library.PullToRefreshBase.Mode mode) {
 		super(context, mode);
 		// TODO Auto-generated constructor stub
 	}
@@ -26,5 +30,23 @@ public class Pull2RefreshListView extends PullToRefreshListView {
 		super(context);
 		// TODO Auto-generated constructor stub
 	}
+
+
+	@Override
+	protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+		super.onScrollChanged(l, t, oldl, oldt);
+		if(onPlvScrollListener != null) {
+			onPlvScrollListener.onScrollChanged(l, t, oldl, oldt);
+		}
+	}
 	
+	private OnPlvScrollListener onPlvScrollListener;
+	
+	public void setOnPlvScrollListener(OnPlvScrollListener onPlvScrollListener) {
+		this.onPlvScrollListener = onPlvScrollListener;
+	}
+
+	public static interface OnPlvScrollListener {
+		void onScrollChanged(int l, int t, int oldl, int oldt);
+	}
 }

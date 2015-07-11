@@ -33,6 +33,7 @@
         <activity android:name=".activity.StatusDetailActivity" />
         <activity android:name=".activity.WriteCommentActivity" />
         <activity android:name=".activity.WriteStatusActivity" />
+        <activity android:name=".activity.UserInfoActivity" />
     </application>
 
 </manifest>

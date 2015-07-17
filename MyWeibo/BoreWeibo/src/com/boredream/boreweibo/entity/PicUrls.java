@@ -2,17 +2,21 @@ package com.boredream.boreweibo.entity;
 
 import android.text.TextUtils;
 
-/*sub class*/
 public class PicUrls extends BaseEntity {
-	private static final String BMIDDLE_URL = "http://ww3.sinaimg.cn/bmiddle";
-	private static final String ORIGINAL_URL = "http://ww3.sinaimg.cn/large";
+	// 中等质量图片url前缀
+	private static final String BMIDDLE_URL = "http://ww3.sinaimg.cn/bmiddle/";
+	// 原质量图片url前缀
+	private static final String ORIGINAL_URL = "http://ww3.sinaimg.cn/large/";
 	
 	private String thumbnail_pic;
 	private String bmiddle_pic;
 	private String original_pic;
 
-	private String getImageId() {
-		int indexOf = thumbnail_pic.lastIndexOf("/");
+	/**
+	 * 从缩略图url中截取末尾的图片id,用于和拼接成其他质量图片url
+	 */
+	public String getImageId() {
+		int indexOf = thumbnail_pic.lastIndexOf("/") + 1;
 		return thumbnail_pic.substring(indexOf);
 	}
 	
@@ -25,6 +29,7 @@ public class PicUrls extends BaseEntity {
 	}
 
 	public String getBmiddle_pic() {
+		// 拼接
 		return TextUtils.isEmpty(bmiddle_pic) ? BMIDDLE_URL + getImageId() : bmiddle_pic;
 	}
 

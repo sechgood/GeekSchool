@@ -34,6 +34,7 @@
         <activity android:name=".activity.WriteCommentActivity" />
         <activity android:name=".activity.WriteStatusActivity" />
         <activity android:name=".activity.UserInfoActivity" />
+        <activity android:name=".activity.ImageBrowserActivity" />
     </application>
 
 </manifest>

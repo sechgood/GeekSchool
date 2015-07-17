@@ -1,5 +1,10 @@
 package com.boredream.boreweibo.utils;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,11 +14,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.widget.Toast;
 
 
 public class ImageUtils {
@@ -84,6 +91,36 @@ public class ImageUtils {
 		intent.setAction(Intent.ACTION_PICK);
 		intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		activity.startActivityForResult(intent, REQUEST_CODE_FROM_ALBUM);
+	}
+	
+	/**
+	 * 将图片保存到SD中
+	 */
+	public static void saveFile(Context context, Bitmap bm, String fileName) throws IOException {
+		// 未安装SD卡时不做保存
+		String storageState = Environment.getExternalStorageState();
+		if(!storageState.equals(Environment.MEDIA_MOUNTED)) {
+			ToastUtils.showToast(context, "未检测到SD卡", Toast.LENGTH_SHORT);
+			return;
+		}
+		
+		// 图片文件保存路径
+		File storageDirectory = Environment.getExternalStorageDirectory();
+		File path = new File(storageDirectory, "/boreweibo/weiboimg");
+		// 图片路径不存在创建之
+		if (!path.exists()) {
+			path.mkdirs();
+		}
+		// 图片文件如果不存在创建之
+		File myCaptureFile = new File(path, fileName);
+		if (!myCaptureFile.exists()) {
+			myCaptureFile.createNewFile();
+		}
+		// 将图片压缩至文件对应的流里,即保存图片至该文件中
+		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(myCaptureFile));
+		bm.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+		bos.flush();
+		bos.close();
 	}
 	
 	/**

@@ -9,6 +9,8 @@ import android.text.Html;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.boredream.boreweibo.R;
+import com.boredream.boreweibo.activity.ImageBrowserActivity;
 import com.boredream.boreweibo.activity.StatusDetailActivity;
 import com.boredream.boreweibo.activity.WriteCommentActivity;
 import com.boredream.boreweibo.activity.WriteStatusActivity;
@@ -210,7 +213,7 @@ public class StatusAdapter extends BaseAdapter {
 		return convertView;
 	}
 
-	private void setImages(Status status, FrameLayout imgContainer,
+	private void setImages(final Status status, FrameLayout imgContainer,
 			GridView gv_images, ImageView iv_image) {
 		ArrayList<PicUrls> pic_urls = status.getPic_urls();
 		String thumbnail_pic = status.getThumbnail_pic();
@@ -222,12 +225,30 @@ public class StatusAdapter extends BaseAdapter {
 			
 			StatusGridImgsAdapter gvAdapter = new StatusGridImgsAdapter(context, pic_urls);
 			gv_images.setAdapter(gvAdapter);
+			gv_images.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					Intent intent = new Intent(context, ImageBrowserActivity.class);
+					intent.putExtra("status", status);
+					intent.putExtra("position", position);
+					context.startActivity(intent);
+				}
+			});
 		} else if(thumbnail_pic != null) {
 			imgContainer.setVisibility(View.VISIBLE);
 			gv_images.setVisibility(View.GONE);
 			iv_image.setVisibility(View.VISIBLE);
 			
 			imageLoader.displayImage(thumbnail_pic, iv_image);
+			iv_image.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, ImageBrowserActivity.class);
+					intent.putExtra("status", status);
+					context.startActivity(intent);
+				}
+			});
 		} else {
 			imgContainer.setVisibility(View.GONE);
 		}

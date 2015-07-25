@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Spannable;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.boredream.boreweibo.R;
+import com.boredream.boreweibo.activity.UserInfoActivity;
 
 public class StringUtils {
 
@@ -49,7 +51,9 @@ public class StringUtils {
 					
 					@Override
 					public void onClick(View widget) {
-						ToastUtils.showToast(context, "用户: " + atStr, Toast.LENGTH_SHORT);
+						Intent intent = new Intent(context, UserInfoActivity.class);
+						intent.putExtra("userName", atStr.substring(1));
+						context.startActivity(intent);
 					}
 				};
 				spannableString.setSpan(clickableSpan, start, start + atStr.length(), 

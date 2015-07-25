@@ -3,6 +3,7 @@ package com.boredream.boreweibo.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.SpannableString;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.boredream.boreweibo.R;
+import com.boredream.boreweibo.activity.UserInfoActivity;
 import com.boredream.boreweibo.entity.Comment;
 import com.boredream.boreweibo.entity.User;
 import com.boredream.boreweibo.utils.DateUtils;
@@ -70,7 +72,7 @@ public class StatusCommentAdapter extends BaseAdapter {
 		}
 
 		Comment comment = getItem(position);
-		User user = comment.getUser();
+		final User user = comment.getUser();
 		
 		imageLoader.displayImage(user.getProfile_image_url(), holder.iv_avatar);
 		holder.tv_subhead.setText(user.getName());
@@ -78,6 +80,24 @@ public class StatusCommentAdapter extends BaseAdapter {
 		SpannableString weiboContent = StringUtils.getWeiboContent(
 				context, holder.tv_comment, comment.getText());
 		holder.tv_comment.setText(weiboContent);
+		
+		holder.iv_avatar.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, UserInfoActivity.class);
+				intent.putExtra("userName", user.getName());
+				context.startActivity(intent);
+			}
+		});
+		
+		holder.tv_subhead.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, UserInfoActivity.class);
+				intent.putExtra("userName", user.getName());
+				context.startActivity(intent);
+			}
+		});
 		
 		holder.ll_comments.setOnClickListener(new OnClickListener() {
 			@Override

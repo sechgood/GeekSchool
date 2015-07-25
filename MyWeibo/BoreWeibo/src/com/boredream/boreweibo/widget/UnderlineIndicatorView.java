@@ -13,7 +13,7 @@ import com.boredream.boreweibo.R;
 public class UnderlineIndicatorView extends LinearLayout {
 
 	private int mCurrentPosition;
-
+	
 	public UnderlineIndicatorView(Context context) {
 		this(context, null);
 	}
@@ -34,48 +34,53 @@ public class UnderlineIndicatorView extends LinearLayout {
 		}
 	}
 
-	public void setCurrentItemWithoutAnim(int item) {
-		final View oldChild = getChildAt(mCurrentPosition);
-		final View newChild = getChildAt(item);
-
-		oldChild.setBackgroundResource(R.color.transparent);
+	public void setCurrentItemWithoutAnim(int position) {
+		final View oldChlid = getChildAt(mCurrentPosition);
+		final View newChild = getChildAt(position);
+		
+		oldChlid.setBackgroundResource(R.color.transparent);
 		newChild.setBackgroundResource(R.color.orange);
-
-		mCurrentPosition = item;
+		
+		mCurrentPosition = position;
 		invalidate();
 	}
-
-	public void setCurrentItem(int item) {
-		final View oldChild = getChildAt(mCurrentPosition);
-		final View newChild = getChildAt(item);
-
+	
+	public void setCurrentItem(int position) {
+		final View oldChlid = getChildAt(mCurrentPosition);
+		final View newChild = getChildAt(position);
+		
 		TranslateAnimation translateAnimation = new TranslateAnimation(
-				Animation.RELATIVE_TO_SELF, 0,
-				Animation.RELATIVE_TO_SELF, item - mCurrentPosition,
-				Animation.RELATIVE_TO_SELF, 0,
+				Animation.RELATIVE_TO_SELF, 0, 
+				Animation.RELATIVE_TO_SELF, position - mCurrentPosition, 
+				Animation.RELATIVE_TO_SELF, 0, 
 				Animation.RELATIVE_TO_SELF, 0);
-
 		translateAnimation.setDuration(200);
+		
 		translateAnimation.setAnimationListener(new AnimationListener() {
+			
 			@Override
 			public void onAnimationStart(Animation animation) {
+				// TODO Auto-generated method stub
 				
 			}
-
+			
 			@Override
 			public void onAnimationRepeat(Animation animation) {
-
+				// TODO Auto-generated method stub
+				
 			}
-
+			
 			@Override
 			public void onAnimationEnd(Animation animation) {
-				oldChild.setBackgroundResource(R.color.transparent);
+				oldChlid.setBackgroundResource(R.color.transparent);
 				newChild.setBackgroundResource(R.color.orange);
 			}
 		});
-		oldChild.setAnimation(translateAnimation);
-
-		mCurrentPosition = item;
+		
+		oldChlid.setAnimation(translateAnimation);
+		
+		mCurrentPosition = position;
 		invalidate();
 	}
+	
 }

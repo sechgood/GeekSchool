@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -32,6 +33,7 @@ import com.boredream.boreweibo.widget.Pull2RefreshListView;
 import com.boredream.boreweibo.widget.Pull2RefreshListView.OnPlvScrollListener;
 import com.boredream.boreweibo.widget.UnderlineIndicatorView;
 import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
@@ -144,6 +146,7 @@ public class UserInfoActivity extends BaseActivity implements
 	@SuppressLint("NewApi")
 	private void initListView() {
 		plv_user_info = (Pull2RefreshListView) findViewById(R.id.plv_user_info);
+		initLoadingLayout();
 		footView = View.inflate(this, R.layout.footview_loading, null);
 		final ListView lv = plv_user_info.getRefreshableView();
 		statusAdapter = new StatusAdapter(this, statuses);
@@ -165,11 +168,10 @@ public class UserInfoActivity extends BaseActivity implements
 						loadStatuses(curPage + 1);
 					}
 				});
-		
 		plv_user_info.setOnPlvScrollListener(new OnPlvScrollListener() {
-			
 			@Override
 			public void onScrollChanged(int l, int t, int oldl, int oldt) {
+				
 				int scrollY = curScrollY = t;
 				
 				if(minImageHeight == -1) {
@@ -180,22 +182,19 @@ public class UserInfoActivity extends BaseActivity implements
 					Rect rect = iv_user_info_head.getDrawable().getBounds();
 					maxImageHeight = rect.bottom - rect.top;
 				}
-//				minImageHeight = DisplayUtils.dp2px(UserInfoActivity.this, 244);
-//				maxImageHeight = DisplayUtils.dp2px(UserInfoActivity.this, 360);
 				
-				int scaleImageDistance = maxImageHeight - minImageHeight;
-				
-				if(-scrollY < scaleImageDistance) {
-					iv_user_info_head.layout(0, 0, 
-							iv_user_info_head.getWidth(), 
+				if(minImageHeight - scrollY < maxImageHeight) {
+					iv_user_info_head.layout(0, 0, iv_user_info_head.getWidth(), 
 							minImageHeight - scrollY);
 				} else {
-					iv_user_info_head.layout(0, - scaleImageDistance - scrollY, 
+					iv_user_info_head.layout(0, 
+							-scrollY - (maxImageHeight - minImageHeight), 
 							iv_user_info_head.getWidth(), 
-							- scaleImageDistance - scrollY + iv_user_info_head.getHeight());
+							-scrollY - (maxImageHeight - minImageHeight) + iv_user_info_head.getHeight());
 				}
 			}
 		});
+		
 		iv_user_info_head.addOnLayoutChangeListener(new OnLayoutChangeListener() {
 
 			@Override
@@ -217,7 +216,7 @@ public class UserInfoActivity extends BaseActivity implements
 			
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				iv_user_info_head.layout(0,
+				iv_user_info_head.layout(0, 
 						user_info_head.getTop(), 
 						iv_user_info_head.getWidth(), 
 						user_info_head.getTop() + iv_user_info_head.getHeight());
@@ -235,6 +234,14 @@ public class UserInfoActivity extends BaseActivity implements
 				}
 			}
 		});
+	}
+
+	private void initLoadingLayout() {
+		ILoadingLayout loadingLayout = plv_user_info.getLoadingLayoutProxy();
+		loadingLayout.setPullLabel("");
+		loadingLayout.setRefreshingLabel("");
+		loadingLayout.setReleaseLabel("");
+		loadingLayout.setLoadingDrawable(new ColorDrawable(R.color.transparent));
 	}
 
 	private void loadData() {
@@ -348,21 +355,22 @@ public class UserInfoActivity extends BaseActivity implements
 			break;
 		}
 	}
-	
+
 	private void syncRadioButton(RadioGroup group, int checkedId) {
 		int index = group.indexOfChild(group.findViewById(checkedId));
 		
 		if(shadow_user_info_tab.getVisibility() == View.VISIBLE) {
 			shadow_uliv_user_info.setCurrentItem(index);
 			
-			((RadioButton) rg_user_info.findViewById(checkedId)).setChecked(true);
+			((RadioButton)rg_user_info.findViewById(checkedId)).setChecked(true);
 			uliv_user_info.setCurrentItemWithoutAnim(index);
 		} else {
 			uliv_user_info.setCurrentItem(index);
 			
-			((RadioButton) shadow_rg_user_info.findViewById(checkedId)).setChecked(true);
+			((RadioButton)shadow_rg_user_info.findViewById(checkedId)).setChecked(true);
 			shadow_uliv_user_info.setCurrentItemWithoutAnim(index);
 		}
+		
 	}
 	
 	@Override
@@ -436,5 +444,6 @@ public class UserInfoActivity extends BaseActivity implements
 //			break;
 //		}
 	}
+
 
 }

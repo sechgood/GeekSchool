@@ -3,6 +3,7 @@ package com.boredream.boreweibo.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -73,15 +74,15 @@ public class UserFragment extends BaseFragment {
 	public void onStart() {
 		super.onStart();
 		// show/hide方法不会走生命周期
+		System.out.println("user frag onStart()");
 	}
 	
 	@Override
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
 		
-		// 用onHiddenChanged方法中的hidden参数fragment的显示/隐藏情况
 		if(!hidden) {
-			weiboApi.usersShow(mAccessToken.getUid(), "",
+			weiboApi.usersShow(mAccessToken.getUid(), "", 
 					new SimpleRequestListener(activity, null) {
 
 						@Override
@@ -89,14 +90,15 @@ public class UserFragment extends BaseFragment {
 							super.onComplete(response);
 							
 							BaseApplication application = (BaseApplication) activity.getApplication();
-							user = application.currentUser = new Gson().fromJson(response, User.class);
+							application.currentUser = user = new Gson().fromJson(response, User.class);
 							
 							setUserInfo();
 						}
-					});
+				
+			});
 		}
 	}
-
+	
 	private void initView() {
 		// 标题栏
 		new TitleBuilder(view)

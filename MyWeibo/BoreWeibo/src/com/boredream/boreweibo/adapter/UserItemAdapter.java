@@ -58,18 +58,19 @@ public class UserItemAdapter extends BaseAdapter {
 
 		// set data
 		UserItem item = getItem(position);
-		holder.v_divider.setVisibility(item.isShowTopDivider() ? View.VISIBLE : View.GONE);
 		holder.iv_left.setImageResource(item.getLeftImg());
 		holder.tv_subhead.setText(item.getSubhead());
 		holder.tv_caption.setText(item.getCaption());
-		
+
+		holder.v_divider.setVisibility(item.isShowTopDivider() ? 
+				View.VISIBLE : View.GONE);
 		holder.ll_content.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ToastUtils.showToast(context, "点击了Item" + position, Toast.LENGTH_SHORT);
+				ToastUtils.showToast(context, "item click position = " + position, Toast.LENGTH_SHORT);
 			}
 		});
-
+		
 		return convertView;
 	}
 

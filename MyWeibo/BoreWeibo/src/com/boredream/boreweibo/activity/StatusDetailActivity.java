@@ -13,6 +13,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -309,6 +311,14 @@ public class StatusDetailActivity extends BaseActivity implements
 			ivImg.setVisibility(View.VISIBLE);
 
 			imageLoader.displayImage(picUrl, ivImg);
+			ivImg.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(StatusDetailActivity.this, ImageBrowserActivity.class);
+					intent.putExtra("status", status);
+					startActivity(intent);
+				}
+			});
 		} else if (picUrls != null && picUrls.size() > 1) {
 			vgContainer.setVisibility(View.VISIBLE);
 			gvImgs.setVisibility(View.VISIBLE);
@@ -316,6 +326,17 @@ public class StatusDetailActivity extends BaseActivity implements
 
 			StatusGridImgsAdapter imagesAdapter = new StatusGridImgsAdapter(this, picUrls);
 			gvImgs.setAdapter(imagesAdapter);
+			gvImgs.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					Intent intent = new Intent(StatusDetailActivity.this, ImageBrowserActivity.class);
+					intent.putExtra("status", status);
+					intent.putExtra("position", position);
+					startActivity(intent);
+				}
+			});
 		} else {
 			vgContainer.setVisibility(View.GONE);
 		}

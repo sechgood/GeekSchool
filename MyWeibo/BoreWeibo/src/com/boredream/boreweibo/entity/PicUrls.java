@@ -2,6 +2,7 @@ package com.boredream.boreweibo.entity;
 
 import android.text.TextUtils;
 
+
 public class PicUrls extends BaseEntity {
 	// 中等质量图片url前缀
 	private static final String BMIDDLE_URL = "http://ww3.sinaimg.cn/bmiddle/";
@@ -11,6 +12,8 @@ public class PicUrls extends BaseEntity {
 	private String thumbnail_pic;
 	private String bmiddle_pic;
 	private String original_pic;
+	
+	private boolean showOriImag;
 
 	/**
 	 * 从缩略图url中截取末尾的图片id,用于和拼接成其他质量图片url
@@ -29,7 +32,6 @@ public class PicUrls extends BaseEntity {
 	}
 
 	public String getBmiddle_pic() {
-		// 拼接
 		return TextUtils.isEmpty(bmiddle_pic) ? BMIDDLE_URL + getImageId() : bmiddle_pic;
 	}
 
@@ -45,4 +47,12 @@ public class PicUrls extends BaseEntity {
 		this.original_pic = original_pic;
 	}
 
+	public boolean isShowOriImag() {
+		return showOriImag;
+	}
+
+	public void setShowOriImag(boolean showOriImag) {
+		this.showOriImag = showOriImag;
+	}
+	
 }
